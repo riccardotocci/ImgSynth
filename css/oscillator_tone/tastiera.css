@@ -1,0 +1,24 @@
+
+
+
+  .white-key {
+    fill: white;
+    stroke: black;
+    stroke-width: 2;
+    cursor: pointer;
+  }
+
+  .black-key {
+    fill: black;
+    stroke: black;
+    stroke-width: 2;
+    cursor: pointer;
+  }
+
+  .white-key:hover {
+    fill: #ddd;
+  }
+
+  .black-key:hover {
+    fill: #444;
+  }

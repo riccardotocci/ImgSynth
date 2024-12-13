@@ -1,0 +1,47 @@
+/* CSS per il modulo Image AI */
+
+.image-ai .color-swatch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.image-ai .color-box {
+  width: 50px;
+  height: 50px;
+  border: 1px solid transparent;
+  margin-right: 10px;
+}
+
+.image-ai .waveform-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+}
+
+.image-ai .waveform-button:hover {
+  background-color: #0056b3;
+}
+
+.image-ai #recalculateButton {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 20px 0;
+}
+
+.image-ai #recalculateButton:hover {
+  background-color: #0056b3;
+}
+
+

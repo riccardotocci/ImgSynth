@@ -1,0 +1,35 @@
+.oscillator-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  canvas {
+    display: block;
+    margin: 10px auto;
+    border: 1px solid #000;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .label {
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+  
+  .controls button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .controls button:hover {
+    background-color: #0056b3;
+  }
+  

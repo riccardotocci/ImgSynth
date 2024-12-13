@@ -1,0 +1,77 @@
+#firstrow{
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 50px;
+  gap: 30px;
+  position:static;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column; /* Mantiene gli oscillatori uno sotto l'altro */
+  gap: 20px; /* Spaziatura verticale tra oscillatori */
+  margin-top: 20px;
+  left: 0%;
+  width: 100%;
+}
+
+#oscillator {
+  display: flex;
+  flex-direction: row; /* Dispone i controlli dell'oscillatore in riga */
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 3%; /* Spaziatura tra i controlli */
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 10px;
+  width: 700px; /* Imposta una larghezza per tutti gli oscillatori */
+  margin: 0; /* Centra gli oscillatori nella pagina */
+  outline: px solid blue;
+  background-color: rgba(0, 0, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.knob-container {
+  display: flex;
+  flex-direction: column; /* Dispone la label sopra e il valore sotto */
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 0; /* Spaziatura orizzontale tra i knob */
+  position: relative;
+}
+
+.input-knob {
+  margin: 5px 0;
+  width:2%;
+  
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+span {
+  font-size: 14px;
+  color: #333;
+  margin-top: 5px;
+}
+
+.switchery {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.switchery-small {
+  height: 20px;
+  width: 40px;
+}
+
+
+.waveform-select {
+  margin: 10px;
+  padding: 5px;
+  font-size: 16px;
+}

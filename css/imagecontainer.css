@@ -1,0 +1,22 @@
+#imageContainer {
+    text-align: center;
+    margin: 10px;
+    width: 400px;
+    height: 200px;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.2);
+    align-content: center;
+
+}
+#displayedImage {
+    max-width: 380px;
+    max-height: 180px;
+    width: auto;
+    height: auto;
+    margin: 10px auto;
+
+    display: block;
+}
+

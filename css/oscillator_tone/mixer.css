@@ -1,0 +1,16 @@
+#mixer{
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    background-color: rgba(35, 202, 253, 0.2);
+    
+}
+label {
+    display: inline-block;
+    width: 80px;
+}
+

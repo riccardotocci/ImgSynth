@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ImgSynth</title>
+        <!-- CSS -->
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/oscillator_tone/main.css">
+        <link rel="stylesheet" href="css/oscillator_tone/effects.css">
+        <link rel="stylesheet" href="css/oscillator_tone/mixer.css">
+        <link rel="stylesheet" href="css/oscillator_tone/adsr.css">
+        <link rel="stylesheet" href="css/oscillator_tone/oscillators.css">
+        <link rel="stylesheet" href="css/oscillator_tone/tastiera.css">
+        <link rel="stylesheet" href="css/oscillator_tone/noise.css">
+        <link rel="stylesheet" href="css/oscillator_tone/filter.css">
+        <link rel="stylesheet" href="css/oscillator_tone/lfo.css">
+        <link rel="stylesheet" href="css/oscillator_tone/backsettings.css">
+        <link rel="stylesheet" href="css/image_ai/image_ai.css">
+        <link rel="stylesheet" href="css/popup.css">
+        <link rel="stylesheet" href="css/slider.css">
+        <link rel="stylesheet" href="css/imagecontainer.css">
+        <link rel="stylesheet" href="css/select.css">
+        <link rel="stylesheet" href="css/oscillator_tone/modmatrix.css">
+        
+        <link rel="stylesheet" href="css/oscillator_tone/preset.css">
+   
+
+        
+
+
+    
+        <!-- Librerie JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.36/Tone.min.js"></script>
+        <script src="oscillator_tone/input-knobs-master/input-knobs.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
+        <script async src="https://docs.opencv.org/4.x/opencv.js" onload="onOpenCvReady();" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/nexusui/dist/NexusUI.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+        <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+        <script type="module" src="oscillator_tone/webaudio-controls.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+
+
+
+        
+
+</head>
+<body>
+
+      
+<h3>ImgSynth</h3>
+<div class="popup-overlay" id="popup">
+    <div id="auth-container">
+    <h4 class="text-4xl font-bold text-white">ImgSynth</h4> 
+    <!-- Login con Email/Password -->
+    <form id="email-login-form" style="display: block;">
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button class="bg-white text-black font-bold py-2 px-4 rounded" type="submit">Login</button>
+    </form>
+    
+    <!-- Registrazione con Email/Password -->
+    <form id="email-register-form" style="display: none;">
+      <input type="email" id="reg-email" placeholder="Email" required />
+      <input type="password" id="reg-password" placeholder="Password" required />
+      <button class="bg-white text-black font-bold py-2 px-4 rounded" type="submit">Register</button>
+    </form>
+  
+    <!-- Pulsante per registrarsi -->
+    <div style="margin-top: 20px; text-align: center;">
+    <button class="bg-white text-black font-bold py-2 px-4 rounded" id="register-button">Register</button>
+    </div>
+        <button class="bg-white text-black font-bold py-2 px-4 rounded" id="skip-button">Skip</button>
+
+        <button class="flex items-center bg-white text-gray-800 font-bold py-2 px-4 rounded shadow hover:bg-gray-100" id="google-login">
+            <i class="fab fa-google text-red-500 mr-2"></i>
+            Login with Google
+          </button>
+          
+      </div>
+      
+      <!-- Messaggio di successo -->
+      <div id="success-message" style="display: none;">
+        <h2>Login completed successfully!</h2>
+        <button id="logout-button" style="display: none;">Logout</button>
+      </div>
+</div>
+<div id="backsettings">
+<form id="uploadForm" method="POST" enctype="multipart/form-data">
+    <input type="file" id="imageInput" name="file" accept="image/*" required>
+</form>
+<div class="presetadjust">
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="adjustPresetButton">Modifica Preset da Immagine</button>
+</div>
+<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="recalculateButton" style="display: none;">
+        Regenarate
+</button>
+</div>
+
+
+    <!-- Horizontal floating navbar -->
+    <div class="navbar">
+        <a href="#" onclick="showSection('section1', this)" class="active">Play</a>
+        <a href="#" onclick="showSection('section2', this)">Pro</a>
+    </div>
+<div id="section1" class="section">
+    <div id="spectrumAnalyzer">
+        <h3>Analizzatore di Spettro - Output Finale</h3>
+        <canvas id="analyserCanvas" width="300" height="150"></canvas>
+    </div>
+    <div class="image-ai">
+        <canvas id="canvas" style="display: none;"></canvas>
+        <div id="output"></div>
+      </div>
+      <div id="player">
+        <section id="main">
+            <button id="connectMIDI">Connetti MIDI</button>
+            <button id="playSequence">Suona Sequenza</button>
+            <button id="playChord">Suona Accordo</button>
+            <div id="status">Pronto</div>
+        </section>
+    </div>
+    <svg viewBox="0 0 2000 200">
+        <!-- White keys -->
+        <rect class="white-key" x="0" y="0" width="50" height="200" data-note="C4" />
+        <rect class="white-key" x="50" y="0" width="50" height="200" data-note="D4" />
+        <rect class="white-key" x="100" y="0" width="50" height="200" data-note="E4" />
+        <rect class="white-key" x="150" y="0" width="50" height="200" data-note="F4" />
+        <rect class="white-key" x="200" y="0" width="50" height="200" data-note="G4" />
+        <rect class="white-key" x="250" y="0" width="50" height="200" data-note="A4" />
+        <rect class="white-key" x="300" y="0" width="50" height="200" data-note="B4" />
+    
+        <!-- Black keys -->
+        <rect class="black-key" x="35" y="0" width="30" height="120" data-note="C#4" />
+        <rect class="black-key" x="85" y="0" width="30" height="120" data-note="D#4" />
+        <rect class="black-key" x="185" y="0" width="30" height="120" data-note="F#4" />
+        <rect class="black-key" x="235" y="0" width="30" height="120" data-note="G#4" />
+        <rect class="black-key" x="285" y="0" width="30" height="120" data-note="A#4" />
+      </svg>
+    <div>
+        <label for="octaveControl">Ottava:</label>
+        <input type="number" id="octaveControl" value="4" min="1" max="8" />
+    </div>
+</div>
+<div id="section2" class="section" hidden>
+
+     
+<div id="firstrow">           <!-- Oscillatore 1 -->
+    <div id="control-group">
+        <div id="oscillator" class="oscillator1">
+            <div class="oscillator-container">
+                <div class="label">Oscillatore 1: <span id="waveformLabel0">Sine</span></div>
+                <canvas id="waveformCanvas0" width="100" height="50"></canvas>
+                <div class="controls">
+                    <button onclick="changeWaveform(0, -1)">◀</button>
+                    <button onclick="changeWaveform(0, 1)">▶</button>
+                </div>
+            </div>
+            <div class="knob-container">
+                <label for="detuneKnob1">Detune</label>
+                <input id="detuneKnob1" class="input-knob" type="range" min="-1200" max="1200" step="10" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
+                <span id="detuneKnob1Value">0</span>
+            </div>
+            <div class="knob-container">
+                <label for="pitchKnob1">Pitch</label>
+                <input id="pitchKnob1" class="input-knob" type="range" min="-24" max="24" step="1" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
+                <span id="pitchKnob1Value">0</span>
+            </div>
+            <div class="knob-container">
+                <label for="octaveKnob1">Octave</label>
+                <input id="octaveKnob1" class="input-knob" type="range" min="-2" max="2" step="1" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
+                <span id="octaveKnob1Value">0</span>
+            </div>
+            <div class="knob-container">
+                <label for="harmonics1">Harmonics</label>
+                <input id="harmonics1" class="input-knob" type="range" min="1" max="10" step="1" value="1" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
+                <span id="harmonics1Value">1</span>
+            </div>
+            <div class="knob-container">
+                <label for="pan1">Pan</label>
+                <input id="pan1" class="input-knob" type="range" min="-1" max="1" step="0.01" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
+                <span id="pan1Value">0</span>
+            </div>
+            <input id="oscillatorToggle1" type="checkbox" class="js-switch" checked>
+        </div>
+    
+            <!-- Ripeti la stessa struttura per Oscillatore 2 e Oscillatore 3 -->
+    
+        <div id="oscillator" class="oscillator2">
+            <div class="oscillator-container">
+                <div class="label">Oscillatore 2: <span id="waveformLabel1">Sine</span></div>
+                <canvas id="waveformCanvas1" width="100" height="50"></canvas>
+                <div class="controls">
+                    <button onclick="changeWaveform(1, -1)">◀</button>
+                    <button onclick="changeWaveform(1, 1)">▶</button>
+                </div>
+            </div>
+            <div class="knob-container">
+                <label for="detuneKnob2">Detune</label>
+                <input id="detuneKnob2" class="input-knob" type="range" min="-1200" max="1200" step="10" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
+                <span id="detuneKnob2Value">0</span>
+            </div>
+            <div class="knob-container">
+                <label for="pitchKnob2">Pitch</label>
+                <input id="pitchKnob2" class="input-knob" type="range" min="-24" max="24" step="1" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
+                <span id="pitchKnob2Value">0</span>
+            </div>
+            <div class="knob-container">
+                <label for="octaveKnob2">Octave</label>
+                <input id="octaveKnob2" class="input-knob" type="range" min="-2" max="2" step="1" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
+                <span id="octaveKnob2Value">0</span>
+            </div>
+            <div class="knob-container">
+                <label for="harmonics2">Harmonics</label>
+                <input id="harmonics2" class="input-knob" type="range" min="1" max="10" step="1" value="1" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
+                <span id="harmonics2Value">1</span>
+            </div>
+            <div class="knob-container">
+                <label for="pan2">Pan</label>
+                <input id="pan2" class="input-knob" type="range" min="-1" max="1" step="0.01" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
+                <span id="pan2Value">0</span>
+            </div>
+            <input id="oscillatorToggle2" type="checkbox" class="js-switch" checked>
+        </div>
+    
+        <div id="oscillator" class="oscillator3">
+            <div class="oscillator-container">
+                <div class="label">Oscillatore 3 <span id="waveformLabel2">Sine</span></div>
+                <canvas id="waveformCanvas2" width="100" height="50"></canvas>
+                <div class="controls">
+                    <button onclick="changeWaveform(2, -1)">◀</button>
+                    <button onclick="changeWaveform(2, 1)">▶</button>
+                </div>
+            </div>
+            <div class="knob-container">
+                <label for="detuneKnob3">Detune</label>
+                <input id="detuneKnob3" class="input-knob" type="range" min="-1200" max="1200" step="10" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
+                
+                <span id="detuneKnob3Value">0</span>
+            </div>
+            <div class="knob-container">
+                <label for="pitchKnob3">Pitch</label>
+                <input id="pitchKnob3" class="input-knob" type="range" min="-24" max="24" step="1" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
+                <span id="pitchKnob3Value">0</span>
+            </div>
+            <div class="knob-container">
+                <label for="octaveKnob3">Octave</label>
+                <input id="octaveKnob3" class="input-knob" type="range" min="-2" max="2" step="1" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
+                <span id="octaveKnob3Value">0</span>
+            </div>
+            <div class="knob-container">
+                <label for="harmonics3">Harmonics</label>
+                <input id="harmonics3" class="input-knob" type="range" min="1" max="10" step="1" value="1" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
+                <span id="harmonics3Value">1</span>
+            </div>
+            <div class="knob-container">
+                <label for="pan3">Pan</label>
+                <input id="pan3" class="input-knob" type="range" min="-1" max="1" step="0.01" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
+                <span id="pan3Value">0</span>
+            </div>
+            <input id="oscillatorToggle3" type="checkbox" class="js-switch" checked>
+        </div>
+    </div>
+
+    <!-- Canali del mixer -->
+    <div id="mixer">
+            <div>
+                <label for="volume1">Volume Osc 1</label>
+                <div id="volume1"></div>
+                <span id="volume1Value">-12 dB</span>
+            </div>
+            <div>
+                <label for="volume2">Volume Osc 2</label>
+                <div id="volume2"></div>
+                <span id="volume2Value">-12 dB</span>
+            </div>
+            <div>
+                <label for="volume3">Volume Osc 3</label>
+                <div id="volume3"></div>
+                <span id="volume3Value">-12 dB</span>
+            </div>
+    </div>
+
+    <div class="noise">
+        <div class="noisevolumeslider">
+            <label for="noiseVolume">Volume Noise</label>
+            <div id="noiseVolume"></div>
+            <span id="noiseVolumeValue">-48 dB</span>
+        </div>
+        
+
+        <label for="noiseType"></label>
+        <div id="noiseType">
+            <select id="noiseTypeSelect">
+                <option value="white">White</option>
+                <option value="pink">Pink</option>
+                <option value="brown">Brown</option>
+            </select>
+        </div>
+    </div>
+    
+    <div id="filter">
+        <label>FILTER</label>
+    <div id="secfilter">
+        <label for="sharedFilterFrequency">Cutoff</label>
+
+        <input id="sharedFilterFrequency" type="range" class="input-knob" min="20" max="20000" step="1" value="1000" data-bgcolor=' rgba(100, 230, 70, 0.2)' data-fgcolor=' rgba(0, 250, 0, 0.8)'>
+        <span id="sharedFilterFrequencyValue">1000</span>
+    </div>
+    <div id="secfilter">
+        <label for="sharedFilterType">Type</label>
+        <select id="sharedFilterType">
+            <option value="lowpass">Lowpass</option>
+            <option value="highpass">Highpass</option>
+            <option value="bandpass">Bandpass</option>
+            <option value="notch">Notch</option>
+            <option value="allpass">Allpass</option>
+            <option value="peaking">Peaking</option>
+            <option value="lowshelf">Lowshelf</option>
+            <option value="highshelf">Highshelf</option>
+        </select>
+    </div>
+    <div>
+        <label for="sharedFilterRolloff">Rolloff</label>
+        <select id="sharedFilterRolloff">
+            <option value="-12">-12 dB/oct</option>
+            <option value="-24">-24 dB/oct</option>
+            <option value="-48">-48 dB/oct</option>
+            <option value="-96">-96 dB/oct</option>
+        </select>
+    </div>
+    </div>
+</div>
+<div id="secondrow">
+    <!--adsr-->
+        <div class="adsr-section">
+            <div id="envelope">
+                <label for="attack">Attack</label>
+                <input type="range" class="input-knob"  id="attack" min="0" max="2" step="0.01" value="0.5" data-bgcolor='rgba(170, 240, 0, 0.2)' data-fgcolor='rgba(30, 120, 0, 0.8)'>
+                <span id="attackValue">0.50</span>
+            </div>
+            <div id="envelope">
+                <label for="decay">Decay</label>
+                <input type="range" class="input-knob"  id="decay" min="0" max="2" step="0.01" value="0.2" data-bgcolor='rgba(170, 240, 0, 0.2)' data-fgcolor='rgba(30, 120, 0, 0.8)'>
+                <span id="decayValue">0.20</span>
+            </div>
+            <div id="envelope">
+                <label for="sustain">Sustain</label>
+                <input type="range" class="input-knob" id="sustain" min="0" max="1" step="0.01" value="0.7" data-bgcolor='rgba(170, 240, 0, 0.2)' data-fgcolor='rgba(30, 120, 0, 0.8)'>
+                <span id="sustainValue">0.70</span>
+            </div>
+            <div id="envelope">
+                <label for="release">Release</label>
+                <input type="range" class="input-knob"  id="release" min="0" max="2" step="0.01" value="0.5" data-bgcolor='rgba(170, 240, 0, 0.2)' data-fgcolor='rgba(30, 120, 0, 0.8)'>
+                <span id="releaseValue">0.50</span>
+            </div>
+        </div>
+
+        <div id="lfoControls">
+        
+            <div id="lfoparameter">
+                <h4>LFO 1</h4>
+                <label for="lfo1Frequency">Frequenza</label>
+                <input id="lfo1Frequency" type="range" min="0.1" max="10" step="0.1" value="0.5">
+                <label for="lfo1Min">Min</label>
+                <input id="lfo1Min" type="number" value="200">
+                <label for="lfo1Max">Max</label>
+                <input id="lfo1Max" type="number" value="800">
+                <label for="lfo1Amplitude">Ampiezza</label>
+                <input id="lfo1Amplitude" type="range" min="0" max="1" step="0.01" value="0.5">
+            </div>
+            <div id="lfoparameter">
+                <h4>LFO 2</h4>
+                <label for="lfo2Frequency">Frequenza</label>
+                <input id="lfo2Frequency" type="range" min="0.1" max="10" step="0.1" value="1">
+                <label for="lfo2Min">Min</label>
+                <input id="lfo2Min" type="number" value="0">
+                <label for="lfo2Max">Max</label>
+                <input id="lfo2Max" type="number" value="1">
+                <label for="lfo2Amplitude">Ampiezza</label>
+                <input id="lfo2Amplitude" type="range" min="0" max="1" step="0.01" value="0.5">
+            </div>
+        </div>
+        <div id="modMatrixDynamicTable">
+            <h3>Modulation Matrix</h3>
+            <table id="modMatrixTable" border="1">
+                <thead>
+                    <tr>
+                        <th>Sorgente</th>
+                        <th>Destinazione</th>
+                        <th>Intensità</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <select id="source1" class="sourceSelect">
+                                <option value="null">null</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select id="destination1" class="destinationSelect">
+                                <option value="null">null</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input id="intensity1" type="range" min="-1" max="1" step="0.01" value="0">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select id="source2" class="sourceSelect">
+                                <option value="null">null</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select id="destination2" class="destinationSelect">
+                                <option value="null">null</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input id="intensity2" type="range" min="-1" max="1" step="0.01" value="0">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select id="source3" class="sourceSelect">
+                                <option value="null">null</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select id="destination3" class="destinationSelect">
+                                <option value="null">null</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input id="intensity3" type="range" min="-1" max="1" step="0.01" value="0">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select id="source4" class="sourceSelect">
+                                <option value="null">null</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select id="destination4" class="destinationSelect">
+                                <option value="null">null</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input id="intensity4" type="range" min="-1" max="1" step="0.01" value="0">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> 
+</div>
+<div id="thirdrow">
+        
+        
+        <!-- Configurazione Effetti -->
+        <section id="effects">
+            <div id="Distortion">
+                <h3>Distortion</h3>
+                <input id="distortionToggle" type="checkbox" class="js-switch">
+                <label for="distortionType">Type:</label>
+                <select id="distortionType">
+                    <option value="sine">Sine</option>
+                    <option value="saw">Saw</option>
+                    <option value="square">Square</option>
+                </select>
+                <label for="distortionAmount">AMT:</label>
+                <input type="range" class="input-knob" id="distortionAmount" min="0" max="1" step="0.01" data-bgcolor='rgba(100, 230, 70, 0.2)' data-fgcolor=' rgba(0, 250, 0, 0.8)'>
+                <div id="distortionAmountValue">0.5</div>
+                <label for="distortionWet">Wet:</label>
+                <input type="range" class="input-knob" id="distortionWet" min="0" max="1" step="0.01">
+                <div id="distortionWetValue">0.5</div>
+            </div>
+            
+            <div id="Chorus">
+                <h3>Chorus</h3>
+                <input id="chorusToggle" type="checkbox" class="js-switch">
+                <div id="chorusToggleValue"></div>
+                <div id="choruspanel">
+                    <div id="chorus1">
+                        <label for="chorusDelay">Delay:</label>
+                        <input type="range" class="input-knob" id="chorusDelay" min="0" max="10" step="0.1">
+                        <div id="chorusDelayValue"></div>
+                        <label for="chorusDepth">Depth:</label>
+                        <input type="range" class="input-knob" id="chorusDepth" min="0" max="1" step="0.01">
+                        <div id="chorusDepthValue"></div>
+                        <label for="chorusFeedback">Feedback:</label>
+                        <input type="range" class="input-knob" id="chorusFeedback" min="0" max="1" step="0.01">
+                    </div>
+                    <div id="chorus2">
+                        <div id="chorusFeedbackValue"></div>
+                        <label for="chorusFrequency">Frequency (Hz):</label>
+                        <input type="range" class="input-knob" id="chorusFrequency" min="0.1" max="10" step="0.1">
+                        <div id="chorusFrequencyValue"></div>
+                        <label for="chorusSpread">Spread:</label>
+                        <input type="range" class="input-knob" id="chorusSpread" min="0" max="360" step="1">
+                        <div id="chorusSpreadValue"></div>
+                        <label for="chorusWet">Wet:</label>
+                        <input type="range" class="input-knob" id="chorusWet" min="0" max="1" step="0.01">
+                        <div id="chorusWetValue"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="Delay">
+                <h3>Delay</h3>
+                <input id="delayToggle" type="checkbox" class="js-switch">
+                <div id="delayToggleValue"></div>
+                <label for="delayTime">Delay Time:</label>
+                <input type="range" class="input-knob" id="delayTime" min="0" max="1000" step="10" value="500">
+                <div id="delayTimeValue"></div>
+                <label for="delayFeedback">Feedback:</label>
+                <input type="range" class="input-knob" id="delayFeedback" min="0" max="1" step="0.01">
+                <div id="delayFeedbackValue"></div>
+                <label for="delayWet">Wet:</label>
+                <input type="range" class="input-knob" id="delayWet" min="0" max="1" step="0.01">
+                <div id="delayWetValue"></div>
+            </div>
+            
+            <div id="Reverb">
+                <h3>Reverb</h3>
+                <input id="reverbToggle" type="checkbox" class="js-switch">
+                <div id="reverbToggleValue"></div>
+                <label for="reverbSize">Size:</label>
+                <input type="range" class="input-knob" id="reverbSize" min="0" max="1" step="0.01">
+                <div id="reverbSizeValue"></div>
+                <label for="reverbPreDelay">Pre-delay:</label>
+                <input type="range" class="input-knob" id="reverbPreDelay" min="0" max="1" step="0.01">
+                <div id="reverbPreDelayValue"></div>
+                <label for="reverbWet">Wet:</label>
+                <input type="range" class="input-knob" id="reverbWet" min="0" max="1" step="0.01">
+                <div id="reverbWetValue"></div>
+            </div>
+            
+            <div id="Limiter">
+                <h3>Limiter</h3>
+                <input id="limiterToggle" type="checkbox" class="js-switch">
+                <div id="limiterToggleValue"></div>
+                <label for="limiterThreshold">Threshold:</label>
+                <input type="range" class="input-knob" id="limiterThreshold" min="-60" max="0" step="1">
+                <div id="limiterThresholdValue"></div>
+            </div>
+        </section>
+
+        <div class="preset-control">
+            <div id="imageContainer">
+                <img id="displayedImage" src="" alt="Image will appear here" style="max-width: 100%; display: none;">
+            </div>
+            <button id="selectImageButton">Seleziona Foto</button>
+            <div id="imageListContainer" style="display: none;">
+                <h3>Seleziona un'immagine:</h3>
+                <ul id="imageList"></ul>
+            </div>
+
+            <button id="savePresetButton">Salva Preset</button>
+          
+            <select id="presetSelector">
+                <option value="default">Default</option>
+                <option value="ambient">Ambient</option>
+                <option value="bass">Bass</option>
+            </select>
+        </div>            
+</div>
+        <!-- Controllo Principale -->
+</div>
+
+    <script type="module" src="js/login.js"></script>
+    <script src="js/section.js"></script>
+    <script src="js/oscillator_tone/waveform.js"></script>
+
+    <!-- Script Personalizzati -->
+    <script src="js/image_ai/waveformFromColor.js"></script>
+    <script src="js/image_ai/displaycolor.js"></script>
+    <script src="js/image_ai/sfondo.js"></script>
+    <script src="js/image_ai/nitidezza.js"></script>
+    <script src="js/image_ai/profondità.js"></script>
+    <script src="js/image_ai/rumore.js"></script>
+    <script src="js/image_ai/transformResult.js"></script>
+    <script src="js/image_ai/analyzeimage.js"></script>
+
+    <script src="js/oscillator_tone/compute_parameter.js"></script>
+    <script src="js/oscillator_tone/definitions.js"></script>
+    <script src="js/oscillator_tone/oscillators.js"></script>
+    <script src="js/oscillator_tone/filter.js"></script>
+    <script src="js/oscillator_tone/mixer.js"></script>
+    <script src="js/oscillator_tone/envelope.js"></script>
+    <script src="js/oscillator_tone/lfo.js"></script>
+    <script src="js/oscillator_tone/modmatrix.js"></script>
+    <script src="js/oscillator_tone/effects.js"></script>
+    <script src="js/oscillator_tone/preset.js"></script>
+    <script src="js/oscillator_tone/image_preset.js"></script>
+    <script src="js/oscillator_tone/analizzatore.js"></script>
+    <script src="js/oscillator_tone/noise.js"></script>
+    <script src="js/slider.js"></script>
+    <script src="js/oscillator_tone/connection.js"></script>
+    <script src="js/oscillator_tone/main.js"></script>
+    <script src="js/oscillator_tone/tastiera.js"></script>
+</body>
+</html>
