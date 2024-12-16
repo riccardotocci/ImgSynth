@@ -47,9 +47,8 @@ function updateNoiseSource(type) {
 
 function playNoise() {
     if (!noiseSource) {
-        updateNoiseSource(document.getElementById("noiseType").value);
+        updateNoiseSource(document.getElementById("noiseType").value || "white");
     }
-
     try {
         noiseSource.start();
         console.log("Noise started.");
@@ -75,56 +74,58 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Seleziona tutti gli elementi con classe carousel-cell
-    const carouselCells = document.querySelectorAll(".carouselnoise .carousel-cell");
+    // Seleziona l'elemento <select>
+    const noiseSelect = document.querySelector("#noiseTypeSelect");
 
-    // Aggiungi un listener di clic a ciascun elemento
-    carouselCells.forEach((cell) => {
-        cell.addEventListener("click", () => {
-            // Ottieni il valore del tipo di rumore
-            const noiseType = cell.getAttribute("value");
+    // Aggiungi un listener di cambiamento (change) al <select>
+    noiseSelect.addEventListener("change", () => {
+        // Ottieni il valore selezionato
+        const noiseType = noiseSelect.value;
 
-            // Verifica se la funzione updateNoiseSource è definita
-            if (typeof updateNoiseSource === "function") {
-                try {
-                    updateNoiseSource(noiseType); // Aggiorna il tipo di rumore
-                    console.log(`Tipo di rumore aggiornato a: ${noiseType}`);
-                } catch (error) {
-                    console.error("Errore durante l'aggiornamento del rumore:", error);
-                }
-            } else {
-                console.error("Funzione updateNoiseSource non trovata.");
+        // Verifica se la funzione updateNoiseSource è definita
+        if (typeof updateNoiseSource === "function") {
+            try {
+                updateNoiseSource(noiseType); // Aggiorna il tipo di rumore
+                console.log(`Tipo di rumore aggiornato a: ${noiseType}`);
+            } catch (error) {
+                console.error("Errore durante l'aggiornamento del rumore:", error);
             }
-
-            // Evidenzia l'elemento selezionato (stile attivo)
-            carouselCells.forEach((cell) => cell.classList.remove("active"));
-            cell.classList.add("active");
-        });
+        } else {
+            console.error("Funzione updateNoiseSource non trovata.");
+        }
     });
 });
-function setNoiseTypeFromArgument(noiseType) {
-    const carouselCells = document.querySelectorAll(".carouselnoise .carousel-cell");
 
-    // Aggiorna il tipo di rumore
-    if (typeof updateNoiseSource === "function") {
-        try {
-            updateNoiseSource(noiseType);
-            console.log(`Tipo di rumore aggiornato a: ${noiseType}`);
-        } catch (error) {
-            console.error("Errore durante l'aggiornamento del rumore:", error);
+function setNoiseTypeFromArgument(noiseType) {
+    const noiseSelect = document.querySelector("#noiseTypeSelect");
+
+    if (noiseSelect) {
+        // Aggiorna il valore del <select>
+        noiseSelect.value = noiseType;
+
+        // Aggiorna il tipo di rumore
+        if (typeof updateNoiseSource === "function") {
+            try {
+                updateNoiseSource(noiseType);
+                console.log(`Tipo di rumore aggiornato a: ${noiseType}`);
+            } catch (error) {
+                console.error("Errore durante l'aggiornamento del rumore:", error);
+            }
+        } else {
+            console.error("Funzione updateNoiseSource non trovata.");
         }
     } else {
-        console.error("Funzione updateNoiseSource non trovata.");
+        console.error("Elemento <select> con id 'noiseTypeSelect' non trovato.");
     }
-
-    // Evidenzia l'elemento selezionato (stile attivo)
-    carouselCells.forEach((cell) => {
-        if (cell.getAttribute("value") === noiseType) {
-            cell.classList.add("active");
-        } else {
-            cell.classList.remove("active");
-        }
-    });
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    if (noiseGainNode) {
+        noiseGainNode.gain.value = Math.pow(10, -60 / 20);
+        document.getElementById("noiseVolumeValue").innerText = (-60).toFixed(1);
+        console.log("Volume del rumore inizializzato a -60 dB.");
+    } else {
+        console.warn("Nodo di guadagno del rumore non trovato.");
+    }
+});
 

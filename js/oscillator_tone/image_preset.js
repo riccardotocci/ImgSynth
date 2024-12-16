@@ -25,7 +25,7 @@ function adjustPresetFromImage(imageAnalysis, dominantColors) {
             id: `oscillator${index + 1}`, // Identificatore dell'oscillatore
             waveform: waveType || (index % 2 === 0 ? "sine" : "triangle"), // Cambia il tipo di onda per oscillatori diversi
             detune: mapRange(sat, 0, 100, -100, 100), // Differenziazione del detune
-             // Modifica la frequenza in base all'indice
+            // Modifica la frequenza in base all'indice
             octave: Math.ceil(mapRange(light, 0, 100, -2 , 2 )), // Differenziazione dell'ottava
             volume: Math.ceil(mapRange(light, 0, 50, -20, 0)), // Differenziazione del volume
             harmonics: 1 + index * 2, // Aggiungi armoniche in base all'indice

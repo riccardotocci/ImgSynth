@@ -5,7 +5,7 @@ const sliderConfigs = {
         min: -60,
         max: 0,
         step: 1,
-        value: -12,
+        value: -60,
         unit: "dB",
         onChange: (value) => {
             if (noiseGainNode) {
@@ -81,9 +81,9 @@ const sliderConfigs = {
     } else {
         console.warn(`Elemento slider con ID ${config.id} non trovato.`);
     }
-  }
+}
 
-  function initializeOscillatorSliders(configs) {
+function initializeOscillatorSliders(configs) {
     Nexus.sliders = Nexus.sliders || {}; // Inizializza un contenitore globale per gli slider
 
     configs.forEach((config, index) => {
@@ -126,20 +126,19 @@ const sliderConfigs = {
     });
 }
 
-  
-  // Inizializza tutti gli slider quando il DOM è pronto
-  document.addEventListener("DOMContentLoaded", () => {
-    // Inizializza slider singoli
-    if (sliderConfigs.noiseVolume) {
-        initializeSlider(sliderConfigs.noiseVolume);
-    }
-  
-    // Inizializza slider per oscillatori
-    if (sliderConfigs.oscillatorVolumes) {
-        initializeOscillatorSliders(sliderConfigs.oscillatorVolumes);
-    }
-  });
-  
+// Inizializza tutti gli slider quando il DOM è pronto
+document.addEventListener("DOMContentLoaded", () => {
+  // Inizializza slider singoli
+  if (sliderConfigs.noiseVolume) {
+      initializeSlider(sliderConfigs.noiseVolume);
+  }
+
+  // Inizializza slider per oscillatori
+  if (sliderConfigs.oscillatorVolumes) {
+      initializeOscillatorSliders(sliderConfigs.oscillatorVolumes);
+  }
+});
+
 function setNoiseVolume(value) {
     const sliderElement = document.getElementById(sliderConfigs.noiseVolume.id);
     if (sliderElement) {

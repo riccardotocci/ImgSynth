@@ -1,9 +1,9 @@
 #firstrow{
   display: flex;
   flex-direction: row;
-  margin-bottom: 50px;
-  gap: 30px;
-  position:static;
+  align-content: center;
+  align-items: center;
+
 }
 
 .control-group {

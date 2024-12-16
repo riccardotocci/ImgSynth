@@ -9,6 +9,13 @@ const synthConfig = {
     },
 };
 
+const adsrConfig = {
+    attack: 0.5,  // Valore iniziale di attack
+    decay: 0.2,   // Valore iniziale di decay
+    sustain: 0.7, // Valore iniziale di sustain
+    release: 0.5, // Valore iniziale di release
+};
+
 var noise = new Tone.Noise("pink");
 
 var gain = new Tone.Gain(0.5);
@@ -17,7 +24,6 @@ const oscillators = Array.from({ length: 3 }, (_, i) => {
     const synth = new Tone.PolySynth(Tone.Synth, synthConfig);
     console.log(`Oscillatore ${i + 1} creato`, synth);
 
-    const detuneSignal = new Tone.Signal(0); 
     return {
         id: i + 1, // ID univoco
         isActive: true,
@@ -30,7 +36,12 @@ const oscillators = Array.from({ length: 3 }, (_, i) => {
             voices: 1,
         },
         synth: synth,
-        detuneSignal: detuneSignal,
+        envelope: {
+            attack: adsrConfig.attack,
+            decay: adsrConfig.decay,
+            sustain: adsrConfig.sustain,
+            release: adsrConfig.release,
+        },
     };
 });
 
@@ -46,14 +57,12 @@ oscillators.forEach((osc, index) => {
     console.log(`Canale del mixer ${index + 1} creato`);
 });
 
-
 const sharedFilter = new Tone.Filter({
     type: "lowpass", // Tipo di filtro
     frequency: 1000, // Frequenza iniziale
     Q: 1,            // Fattore di qualità
     rolloff: -12,    // Rolloff del filtro
 }).toDestination(); // Collega alla destinazione finale
-
 
 const envelopeScaler = new Tone.Multiply(5000);
 
@@ -63,12 +72,7 @@ const filterEnvelope = new Tone.Envelope({
     sustain: 0.7,         // Livello di Sustain
     release: 0.5,         // Tempo di Release
 });
-const adsrConfig = {
-    attack: 0.5,  // Valore iniziale di attack
-    decay: 0.2,   // Valore iniziale di decay
-    sustain: 0.7, // Valore iniziale di sustain
-    release: 0.5, // Valore iniziale di release
-};
+
 // Configurazione globale degli effetti (unica per tutti gli oscillatori)
 const effectsConfig = {
     reverbWet: 0.5,   // Livello del riverbero (0-1)
@@ -84,12 +88,7 @@ const effectsConfig = {
     limiterOn: true, // P,ofondità del chorus (0-1)
 }
 
-filterEnvelope.attack = adsrConfig.attack;
-filterEnvelope.decay = adsrConfig.decay;
-filterEnvelope.sustain = adsrConfig.sustain;
-filterEnvelope.release = adsrConfig.release;
 
-console.log("Envelope sincronizzato con il filtro condiviso:", adsrConfig);
 
 // Crea istanze degli effetti
 const reverb = new Tone.Reverb({ wet: effectsConfig.reverbWet });
@@ -104,79 +103,6 @@ const limiter = new Tone.Limiter(effectsConfig.limiterThreshold);
 const chorus = new Tone.Chorus(4, effectsConfig.chorusDepth, 0.5).start(); // Chorus a 4Hz
 
 const analyser = new Tone.Analyser("fft", 256);
-
-// Creazione degli LFO
-const lfo1 = new Tone.LFO({
-    frequency: 0.5, // Frequenza iniziale in Hz
-    min: 200,       // Valore minimo della modulazione
-    max: 800,       // Valore massimo della modulazione
-    amplitude: 0.5, // Ampiezza della modulazione
-}).start(); // Avvia l'LFO
-
-const lfo2 = new Tone.LFO({
-    frequency: 1,   // Frequenza iniziale in Hz
-    min: 0,         // Valore minimo della modulazione
-    max: 1,         // Valore massimo della modulazione
-    amplitude: 0.5, // Ampiezza della modulazione
-}).start(); // Avvia l'LFO
-
-console.log("LFO1 e LFO2 creati e avviati");
-
-// Crea le destinazioni dinamicamente
-const destinations = {
-    filterFrequency: sharedFilter.frequency,
-    delayWet: delay.wet,
-
-};
-
-oscillators.forEach((osc, index) => {
-    destinations[`oscillator${index + 1}Detune`] = value => {
-        osc.config.detune = value;
-        if (osc.synth) {
-            osc.synth.set({
-                detune: value
-            });
-        }
-    };
-});
-
-// Oscillator 1
-destinations[`oscillator1Pitch`] = value => updateOscillatorParameter(0, "pitch", value);
-destinations[`oscillator1Octave`] = value => updateOscillatorParameter(0, "octave", value);
-
-// Oscillator 2
-destinations[`oscillator2Pitch`] = value => updateOscillatorParameter(1, "pitch", value);
-destinations[`oscillator2Octave`] = value => updateOscillatorParameter(1, "octave", value);
-
-// Oscillator 3
-destinations[`oscillator3Pitch`] = value => updateOscillatorParameter(2, "pitch", value);
-destinations[`oscillator3Octave`] = value => updateOscillatorParameter(2, "octave", value);
-
-// Crea l'oggetto modMatrix con le destinazioni aggiornate
-const modMatrix = {
-    sources: {
-        LFO1: {
-            instance: lfo1,
-            parameters: {
-                frequency: lfo1.frequency,
-                amplitude: lfo1.amplitude,
-                min: lfo1.min,
-                max: lfo1.max,
-            },
-        },
-        LFO2: {
-            instance: lfo2,
-            parameters: {
-                frequency: lfo2.frequency,
-                amplitude: lfo2.amplitude,
-                min: lfo2.min,
-                max: lfo2.max,
-            },
-        },
-    },
-    destinations: destinations, // Usa le destinazioni dinamiche
-    connections: [], // Per gestire le connessioni dinamiche
-};
 
 let presets;
 

@@ -35,12 +35,11 @@ function handleKeyPress(keyRect, note) {
         if (osc.isActive) {
             console.log(`Oscillatore ${index + 1}: Nota ${fullNote} inviata`);
             osc.synth.triggerAttack(fullNote);
+            filterEnvelope.triggerAttack();
         }
     });
 
     // Attiva il rumore
-    const noiseType = document.querySelector(".carousel-cell.active").getAttribute("value") || "white";
-    updateNoiseSource(noiseType);
     playNoise();
 }
 
@@ -51,6 +50,8 @@ function handleKeyRelease() {
     oscillators.forEach((osc) => {
         if (osc.isActive) {
             osc.synth.releaseAll();
+            filterEnvelope.triggerRelease();
+
         }
     });
 

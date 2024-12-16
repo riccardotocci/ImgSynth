@@ -1,24 +1,33 @@
 #secondrow{
     display:flex;
     flex-direction: row;
-    gap: 100px;
+    gap: 160px;
 }
 
-.adsr-section {
+.knob-adsr{
     display: flex;
     flex-direction: row;
     gap:10px;
     align-items: center;
     justify-content: center;
+
+}
+
+#envelope{
+    display:flex;
+    flex-direction: column;
+    
+}
+
+.adsr-section{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
     margin: 10px;
     padding: 10px;
     border: 1px solid #ccc;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     background-color: rgba(133, 216, 0, 0.2);
-}
-
-#envelope{
-    display:flex;
-    flex-direction: column;
 }

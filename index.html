@@ -102,7 +102,7 @@
     <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="adjustPresetButton">Modifica Preset da Immagine</button>
 </div>
 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="recalculateButton" style="display: none;">
-        Regenarate
+        Regenerate
 </button>
 </div>
 
@@ -300,7 +300,7 @@
 
         <label for="noiseType"></label>
         <div id="noiseType">
-            <select id="noiseTypeSelect">
+            <select id="noiseTypeSelect" class="block w-30 p-2 mb-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option value="white">White</option>
                 <option value="pink">Pink</option>
                 <option value="brown">Brown</option>
@@ -318,7 +318,7 @@
     </div>
     <div id="secfilter">
         <label for="sharedFilterType">Type</label>
-        <select id="sharedFilterType">
+        <select id="sharedFilterType" class="block w-30 p-2 mb-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option value="lowpass">Lowpass</option>
             <option value="highpass">Highpass</option>
             <option value="bandpass">Bandpass</option>
@@ -329,9 +329,15 @@
             <option value="highshelf">Highshelf</option>
         </select>
     </div>
-    <div>
+
+    <div id="secfilter" id="filterQualityControl">
+        <label for="sharedFilterQ">Q</label>
+        <input id="sharedFilterQ" min="0.1" max="10" step="0.1" value="1" type="range" class="input-knob" data-bgcolor=' rgba(100, 230, 70, 0.2)' data-fgcolor=' rgba(0, 250, 0, 0.8)'>
+        <span id="sharedFilterQValue">1</span>
+    </div>
+    <div id="secfilter">
         <label for="sharedFilterRolloff">Rolloff</label>
-        <select id="sharedFilterRolloff">
+        <select id="sharedFilterRolloff" class="block w-30 p-2 mb-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option value="-12">-12 dB/oct</option>
             <option value="-24">-24 dB/oct</option>
             <option value="-48">-48 dB/oct</option>
@@ -343,6 +349,8 @@
 <div id="secondrow">
     <!--adsr-->
         <div class="adsr-section">
+            <label>AMPLITUDE-ENVELOPE</label>
+            <div class="knob-adsr">
             <div id="envelope">
                 <label for="attack">Attack</label>
                 <input type="range" class="input-knob"  id="attack" min="0" max="2" step="0.01" value="0.5" data-bgcolor='rgba(170, 240, 0, 0.2)' data-fgcolor='rgba(30, 120, 0, 0.8)'>
@@ -363,127 +371,53 @@
                 <input type="range" class="input-knob"  id="release" min="0" max="2" step="0.01" value="0.5" data-bgcolor='rgba(170, 240, 0, 0.2)' data-fgcolor='rgba(30, 120, 0, 0.8)'>
                 <span id="releaseValue">0.50</span>
             </div>
-        </div>
-
-        <div id="lfoControls">
-        
-            <div id="lfoparameter">
-                <h4>LFO 1</h4>
-                <label for="lfo1Frequency">Frequenza</label>
-                <input id="lfo1Frequency" type="range" min="0.1" max="10" step="0.1" value="0.5">
-                <label for="lfo1Min">Min</label>
-                <input id="lfo1Min" type="number" value="200">
-                <label for="lfo1Max">Max</label>
-                <input id="lfo1Max" type="number" value="800">
-                <label for="lfo1Amplitude">Ampiezza</label>
-                <input id="lfo1Amplitude" type="range" min="0" max="1" step="0.01" value="0.5">
-            </div>
-            <div id="lfoparameter">
-                <h4>LFO 2</h4>
-                <label for="lfo2Frequency">Frequenza</label>
-                <input id="lfo2Frequency" type="range" min="0.1" max="10" step="0.1" value="1">
-                <label for="lfo2Min">Min</label>
-                <input id="lfo2Min" type="number" value="0">
-                <label for="lfo2Max">Max</label>
-                <input id="lfo2Max" type="number" value="1">
-                <label for="lfo2Amplitude">Ampiezza</label>
-                <input id="lfo2Amplitude" type="range" min="0" max="1" step="0.01" value="0.5">
             </div>
         </div>
-        <div id="modMatrixDynamicTable">
-            <h3>Modulation Matrix</h3>
-            <table id="modMatrixTable" border="1">
-                <thead>
-                    <tr>
-                        <th>Sorgente</th>
-                        <th>Destinazione</th>
-                        <th>Intensità</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <select id="source1" class="sourceSelect">
-                                <option value="null">null</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select id="destination1" class="destinationSelect">
-                                <option value="null">null</option>
-                            </select>
-                        </td>
-                        <td>
-                            <input id="intensity1" type="range" min="-1" max="1" step="0.01" value="0">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <select id="source2" class="sourceSelect">
-                                <option value="null">null</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select id="destination2" class="destinationSelect">
-                                <option value="null">null</option>
-                            </select>
-                        </td>
-                        <td>
-                            <input id="intensity2" type="range" min="-1" max="1" step="0.01" value="0">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <select id="source3" class="sourceSelect">
-                                <option value="null">null</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select id="destination3" class="destinationSelect">
-                                <option value="null">null</option>
-                            </select>
-                        </td>
-                        <td>
-                            <input id="intensity3" type="range" min="-1" max="1" step="0.01" value="0">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <select id="source4" class="sourceSelect">
-                                <option value="null">null</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select id="destination4" class="destinationSelect">
-                                <option value="null">null</option>
-                            </select>
-                        </td>
-                        <td>
-                            <input id="intensity4" type="range" min="-1" max="1" step="0.01" value="0">
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div> 
+    <!--adsr-->
+    
+    <div class="adsr-section">
+        <label>FILTER-ENVELOPE</label>
+        <div class="knob-adsr">
+            <div id="envelope">
+                <label for="filter-attack">Attack</label>
+                <input type="range" class="input-knob"  id="filter-attack" min="0" max="2" step="0.01" value="0.5" data-bgcolor='rgba(170, 240, 0, 0.2)' data-fgcolor='rgba(30, 120, 0, 0.8)'>
+                <span id="filter-attack-value">0.50</span>
+            </div>
+            <div id="envelope">
+                <label for="filter-decay">Decay</label>
+                <input type="range" class="input-knob"  id="filter-decay" min="0" max="2" step="0.01" value="0.2" data-bgcolor='rgba(170, 240, 0, 0.2)' data-fgcolor='rgba(30, 120, 0, 0.8)'>
+                <span id="filter-decay-value">0.20</span>
+            </div>
+            <div id="envelope">
+                <label for="filter-sustain">Sustain</label>
+                <input type="range" class="input-knob" id="filter-sustain" min="0" max="1" step="0.01" value="0.7" data-bgcolor='rgba(170, 240, 0, 0.2)' data-fgcolor='rgba(30, 120, 0, 0.8)'>
+                <span id="filter-sustain-value">0.70</span>
+            </div>
+            <div id="envelope">
+                <label for="filter-release">Release</label>
+                <input type="range" class="input-knob"  id="filter-release" min="0" max="2" step="0.01" value="0.5" data-bgcolor='rgba(170, 240, 0, 0.2)' data-fgcolor='rgba(30, 120, 0, 0.8)'>
+                <span id="filter-release-value">0.50</span>
+            </div>
+        </div>
+    </div>
 </div>
-<div id="thirdrow">
-        
-        
+<div id="thirdrow">        
         <!-- Configurazione Effetti -->
         <section id="effects">
             <div id="Distortion">
                 <h3>Distortion</h3>
                 <input id="distortionToggle" type="checkbox" class="js-switch">
-                <label for="distortionType">Type:</label>
+                <label for="distortionType">Type</label>
                 <select id="distortionType">
                     <option value="sine">Sine</option>
                     <option value="saw">Saw</option>
                     <option value="square">Square</option>
                 </select>
-                <label for="distortionAmount">AMT:</label>
-                <input type="range" class="input-knob" id="distortionAmount" min="0" max="1" step="0.01" data-bgcolor='rgba(100, 230, 70, 0.2)' data-fgcolor=' rgba(0, 250, 0, 0.8)'>
+                <label for="distortionAmount">AMT</label>
+                <input type="range" class="input-knob" id="distortionAmount" min="0" max="1" step="0.01" data-bgcolor=' rgba(160,40,40,0.7)' data-fgcolor=' rgba(255,40,40,0.8)'>
                 <div id="distortionAmountValue">0.5</div>
                 <label for="distortionWet">Wet:</label>
-                <input type="range" class="input-knob" id="distortionWet" min="0" max="1" step="0.01">
+                <input type="range" class="input-knob" id="distortionWet" min="0" max="1" step="0.01" data-bgcolor=' rgba(160,40,40,0.7)' data-fgcolor=' rgba(255,40,40,0.8)'>
                 <div id="distortionWetValue">0.5</div>
             </div>
             
@@ -493,25 +427,25 @@
                 <div id="chorusToggleValue"></div>
                 <div id="choruspanel">
                     <div id="chorus1">
-                        <label for="chorusDelay">Delay:</label>
-                        <input type="range" class="input-knob" id="chorusDelay" min="0" max="10" step="0.1">
+                        <label for="chorusDelay">Delay</label>
+                        <input type="range" class="input-knob" id="chorusDelay" min="0" max="10" step="0.1" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
                         <div id="chorusDelayValue"></div>
-                        <label for="chorusDepth">Depth:</label>
-                        <input type="range" class="input-knob" id="chorusDepth" min="0" max="1" step="0.01">
+                        <label for="chorusDepth">Depth</label>
+                        <input type="range" class="input-knob" id="chorusDepth" min="0" max="1" step="0.01" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
                         <div id="chorusDepthValue"></div>
-                        <label for="chorusFeedback">Feedback:</label>
-                        <input type="range" class="input-knob" id="chorusFeedback" min="0" max="1" step="0.01">
+                        <label for="chorusFeedback">Feedback</label>
+                        <input type="range" class="input-knob" id="chorusFeedback" min="0" max="1" step="0.01" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
                     </div>
                     <div id="chorus2">
                         <div id="chorusFeedbackValue"></div>
-                        <label for="chorusFrequency">Frequency (Hz):</label>
-                        <input type="range" class="input-knob" id="chorusFrequency" min="0.1" max="10" step="0.1">
+                        <label for="chorusFrequency">Frequency (Hz)</label>
+                        <input type="range" class="input-knob" id="chorusFrequency" min="0.1" max="10" step="0.1" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
                         <div id="chorusFrequencyValue"></div>
-                        <label for="chorusSpread">Spread:</label>
-                        <input type="range" class="input-knob" id="chorusSpread" min="0" max="360" step="1">
+                        <label for="chorusSpread">Spread</label>
+                        <input type="range" class="input-knob" id="chorusSpread" min="0" max="360" step="1" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
                         <div id="chorusSpreadValue"></div>
-                        <label for="chorusWet">Wet:</label>
-                        <input type="range" class="input-knob" id="chorusWet" min="0" max="1" step="0.01">
+                        <label for="chorusWet">Wet</label>
+                        <input type="range" class="input-knob" id="chorusWet" min="0" max="1" step="0.01" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
                         <div id="chorusWetValue"></div>
                     </div>
                 </div>
@@ -521,14 +455,14 @@
                 <h3>Delay</h3>
                 <input id="delayToggle" type="checkbox" class="js-switch">
                 <div id="delayToggleValue"></div>
-                <label for="delayTime">Delay Time:</label>
-                <input type="range" class="input-knob" id="delayTime" min="0" max="1000" step="10" value="500">
+                <label for="delayTime">Delay Time</label>
+                <input type="range" class="input-knob" id="delayTime" min="0" max="1000" step="10" value="500" data-bgcolor=' rgba(170,20,100,0.7)' data-fgcolor=' rgba(255,0,120,0.8)'>
                 <div id="delayTimeValue"></div>
-                <label for="delayFeedback">Feedback:</label>
-                <input type="range" class="input-knob" id="delayFeedback" min="0" max="1" step="0.01">
+                <label for="delayFeedback">Feedback</label>
+                <input type="range" class="input-knob" id="delayFeedback" min="0" max="1" step="0.01" data-bgcolor=' rgba(170,20,100,0.7)' data-fgcolor=' rgba(255,0,120,0.8)'>
                 <div id="delayFeedbackValue"></div>
-                <label for="delayWet">Wet:</label>
-                <input type="range" class="input-knob" id="delayWet" min="0" max="1" step="0.01">
+                <label for="delayWet">Wet</label>
+                <input type="range" class="input-knob" id="delayWet" min="0" max="1" step="0.01" data-bgcolor=' rgba(170,20,100,0.7)' data-fgcolor=' rgba(255,0,120,0.8)'>
                 <div id="delayWetValue"></div>
             </div>
             
@@ -536,14 +470,14 @@
                 <h3>Reverb</h3>
                 <input id="reverbToggle" type="checkbox" class="js-switch">
                 <div id="reverbToggleValue"></div>
-                <label for="reverbSize">Size:</label>
-                <input type="range" class="input-knob" id="reverbSize" min="0" max="1" step="0.01">
+                <label for="reverbSize">Size</label>
+                <input type="range" class="input-knob" id="reverbSize" min="0" max="1" step="0.01" data-bgcolor=' rgba(140,0,120,0.7)' data-fgcolor=' rgba(250,0,150,0.8)'>
                 <div id="reverbSizeValue"></div>
-                <label for="reverbPreDelay">Pre-delay:</label>
-                <input type="range" class="input-knob" id="reverbPreDelay" min="0" max="1" step="0.01">
+                <label for="reverbPreDelay">Pre-delay</label>
+                <input type="range" class="input-knob" id="reverbPreDelay" min="0" max="1" step="0.01" data-bgcolor=' rgba(140,0,120,0.7)' data-fgcolor=' rgba(250,0,150,0.8)'>
                 <div id="reverbPreDelayValue"></div>
-                <label for="reverbWet">Wet:</label>
-                <input type="range" class="input-knob" id="reverbWet" min="0" max="1" step="0.01">
+                <label for="reverbWet">Wet</label>
+                <input type="range" class="input-knob" id="reverbWet" min="0" max="1" step="0.01" data-bgcolor=' rgba(140,0,120,0.7)' data-fgcolor=' rgba(250,0,150,0.8)'>
                 <div id="reverbWetValue"></div>
             </div>
             
@@ -551,8 +485,8 @@
                 <h3>Limiter</h3>
                 <input id="limiterToggle" type="checkbox" class="js-switch">
                 <div id="limiterToggleValue"></div>
-                <label for="limiterThreshold">Threshold:</label>
-                <input type="range" class="input-knob" id="limiterThreshold" min="-60" max="0" step="1">
+                <label for="limiterThreshold">Threshold</label>
+                <input type="range" class="input-knob" id="limiterThreshold" min="-60" max="0" step="1" data-bgcolor=' rgba(80,0,80,0.7)' data-fgcolor=' rgba(200,0,200,0.8)'>
                 <div id="limiterThresholdValue"></div>
             </div>
         </section>
@@ -561,15 +495,15 @@
             <div id="imageContainer">
                 <img id="displayedImage" src="" alt="Image will appear here" style="max-width: 100%; display: none;">
             </div>
-            <button id="selectImageButton">Seleziona Foto</button>
+            <button  class="bg-white w-60 text-black font-bold py-1 px-3 rounded" id="selectImageButton">Seleziona Foto</button>
             <div id="imageListContainer" style="display: none;">
                 <h3>Seleziona un'immagine:</h3>
                 <ul id="imageList"></ul>
             </div>
 
-            <button id="savePresetButton">Salva Preset</button>
+            <button class="bg-white w-60 text-black font-bold py-1 px-3 rounded" id="savePresetButton">Salva Preset</button>
           
-            <select id="presetSelector">
+            <select id="presetSelector" class="block w-60 p-2 mb-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option value="default">Default</option>
                 <option value="ambient">Ambient</option>
                 <option value="bass">Bass</option>
@@ -599,8 +533,6 @@
     <script src="js/oscillator_tone/filter.js"></script>
     <script src="js/oscillator_tone/mixer.js"></script>
     <script src="js/oscillator_tone/envelope.js"></script>
-    <script src="js/oscillator_tone/lfo.js"></script>
-    <script src="js/oscillator_tone/modmatrix.js"></script>
     <script src="js/oscillator_tone/effects.js"></script>
     <script src="js/oscillator_tone/preset.js"></script>
     <script src="js/oscillator_tone/image_preset.js"></script>

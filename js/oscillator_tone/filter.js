@@ -37,4 +37,17 @@ if (displayFrequencyValue) {
     });
 }
 
+// Listener per modificare il Q del filtro condiviso
+const qualityControl = document.getElementById("sharedFilterQ");
+const qualityValueDisplay = document.getElementById("sharedFilterQValue");
+
+if (qualityControl) {
+    qualityControl.addEventListener("input", (e) => {
+        const qValue = parseFloat(e.target.value);
+        sharedFilter.Q.value = qValue; // Aggiorna il Q del filtro condiviso
+        qualityValueDisplay.textContent = qValue.toFixed(1); // Aggiorna l'interfaccia utente
+        console.log(`Qualità (Q) del filtro condiviso aggiornata a: ${qValue}`);
+    });
+}
+
 
