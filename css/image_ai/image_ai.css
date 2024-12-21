@@ -1,20 +1,20 @@
 /* CSS per il modulo Image AI */
 
-.image-ai .color-swatch {
+ .color-swatch {
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 10px 0;
 }
 
-.image-ai .color-box {
+ .color-box {
   width: 50px;
   height: 50px;
   border: 1px solid transparent;
   margin-right: 10px;
 }
 
-.image-ai .waveform-button {
+.waveform-button {
   background-color: #007bff;
   color: #fff;
   border: none;
@@ -25,23 +25,26 @@
   margin-left: 10px;
 }
 
-.image-ai .waveform-button:hover {
+ .waveform-button:hover {
   background-color: #0056b3;
 }
-
-.image-ai #recalculateButton {
-  background-color: #007bff;
-  color: #fff;
+#recalculateButton {
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.7));
+  display: inline-block; /* Per evitare spazi indesiderati */
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin: 20px 0;
+  transition: background-color 0.05s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
 
-.image-ai #recalculateButton:hover {
-  background-color: #0056b3;
+#recalculateButton:active {
+  transform: scale(0.8);
+}
+
+.ImgSynthLogo{
+  filter: drop-shadow(2px 2px 2px rgba(255, 255, 255, 0.2));
+  display: inline-block; /* Per evitare spazi indesiderati */
 }
 
 

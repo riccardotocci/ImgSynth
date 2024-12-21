@@ -29,6 +29,8 @@ function updateFilterUI(preset) {
     document.getElementById("sharedFilterType").value = preset.filterType;
     document.getElementById("sharedFilterFrequency").value = preset.sharedFilterFrequency;
     document.getElementById("sharedFilterRolloff").value = preset.sharedFilterQ;
+    document.getElementById("sharedFilterFrequencyValue").textContent = `${Math.round(preset.sharedFilterFrequency)} Hz`;
+
 }
 
 function updateEnvelopeUI(preset) {

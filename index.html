@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ImgSynth</title>
+    <link rel="icon" type="image/png" href="img/IMGSYNTH.png" width="16px" height="16px" stile=" filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 1));
+  display: inline-block;">
         <!-- CSS -->
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/oscillator_tone/main.css">
@@ -49,18 +51,14 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
 
-
-
-        
-
 </head>
 <body>
 
       
-<h3>ImgSynth</h3>
+<img src="img/IMGSYNTH1.png" class="ImgSynthLogo" width="400" height="200" />
 <div class="popup-overlay" id="popup">
     <div id="auth-container">
-    <h4 class="text-4xl font-bold text-white">ImgSynth</h4> 
+    <img src="img/IMGSYNTH2.png" alt="ImgSynth Logo" width="400" height="200" />
     <!-- Login con Email/Password -->
     <form id="email-login-form" style="display: block;">
     <input type="email" id="email" placeholder="Email" required />
@@ -101,9 +99,6 @@
 <div class="presetadjust">
     <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="adjustPresetButton">Modifica Preset da Immagine</button>
 </div>
-<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="recalculateButton" style="display: none;">
-        Regenerate
-</button>
 </div>
 
 
@@ -117,6 +112,7 @@
         <h3>Analizzatore di Spettro - Output Finale</h3>
         <canvas id="analyserCanvas" width="300" height="150"></canvas>
     </div>
+    <canvas id="defaultCanvas0"></canvas>
     <div class="image-ai">
         <canvas id="canvas" style="display: none;"></canvas>
         <div id="output"></div>
@@ -508,6 +504,9 @@
                 <option value="ambient">Ambient</option>
                 <option value="bass">Bass</option>
             </select>
+            <button id="recalculateButton" style="display: none;">
+                <img src="img/IMGSYNTH.png" alt="ImgSynth Logo" width="100" height="100" />
+            </button>
         </div>            
 </div>
         <!-- Controllo Principale -->
@@ -542,5 +541,6 @@
     <script src="js/oscillator_tone/connection.js"></script>
     <script src="js/oscillator_tone/main.js"></script>
     <script src="js/oscillator_tone/tastiera.js"></script>
+    <script src="js/p5_img/p5.js"></script>
 </body>
 </html>

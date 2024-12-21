@@ -8,6 +8,15 @@ if (frequencyControl) {
     
 }
 
+// Funzione per visualizzare il valore della frequenza condivisa
+const displayFrequencyValue = document.getElementById("sharedFilterFrequencyValue");
+if (displayFrequencyValue) {
+    frequencyControl.addEventListener("input", (e) => {
+        const frequency = parseFloat(e.target.value);
+        displayFrequencyValue.textContent = `${frequency} Hz`;
+    });
+}
+
 // Listener per modificare il tipo di filtro condiviso
 const filterTypeControl = document.getElementById("sharedFilterType");
 if (filterTypeControl) {
@@ -28,14 +37,7 @@ if (rolloffControl) {
     });
 }
 
-// Funzione per visualizzare il valore della frequenza condivisa
-const displayFrequencyValue = document.getElementById("sharedFilterFrequencyValue");
-if (displayFrequencyValue) {
-    frequencyControl.addEventListener("input", (e) => {
-        const frequency = parseFloat(e.target.value);
-        displayFrequencyValue.textContent = `${frequency} Hz`;
-    });
-}
+
 
 // Listener per modificare il Q del filtro condiviso
 const qualityControl = document.getElementById("sharedFilterQ");
