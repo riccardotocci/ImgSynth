@@ -23,21 +23,18 @@
         <link rel="stylesheet" href="css/slider.css">
         <link rel="stylesheet" href="css/imagecontainer.css">
         <link rel="stylesheet" href="css/select.css">
+        <link rel="stylesheet" href="css/p5.css">
         <link rel="stylesheet" href="css/oscillator_tone/modmatrix.css">
         
         <link rel="stylesheet" href="css/oscillator_tone/preset.css">
    
 
-        
-
-
-    
         <!-- Librerie JS -->
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.36/Tone.min.js"></script>
         <script src="oscillator_tone/input-knobs-master/input-knobs.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
-        <script async src="https://docs.opencv.org/4.x/opencv.js" onload="onOpenCvReady();" defer></script>
+        <script src="https://docs.opencv.org/4.10.0/opencv.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/nexusui/dist/NexusUI.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -46,7 +43,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
         <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
         <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
-        <script type="module" src="oscillator_tone/webaudio-controls.js"></script>
+
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
@@ -109,48 +106,47 @@
     </div>
 <div id="section1" class="section">
     <div id="spectrumAnalyzer">
-        <h3>Analizzatore di Spettro - Output Finale</h3>
         <canvas id="analyserCanvas" width="300" height="150"></canvas>
     </div>
-    <canvas id="defaultCanvas0"></canvas>
-    <div class="image-ai">
-        <canvas id="canvas" style="display: none;"></canvas>
-        <div id="output"></div>
+    <div id="canvas-container" style="display: none;">
+        <canvas id="mainCanvas"></canvas>
       </div>
-      <div id="player">
-        <section id="main">
-            <button id="connectMIDI">Connetti MIDI</button>
-            <button id="playSequence">Suona Sequenza</button>
-            <button id="playChord">Suona Accordo</button>
-            <div id="status">Pronto</div>
-        </section>
-    </div>
-    <svg viewBox="0 0 2000 200">
+    <svg class="keyboard-virtual" viewBox="-385 0 1300 300">
         <!-- White keys -->
-        <rect class="white-key" x="0" y="0" width="50" height="200" data-note="C4" />
-        <rect class="white-key" x="50" y="0" width="50" height="200" data-note="D4" />
-        <rect class="white-key" x="100" y="0" width="50" height="200" data-note="E4" />
-        <rect class="white-key" x="150" y="0" width="50" height="200" data-note="F4" />
-        <rect class="white-key" x="200" y="0" width="50" height="200" data-note="G4" />
-        <rect class="white-key" x="250" y="0" width="50" height="200" data-note="A4" />
-        <rect class="white-key" x="300" y="0" width="50" height="200" data-note="B4" />
-    
+        <rect class="white-key" x="0" y="0" width="75" height="300" data-note="C" />
+        <rect class="white-key" x="75" y="0" width="75" height="300" data-note="D" />
+        <rect class="white-key" x="150" y="0" width="75" height="300" data-note="E" />
+        <rect class="white-key" x="225" y="0" width="75" height="300" data-note="F" />
+        <rect class="white-key" x="300" y="0" width="75" height="300" data-note="G" />
+        <rect class="white-key" x="375" y="0" width="75" height="300" data-note="A" />
+        <rect class="white-key" x="450" y="0" width="75" height="300" data-note="B" />
+
         <!-- Black keys -->
-        <rect class="black-key" x="35" y="0" width="30" height="120" data-note="C#4" />
-        <rect class="black-key" x="85" y="0" width="30" height="120" data-note="D#4" />
-        <rect class="black-key" x="185" y="0" width="30" height="120" data-note="F#4" />
-        <rect class="black-key" x="235" y="0" width="30" height="120" data-note="G#4" />
-        <rect class="black-key" x="285" y="0" width="30" height="120" data-note="A#4" />
+        <rect class="black-key" x="52.5" y="0" width="45" height="180" data-note="C#" />
+        <rect class="black-key" x="127.5" y="0" width="45" height="180" data-note="D#" />
+        <rect class="black-key" x="277.5" y="0" width="45" height="180" data-note="F#" />
+        <rect class="black-key" x="352.5" y="0" width="45" height="180" data-note="G#" />
+        <rect class="black-key" x="427.5" y="0" width="45" height="180" data-note="A#" />
       </svg>
     <div>
         <label for="octaveControl">Ottava:</label>
         <input type="number" id="octaveControl" value="4" min="1" max="8" />
     </div>
+    <div class="image-ai">
+        <canvas id="canvas" style="display: none;"></canvas>
+        <div id="output"></div>
+    </div>
+    <div id="player">
+        <section id="main">
+            <button id="connectMIDI">Connetti MIDI</button>
+        </section>
+</div>
 </div>
 <div id="section2" class="section" hidden>
 
-     
-<div id="firstrow">           <!-- Oscillatore 1 -->
+<!-- Oscillatore 1 -->
+
+<div id="firstrow">           
     <div id="control-group">
         <div id="oscillator" class="oscillator1">
             <div class="oscillator-container">
@@ -541,6 +537,6 @@
     <script src="js/oscillator_tone/connection.js"></script>
     <script src="js/oscillator_tone/main.js"></script>
     <script src="js/oscillator_tone/tastiera.js"></script>
-    <script src="js/p5_img/p5.js"></script>
+    <script src="sketch.js"></script>
 </body>
 </html>

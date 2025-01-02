@@ -2,6 +2,11 @@ let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
 let result = document.getElementById('result');
 
+console.log('cv:', cv); // Verifica che OpenCV.js sia caricato
+console.log('Canvas:', canvas); // Verifica il canvas
+console.log('Immagine caricata:', cv.imread(canvas)); // Testa cv.imread
+
+
 function onOpenCvReady() {
   if (typeof cv === 'undefined') {
     console.error('OpenCV.js non è stato caricato correttamente.');
@@ -13,7 +18,6 @@ function onOpenCvReady() {
 
 function calculateSharpness(canvas, ctx){
     try {
-
       // Converti l'immagine in un Mat di OpenCV
       let src = cv.imread(canvas);
       let gray = new cv.Mat();
@@ -50,5 +54,4 @@ function calculateSharpness(canvas, ctx){
       console.error('Errore durante l’elaborazione:', error);
       alert('Si è verificato un errore durante l’elaborazione dell’immagine.');
     }
-
-  };
+};

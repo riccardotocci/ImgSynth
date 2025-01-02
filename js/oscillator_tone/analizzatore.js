@@ -13,10 +13,10 @@ function drawSpectrum() {
     const barWidth = width / data.length;
     data.forEach((value, index) => {
         const barHeight = (value + 140) * (height / 140); // Normalizza i valori
-        const x = index * barWidth;
+        const x = Math.log10(index + 1) * barWidth * data.length / Math.log10(data.length + 1);
 
         // Colore dinamico basato sull'ampiezza
-        const color = `hsl(${(index / data.length) * 360}, 100%, 50%)`;
+        const color = `hsl(${Math.log10(index + 1) * 360 / Math.log10(data.length + 1)}, 100%, 50%)`;
         canvasContextAn.fillStyle = color;
 
         // Disegna la barra

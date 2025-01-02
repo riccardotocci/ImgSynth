@@ -3,8 +3,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    align-content: center;
 }
+#canvas-container{
+    border: 1px solid #ddd;
+    height: 200px;
 
+}
 #player {
     bottom: 20px; /* Posiziona il contenitore a 20px dal fondo della pagina */ /* Allinea al centro orizzontalmente */
     /* Compensa la metà della larghezza per il centramento */
@@ -20,6 +25,7 @@
     border-radius: 8px; /* Angoli arrotondati */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Leggera ombra */
     font-family: Arial, sans-serif;
+    margin: auto;
 }
 
 
@@ -66,6 +72,17 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     text-align: center;
+}
+#spectrumAnalyzer{
+    width: 400px;
+    margin: auto;
+    margin-bottom: 20px;
+    height: 155px;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    background-color: rgba(0, 0, 0, 0.322);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 label[for="octaveControl"] {

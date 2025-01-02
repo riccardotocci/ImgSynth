@@ -11,13 +11,17 @@ document.getElementById("octaveControl").addEventListener("input", (e) => {
 
 // Aggiungi eventi ai tasti esistenti nella tastiera SVG
 document.querySelectorAll("rect").forEach((keyRect) => {
-    const note = keyRect.getAttribute("data-note");
+    const baseNote = keyRect.getAttribute("data-note");
 
     // Aggiungi eventi per mouse e touch
-    keyRect.addEventListener("mousedown", () => handleKeyPress(keyRect, note));
+    keyRect.addEventListener("mousedown", () => {
+        let note = baseNote + currentOctave;
+        handleKeyPress(keyRect, note);
+    });
     keyRect.addEventListener("mouseup", handleKeyRelease);
     keyRect.addEventListener("touchstart", (e) => {
         e.preventDefault();
+        let note = baseNote + currentOctave;
         handleKeyPress(keyRect, note);
     });
     keyRect.addEventListener("touchend", handleKeyRelease);

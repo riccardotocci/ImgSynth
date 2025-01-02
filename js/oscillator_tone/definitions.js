@@ -16,7 +16,7 @@ const adsrConfig = {
     release: 0.5, // Valore iniziale di release
 };
 
-var noise = new Tone.Noise("pink");
+var noisesynth = new Tone.Noise("pink");
 
 var gain = new Tone.Gain(0.5);
 
@@ -103,6 +103,7 @@ const limiter = new Tone.Limiter(effectsConfig.limiterThreshold);
 const chorus = new Tone.Chorus(4, effectsConfig.chorusDepth, 0.5).start(); // Chorus a 4Hz
 
 const analyser = new Tone.Analyser("fft", 256);
+window.analyser = analyser;
 
 let presets;
 
@@ -166,7 +167,7 @@ document.getElementById("presetSelector").addEventListener("change", (e) => {
             },
     
             // Configurazione del noise
-            noise: {
+            noisesynth: {
                 level: 0, // Livello del rumore (0-100)
             },
         },

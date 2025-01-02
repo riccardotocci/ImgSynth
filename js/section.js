@@ -13,7 +13,6 @@ document.getElementById("skip-button").addEventListener("click", () => {
     console.log("Login skipped by the user.");
     closePopup();
   });
-  
 
         function showSection(sectionId, element, useHidden = false) {
             // Remove 'active' class from all navbar links

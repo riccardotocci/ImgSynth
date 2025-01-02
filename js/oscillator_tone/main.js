@@ -15,60 +15,6 @@ const toggleNoise = (noise) => {
 };
 
 
-document.getElementById("playSequence").addEventListener("click", async () => {
-    await Tone.start();
-    console.log("Playing sequence...");
-
-    const now = Tone.now();
-    const notes = ["C4", "E4", "G4", "B4"];
-    const durationPerNote = 0.5; // Durata di ciascuna nota in secondi
-    const totalDuration = notes.length * durationPerNote; // Durata totale della sequenza
-    const noiseType = document.getElementById("noiseType").value;
-
-    // Aggiorna il tipo di rumore
-    updateNoiseSource(noiseType);
-
-    // Avvia il rumore
-    playNoise();
-
-    // Riproduzione delle note
-    notes.forEach((note, index) => {
-        oscillators.forEach((osc) => {
-            if (osc.isActive) {
-                osc.synth.triggerAttackRelease(note, "8n", now + index * durationPerNote);
-            }
-        });
-    });
-
-    // Arresta il rumore dopo la durata totale della sequenza
-    setTimeout(() => {
-        stopNoise();
-    }, totalDuration * 1000);
-});
-
-
-// Riproduzione di un accordo
-document.getElementById("playChord").addEventListener("click", async () => {
-    await Tone.start();
-    console.log("Playing chord...");
-    const chord = ["C4", "E4", "G4"];
-    const noiseType = document.getElementById("noiseType").value;
-    const duration = 2; // Durata in secondi
-    oscillators.forEach((osc) => {
-        if (osc.isActive) {
-            osc.synth.triggerAttackRelease(chord, "2n");
-        }
-    });
-    // Riproduzione del rumore
-    updateNoiseSource(noiseType);
-    playNoise(); // Avvia il rumore
-
-    // Arresta il rumore dopo la durata specificata
-    setTimeout(() => {
-        stopNoise(); // Ferma il rumore
-    }, duration * 1000);
-});
-
 document.getElementById("connectMIDI").addEventListener("click", async () => {
     if (navigator.requestMIDIAccess) {
         const midiAccess = await navigator.requestMIDIAccess();
@@ -83,8 +29,10 @@ document.getElementById("connectMIDI").addEventListener("click", async () => {
                 oscillators.forEach((osc) => {
                     if (osc.isActive) {
                         if (status === 144 && velocity > 0) { // Nota premuta
+                            startVisualizationFromMIDI(note);
                             osc.synth.triggerAttack(frequency);
-                        } else if (status === 128 || (status === 144 && velocity === 0)) { // Nota rilasciata
+                        } else if (status === 128 || (status === 144 && velocity === 0)) {
+                            stopVisualization(); // Nota rilasciata
                             osc.synth.triggerRelease(frequency);
                         }
                     }

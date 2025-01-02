@@ -1,83 +1,95 @@
-// Variabili globali
-let img; // Immagine di base
-let fft, amplitude; // Analizzatori audio
-let oscillators = []; // Array di oscillatori
+let imgp5; // Variabile per immagazzinare l'immagine
+let imgOriginal; // Per immagazzinare l'immagine originale
+let waveTypes = []; // Array per le forme d'onda correnti
+let noteActive = false; // Stato della pressione della nota
 
-// Caricamento immagine personalizzata
-document.getElementById('imageInput').addEventListener('change', function (event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    img = new Image();
-    img.src = URL.createObjectURL(file);
-    img.crossOrigin = "Anonymous";
-
-    img.onload = () => {
-        let canvas = document.getElementById('canvas'); // Canvas per immagine
-        let ctx = canvas.getContext('2d');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height); // Disegna immagine
-        processImage(); // Elabora immagine
-        document.getElementById('recalculateButton').style.display = 'inline-block';
-    };
-});
-
-// Elabora e disegna l'immagine sul canvas
-function processImage() {
-    fft = new p5.FFT();
-    amplitude = new p5.Amplitude();
-
-    // Configura 3 oscillatori
-    oscillators.forEach((osc) => osc.stop()); // Ferma eventuali oscillatori esistenti
-    oscillators = [];
-
-    for (let i = 0; i < 3; i++) {
-        let osc = new p5.Oscillator();
-        osc.setType(['sine', 'square', 'triangle'][i % 3]);
-        osc.freq(random(200, 800)); // Frequenza casuale
-        osc.amp(0.5); // Ampiezza fissa
-        osc.start();
-        oscillators.push(osc);
-    }
+function setup() {
+    // Creare il canvas
+    const canvas = createCanvas(800, 600);
+    canvas.id('canvasp5');
+    canvas.parent('canvas-container');
+    noLoop();
 }
 
-// Recalcola immagine e suoni
-document.getElementById('recalculateButton').addEventListener('click', () => {
-    processImage();
-});
-
-// Disegna effetto grafico basato sul suono
 function draw() {
-    if (!img) return; // Aspetta caricamento immagine
+    console.log('draw() called');
+    if (noteActive) {
+        // Gioco di colori basato sui range delle waveform attive
+        background(0); // Sfondo nero
+        waveTypes.forEach((waveType, index) => {
+            const range = waveformToRange(waveType);
+            const color = rangeToColor(range);
 
-    let canvas = document.getElementById('canvas'); // Canvas per output
-    let ctx = canvas.getContext('2d');
-
-    // Ottieni dati audio
-    let spectrum = fft.analyze(); // Spettro frequenze
-    let level = amplitude.getLevel(); // Ampiezza
-
-    let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    let pixels = imageData.data;
-
-    // Effetto 1: Distorsione basata sulla frequenza
-    for (let i = 0; i < pixels.length; i += 4) {
-        let freqIndex = i % spectrum.length;
-        let shift = map(spectrum[freqIndex], 0, 255, -20, 20);
-
-        pixels[i] = constrain(pixels[i] + shift, 0, 255); // Rosso
-        pixels[i + 1] = constrain(pixels[i + 1] - shift, 0, 255); // Verde
-        pixels[i + 2] = constrain(pixels[i + 2] + shift, 0, 255); // Blu
+            // Disegna rettangoli colorati che rappresentano i range
+            fill(color[0], color[1], color[2]);
+            noStroke();
+            rect(index * width / waveTypes.length, 0, width / waveTypes.length, height);
+        });
+    } else {
+        // Stato inattivo: solo sfondo nero
+        background(0);
     }
-
-    // Effetto 2: Oscillazione basata sull'ampiezza
-    let brightnessShift = map(level, 0, 1, 0, 50);
-    for (let j = 0; j < pixels.length; j += 4) {
-        pixels[j] = constrain(pixels[j] + brightnessShift, 0, 255); // Rosso
-        pixels[j + 1] = constrain(pixels[j + 1] - brightnessShift, 0, 255); // Verde
-        pixels[j + 2] = constrain(pixels[j + 2] + brightnessShift, 0, 255); // Blu
-    }
-
-    ctx.putImageData(imageData, 0, 0); // Aggiorna canvas
 }
+
+function setWaveTypes(newWaveTypes) {
+    waveTypes = newWaveTypes;
+    redraw(); // Ridisegna il canvas quando cambiano le waveform
+}
+
+// Funzione per ottenere il range di tonalità HSL per ogni waveform
+function waveformToRange(waveType) {
+    switch (waveType) {
+        case 'sine':
+            return [180, 300]; // Blu, Verde
+        case 'square':
+            return [0, 40, 300, 360]; // Rosso, Nero
+        case 'sawtooth':
+            return [40, 90]; // Giallo, Arancione
+        case 'triangle':
+            return [90, 180]; // Verde chiaro, Azzurro
+        default:
+            return [0, 0]; // Default, nessun range
+    }
+}
+
+// Funzione per convertire un range in un colore RGB
+function rangeToColor(range) {
+    const h = random(range[0], range[1]); // Genera un valore casuale all'interno del range
+    const s = random(50, 100); // Saturazione casuale
+    const l = random(50, 75); // Luminosità casuale
+    return hslToRgb(h, s, l); // Converte HSL in RGB
+} // Grigio per default
+
+
+// Event Listener per pressione di note
+function notePressed() {
+    noteActive = true; // Attiva la visualizzazione dei colori
+    redraw(); // Ridisegna il canvas
+}
+
+function noteReleased() {
+    noteActive = false; // Disattiva il gioco di colori
+    redraw(); // Ridisegna il canvas
+}
+
+// Collegare i tasti MIDI o la tastiera
+function startVisualizationFromKey() {
+    noteActive = true; // Attiva lo stato di visualizzazione
+    redraw(); // Ridisegna il canvas per visualizzare i colori
+}
+
+function startVisualizationFromMIDI(note) {
+    console.log(`Nota MIDI premuta: ${note}`);
+    noteActive = true; // Attiva lo stato di visualizzazione
+    redraw(); // Ridisegna il canvas per visualizzare i colori
+}
+
+function stopVisualization() {
+    noteActive = false; // Disattiva lo stato di visualizzazione
+    console.log('Returning to standard view');
+    redraw(); // Torna in stato inattivo
+}
+
+
+
+

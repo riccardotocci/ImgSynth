@@ -13,7 +13,7 @@ const firebaseConfig = {
     apiKey: "AIzaSyAuceluZ-joBXnYFi3edk0aQrHpGP6MTRc",
     authDomain: "imgsynth-6ff32.firebaseapp.com",
     projectId: "imgsynth-6ff32",
-    storageBucket: "imgsynth-6ff32.appspot.com",
+    storageBucket: "imgsynth-6ff32.firebasestorage.app",
     messagingSenderId: "528934109445",
     appId: "1:528934109445:web:2f4a72340e4a9db5b3b76c",
     measurementId: "G-ZJHS7NECNF"
