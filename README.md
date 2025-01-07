@@ -46,34 +46,8 @@ ImgSynth is an advanced modular synthesizer that merges audio synthesis with vis
 Enhance ImgSynth by capturing images with the ESP32-CAM module for real-time preset generation:
 
 1. **Setup ESP32-CAM**:
-   - Program the ESP32-CAM using the Arduino IDE. Install the [ESP32 core for Arduino](https://github.com/espressif/arduino-esp32#installation-instructions).
-   - Use the following example sketch to enable HTTP streaming:
-     ```cpp
-     #include <WiFi.h>
-     #include "esp_camera.h"
-     #include "Arduino.h"
-
-     const char* ssid = "YOUR_SSID";
-     const char* password = "YOUR_PASSWORD";
-
-     void startCameraServer();
-
-     void setup() {
-         Serial.begin(115200);
-         WiFi.begin(ssid, password);
-         while (WiFi.status() != WL_CONNECTED) {
-             delay(500);
-             Serial.print(".");
-         }
-         Serial.println("WiFi connected");
-         Serial.println(WiFi.localIP());
-         startCameraServer();
-     }
-
-     void loop() {
-         delay(1);
-     }
-     ```
+   - Program the ESP32-CAM using the Arduino IDE.
+   - Use the instruction include in the about section.
    - Connect the ESP32-CAM to your Wi-Fi network and note the IP address displayed in the Serial Monitor.
 
 2. **Integration with ImgSynth**:
