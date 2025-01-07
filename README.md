@@ -116,6 +116,6 @@ Enhance ImgSynth by capturing images with the ESP32-CAM module for real-time pre
 ---
 
 ## Contact and Support
-For questions or assistance, please open an issue on the [ImgSynth GitHub Repository](https://github.com/yourusername/ImgSynth/issues).
+For questions or assistance, please open an issue on the [ImgSynth GitHub Repository](https://github.com/riccardotocci/ImgSynth/issues).
 
 
