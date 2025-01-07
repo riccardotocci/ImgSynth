@@ -18,6 +18,7 @@ function onOpenCvReady() {
 
 function calculateSharpness(canvas, ctx){
     try {
+
       // Converti l'immagine in un Mat di OpenCV
       let src = cv.imread(canvas);
       let gray = new cv.Mat();
@@ -34,7 +35,7 @@ function calculateSharpness(canvas, ctx){
       let variance = stddev.data64F[0] ** 2;
 
       // Calcola la nitidezza relativa
-      let totalPixels = img.width * img.height;
+      let totalPixels = src.cols * src.rows;
       let relativeSharpness = variance / totalPixels;
 
       // Scala la nitidezza in 0-100

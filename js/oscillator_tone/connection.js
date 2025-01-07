@@ -2,11 +2,7 @@ oscillators.forEach((osc, index) => {
     if (osc.synth && osc.channel) {
         osc.synth.connect(osc.channel);      // Oscillatore → Filtro individuale   // Filtro individuale → Mixer
         osc.channel.connect(sharedFilter); // Mixer → Filtro condiviso
-
-        // Aggiungi un trigger per l'inviluppo del rumore
-        osc.synth.triggerAttackRelease("C4", "4n", Tone.now() + index * 0.5, undefined, () => {
-            noiseEnvelope.triggerAttackRelease("4n", Tone.now() + index * 0.5);
-        });
+        
         console.log(`Oscillatore ${index + 1} collegato al filtro condiviso.`);
     } else {
         console.error(`Oscillatore ${index + 1}, Filtro o Mixer non configurati.`);

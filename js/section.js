@@ -39,4 +39,18 @@ document.getElementById("skip-button").addEventListener("click", () => {
             } else {
                 selectedSection.classList.add('active'); // Aggiunge la classe 'active'
             }
+
+                // Gestisci la visibilità della tastiera
+    const keyboard = document.getElementById('keyboard');
+
+    // Nascondi la tastiera se nessuna sezione è attiva o se la sezione attiva è 'section4'
+    if (sectionId === 'section4') {
+        keyboard.style.display = 'none'; // Nascondi la tastiera
+    } else {
+        keyboard.style.display = 'flex'; // Mostra la tastiera
+        keyboard.style.flexDirection = 'row';
+        keyboard.style.margin = '15px';
+    }
+
         }
+

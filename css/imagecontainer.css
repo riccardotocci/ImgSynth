@@ -10,6 +10,11 @@
     align-content: center;
 
 }
+
+#mainCanvas{
+    max-width: 700px;
+    max-height: 400px;
+}
 #displayedImage {
     max-width: 480px;
     max-height: 280px;

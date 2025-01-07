@@ -2,8 +2,8 @@ const canvasAn = document.getElementById("analyserCanvas");
 const canvasContextAn = canvasAn.getContext("2d");
 
 function drawSpectrum() {
-    const width = canvas.width;
-    const height = canvas.height;
+    const width = canvasAn.width;
+    const height = canvasAn.height;
     const data = analyser.getValue(); // Ottieni i dati FFT dall'analizzatore
 
     // Pulisci il canvas

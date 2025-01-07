@@ -135,7 +135,7 @@ document.getElementById("presetSelector").addEventListener("change", (e) => {
             ],
     
             // Configurazione del filtro condiviso
-            filterType: "low-pass", // Tipo di filtro: low-pass, band-pass, high-pass
+            filterType: "lowpass", // Tipo di filtro: low-pass, band-pass, high-pass
             sharedFilterFrequency: 1000, // Frequenza del filtro (Hz)
             sharedFilterQ: 1, // Fattore di qualità del filtro
     
@@ -167,7 +167,7 @@ document.getElementById("presetSelector").addEventListener("change", (e) => {
             },
     
             // Configurazione del noise
-            noisesynth: {
+            noise: {
                 level: 0, // Livello del rumore (0-100)
             },
         },
@@ -193,7 +193,7 @@ document.getElementById("presetSelector").addEventListener("change", (e) => {
                     volume: -9,
                 },
             ],
-            filterType: "band-pass",
+            filterType: "bandpass",
             sharedFilterFrequency: 800,
             sharedFilterQ: 0.8,
             attack: 1.0,
@@ -241,13 +241,21 @@ document.getElementById("presetSelector").addEventListener("change", (e) => {
                     volume: -8,
                 },
             ],
-            filterType: "low-pass",
+            filterType: "lowpass",
             sharedFilterFrequency: 500,
-            sharedFilterQ: 2,
+            sharedFilterQ: -24,
             attack: 0.2,
             decay: 0.1,
             sustain: 0.9,
             release: 0.4,
+            chorus: {
+                delayTime: 0.02,
+                depth: 0.7,          // Deep modulation
+                frequency: 2,         // Slower rate
+                feedback: 0.5,        // More pronounced
+                spread: 180,         // Full stereo
+                wet: 0.6,            // Prominent effect
+            },
             reverb: {
                 size:0.5,
                 decay: 1.5,
@@ -259,7 +267,7 @@ document.getElementById("presetSelector").addEventListener("change", (e) => {
                 feedback: 0.2,
                 mix: 0.3,
             },
-            distortion: {
+            saturation: {
                 drive: 0.7,
                 wet: 60,
                 tone: "bright",

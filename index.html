@@ -7,6 +7,7 @@
     <link rel="icon" type="image/png" href="img/IMGSYNTH.png" width="16px" height="16px" stile=" filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 1));
   display: inline-block;">
         <!-- CSS -->
+        <link rel="stylesheet" href="css/section4/about.css">
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/oscillator_tone/main.css">
         <link rel="stylesheet" href="css/oscillator_tone/effects.css">
@@ -89,57 +90,62 @@
         <button id="logout-button" style="display: none;">Logout</button>
       </div>
 </div>
-<div id="backsettings">
-<form id="uploadForm" method="POST" enctype="multipart/form-data">
-    <input type="file" id="imageInput" name="file" accept="image/*" required>
-</form>
-<div class="presetadjust">
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="adjustPresetButton">Modifica Preset da Immagine</button>
-</div>
-</div>
+
 
 
     <!-- Horizontal floating navbar -->
-    <div class="navbar">
-        <a href="#" onclick="showSection('section1', this)" class="active">Play</a>
-        <a href="#" onclick="showSection('section2', this)">Pro</a>
+    <div class="navbar bg-gray-800 p-4 rounded-lg shadow-lg">
+        <div class="flex space-x-6"></div>
+            <a href="#" onclick="showSection('section1', this)" class="text-white hover:text-blue-400 font-semibold px-3 py-2 rounded-md transition duration-300 flex items-center">
+                <i class="fas fa-play mr-2"></i>Play
+            </a>
+            <a href="#" onclick="showSection('section2', this)" class="text-white hover:text-blue-400 font-semibold px-3 py-2 rounded-md transition duration-300 flex items-center">
+                <i class="fas fa-sliders-h mr-2"></i>Pro
+            </a>
+            <a href="#" onclick="showSection('section3', this)" class="text-white hover:text-blue-400 font-semibold px-3 py-2 rounded-md transition duration-300 flex items-center">
+                <i class="fas fa-camera mr-2"></i>Esp32-Cam
+            </a>
+            <a href="#" onclick="showSection('section4', this)" class="text-white hover:text-blue-400 font-semibold px-3 py-2 rounded-md transition duration-300 flex items-center">
+                <i class="fas fa-info-circle mr-2"></i>About
+            </a>
+        </div>
     </div>
-<div id="section1" class="section">
+    </div>
+<div id="section1" class="section" hidden>
+    <div id="play">
     <div id="spectrumAnalyzer">
-        <canvas id="analyserCanvas" width="300" height="150"></canvas>
+        <canvas id="analyserCanvas" width="400" height="200"></canvas>
     </div>
-    <div id="canvas-container" style="display: none;">
-        <canvas id="mainCanvas"></canvas>
-      </div>
-    <svg class="keyboard-virtual" viewBox="-385 0 1300 300">
-        <!-- White keys -->
-        <rect class="white-key" x="0" y="0" width="75" height="300" data-note="C" />
-        <rect class="white-key" x="75" y="0" width="75" height="300" data-note="D" />
-        <rect class="white-key" x="150" y="0" width="75" height="300" data-note="E" />
-        <rect class="white-key" x="225" y="0" width="75" height="300" data-note="F" />
-        <rect class="white-key" x="300" y="0" width="75" height="300" data-note="G" />
-        <rect class="white-key" x="375" y="0" width="75" height="300" data-note="A" />
-        <rect class="white-key" x="450" y="0" width="75" height="300" data-note="B" />
-
-        <!-- Black keys -->
-        <rect class="black-key" x="52.5" y="0" width="45" height="180" data-note="C#" />
-        <rect class="black-key" x="127.5" y="0" width="45" height="180" data-note="D#" />
-        <rect class="black-key" x="277.5" y="0" width="45" height="180" data-note="F#" />
-        <rect class="black-key" x="352.5" y="0" width="45" height="180" data-note="G#" />
-        <rect class="black-key" x="427.5" y="0" width="45" height="180" data-note="A#" />
-      </svg>
-    <div>
-        <label for="octaveControl">Ottava:</label>
-        <input type="number" id="octaveControl" value="4" min="1" max="8" />
-    </div>
-    <div class="image-ai">
-        <canvas id="canvas" style="display: none;"></canvas>
+    <div id="img-container">
+        <div id="canvas-container">
+            <canvas id="mainCanvas" width="800" height="400"></canvas>
+        </div>
+        <div class="image-ai">
+            <canvas id="canvas" style="display: none;"></canvas>
         <div id="output"></div>
     </div>
-    <div id="player">
-        <section id="main">
-            <button id="connectMIDI">Connetti MIDI</button>
-        </section>
+    </div>
+    <div id="player" class="flex justify-center items-center gap-4 my-4">
+        <div id="backsettings" class="flex items-center gap-4">
+            <form id="uploadForm" method="POST" enctype="multipart/form-data">
+                <input type="file" id="imageInput" name="file" accept="image/*" required
+                    class="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold
+                    file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+            </form>
+            <div class="presetadjust">
+                <button id="adjustPresetButton" 
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center">
+                    <i class="fas fa-sliders-h mr-2"></i>
+                    Adjust Image Preset
+                </button>
+            </div>
+            <button id="recalculateButton" style="display: none;">
+                <img src="img/IMGSYNTH.png" alt="ImgSynth Logo" width="100" height="100" />
+            </button>
+        </div>
+        
+    </div>
+    </div>
 </div>
 </div>
 <div id="section2" class="section" hidden>
@@ -150,7 +156,7 @@
     <div id="control-group">
         <div id="oscillator" class="oscillator1">
             <div class="oscillator-container">
-                <div class="label">Oscillatore 1: <span id="waveformLabel0">Sine</span></div>
+                <div class="label text-lg font-semibold text-gray-700">Oscillatore 1: <span id="waveformLabel0" >sine</span></div>
                 <canvas id="waveformCanvas0" width="100" height="50"></canvas>
                 <div class="controls">
                     <button onclick="changeWaveform(0, -1)">◀</button>
@@ -189,7 +195,7 @@
     
         <div id="oscillator" class="oscillator2">
             <div class="oscillator-container">
-                <div class="label">Oscillatore 2: <span id="waveformLabel1">Sine</span></div>
+                <div class="label text-lg font-semibold text-gray-700">Oscillatore 2: <span id="waveformLabel1">sine</span></div>
                 <canvas id="waveformCanvas1" width="100" height="50"></canvas>
                 <div class="controls">
                     <button onclick="changeWaveform(1, -1)">◀</button>
@@ -226,7 +232,7 @@
     
         <div id="oscillator" class="oscillator3">
             <div class="oscillator-container">
-                <div class="label">Oscillatore 3 <span id="waveformLabel2">Sine</span></div>
+                <div class="label text-lg font-semibold text-gray-700">Oscillatore 3 <span id="waveformLabel2">sine</span></div>
                 <canvas id="waveformCanvas2" width="100" height="50"></canvas>
                 <div class="controls">
                     <button onclick="changeWaveform(2, -1)">◀</button>
@@ -264,9 +270,9 @@
     </div>
 
     <!-- Canali del mixer -->
-    <div id="mixer">
+    <div id="mixer" class="text-lg font-medium text-gray-600">
             <div>
-                <label for="volume1">Volume Osc 1</label>
+                <label for="volume1" >Volume Osc 1</label>
                 <div id="volume1"></div>
                 <span id="volume1Value">-12 dB</span>
             </div>
@@ -284,7 +290,7 @@
 
     <div class="noise">
         <div class="noisevolumeslider">
-            <label for="noiseVolume">Volume Noise</label>
+            <label for="noiseVolume" class="text-lg font-medium text-gray-600">Volume Noise</label>
             <div id="noiseVolume"></div>
             <span id="noiseVolumeValue">-48 dB</span>
         </div>
@@ -301,7 +307,7 @@
     </div>
     
     <div id="filter">
-        <label>FILTER</label>
+        <label class="text-lg font-bold text-gray-700">FILTER</label>
     <div id="secfilter">
         <label for="sharedFilterFrequency">Cutoff</label>
 
@@ -341,7 +347,7 @@
 <div id="secondrow">
     <!--adsr-->
         <div class="adsr-section">
-            <label>AMPLITUDE-ENVELOPE</label>
+            <label class="text-lg font-bold text-gray-700">AMPLITUDE-ENVELOPE</label>
             <div class="knob-adsr">
             <div id="envelope">
                 <label for="attack">Attack</label>
@@ -368,7 +374,7 @@
     <!--adsr-->
     
     <div class="adsr-section">
-        <label>FILTER-ENVELOPE</label>
+        <label class="text-lg font-bold text-gray-700">FILTER-ENVELOPE</label>
         <div class="knob-adsr">
             <div id="envelope">
                 <label for="filter-attack">Attack</label>
@@ -397,7 +403,7 @@
         <!-- Configurazione Effetti -->
         <section id="effects">
             <div id="Distortion">
-                <h3>Distortion</h3>
+                <h3 class="text-lg font-bold text-gray-700">Distortion</h3>
                 <input id="distortionToggle" type="checkbox" class="js-switch">
                 <label for="distortionType">Type</label>
                 <select id="distortionType">
@@ -414,7 +420,7 @@
             </div>
             
             <div id="Chorus">
-                <h3>Chorus</h3>
+                <h3 class="text-lg font-bold text-gray-700">Chorus</h3>
                 <input id="chorusToggle" type="checkbox" class="js-switch">
                 <div id="chorusToggleValue"></div>
                 <div id="choruspanel">
@@ -427,10 +433,10 @@
                         <div id="chorusDepthValue"></div>
                         <label for="chorusFeedback">Feedback</label>
                         <input type="range" class="input-knob" id="chorusFeedback" min="0" max="1" step="0.01" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
+                        <div id="chorusFeedbackValue"></div>
                     </div>
                     <div id="chorus2">
-                        <div id="chorusFeedbackValue"></div>
-                        <label for="chorusFrequency">Frequency (Hz)</label>
+                        <label for="chorusFrequency">Frequency</label>
                         <input type="range" class="input-knob" id="chorusFrequency" min="0.1" max="10" step="0.1" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
                         <div id="chorusFrequencyValue"></div>
                         <label for="chorusSpread">Spread</label>
@@ -444,7 +450,7 @@
             </div>
             
             <div id="Delay">
-                <h3>Delay</h3>
+                <h3 class="text-lg font-bold text-gray-700">Delay</h3>
                 <input id="delayToggle" type="checkbox" class="js-switch">
                 <div id="delayToggleValue"></div>
                 <label for="delayTime">Delay Time</label>
@@ -459,27 +465,27 @@
             </div>
             
             <div id="Reverb">
-                <h3>Reverb</h3>
+                <h3 class="text-lg font-bold text-gray-700">Reverb</h3>
                 <input id="reverbToggle" type="checkbox" class="js-switch">
                 <div id="reverbToggleValue"></div>
                 <label for="reverbSize">Size</label>
-                <input type="range" class="input-knob" id="reverbSize" min="0" max="1" step="0.01" data-bgcolor=' rgba(140,0,120,0.7)' data-fgcolor=' rgba(250,0,150,0.8)'>
+                <input type="range" class="input-knob" id="reverbSize" min="0" max="1" step="0.01" value="0.5" data-bgcolor=' rgba(140,0,120,0.7)' data-fgcolor=' rgba(250,0,150,0.8)'>
                 <div id="reverbSizeValue"></div>
                 <label for="reverbPreDelay">Pre-delay</label>
-                <input type="range" class="input-knob" id="reverbPreDelay" min="0" max="1" step="0.01" data-bgcolor=' rgba(140,0,120,0.7)' data-fgcolor=' rgba(250,0,150,0.8)'>
+                <input type="range" class="input-knob" id="reverbPreDelay" min="0" max="1" step="0.01" value="0.5" data-bgcolor=' rgba(140,0,120,0.7)' data-fgcolor=' rgba(250,0,150,0.8)'>
                 <div id="reverbPreDelayValue"></div>
                 <label for="reverbWet">Wet</label>
-                <input type="range" class="input-knob" id="reverbWet" min="0" max="1" step="0.01" data-bgcolor=' rgba(140,0,120,0.7)' data-fgcolor=' rgba(250,0,150,0.8)'>
+                <input type="range" class="input-knob" id="reverbWet" min="0" max="1" step="0.01" value="0.5" data-bgcolor=' rgba(140,0,120,0.7)' data-fgcolor=' rgba(250,0,150,0.8)'>
                 <div id="reverbWetValue"></div>
             </div>
             
             <div id="Limiter">
-                <h3>Limiter</h3>
+                <h3 class="text-lg font-bold text-gray-700">Limiter</h3>
                 <input id="limiterToggle" type="checkbox" class="js-switch">
-                <div id="limiterToggleValue"></div>
+                <div id="limiterToggleValue">0</div>
                 <label for="limiterThreshold">Threshold</label>
                 <input type="range" class="input-knob" id="limiterThreshold" min="-60" max="0" step="1" data-bgcolor=' rgba(80,0,80,0.7)' data-fgcolor=' rgba(200,0,200,0.8)'>
-                <div id="limiterThresholdValue"></div>
+                <div id="limiterThresholdValue">0</div>
             </div>
         </section>
 
@@ -487,28 +493,281 @@
             <div id="imageContainer">
                 <img id="displayedImage" src="" alt="Image will appear here" style="max-width: 100%; display: none;">
             </div>
-            <button  class="bg-white w-60 text-black font-bold py-1 px-3 rounded" id="selectImageButton">Seleziona Foto</button>
-            <div id="imageListContainer" style="display: none;">
-                <h3>Seleziona un'immagine:</h3>
-                <ul id="imageList"></ul>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out w-60 flex items-center justify-center" id="selectImageButton">
+                <i class="fas fa-image mr-2"></i>
+                Select Photo
+            </button>
+            
+            <div id="imageListContainer" class="bg-white rounded-lg shadow-md p-4 mt-4" style="display: none;">
+                <h3 class="text-lg font-semibold text-gray-700 mb-3">Select an image:</h3>
+                <ul id="imageList" class="space-y-2"></ul>
             </div>
+            
+            <input type="text"
+                id="presetName" 
+                class="w-60 p-3 mt-4 text-gray-700 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 ease-in-out"
+                placeholder="Enter preset name">
+            
+            <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out w-60 flex items-center justify-center mt-4" id="savePresetButton">
+                <i class="fas fa-save mr-2"></i>
+                Save Preset
+            </button>
 
-            <button class="bg-white w-60 text-black font-bold py-1 px-3 rounded" id="savePresetButton">Salva Preset</button>
-          
-            <select id="presetSelector" class="block w-60 p-2 mb-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <button class="bg-white w-60 text-black font-bold py-1 px-3 rounded" id="loadPresetsButton">
+                <i class="fas fa-folder-open mr-2"></i>
+                Load Preset
+            </button>
+            <select id="presetSelector" >
                 <option value="default">Default</option>
                 <option value="ambient">Ambient</option>
                 <option value="bass">Bass</option>
             </select>
-            <button id="recalculateButton" style="display: none;">
-                <img src="img/IMGSYNTH.png" alt="ImgSynth Logo" width="100" height="100" />
-            </button>
         </div>            
 </div>
-        <!-- Controllo Principale -->
+</div>
+<div id="section3" class="section" hidden>
+    <div class="esp32-section">
+        <h1 class="mb-4 text-3xl font-extrabold font-serif text-gray-900 dark:text-white md:text-5xl lg:text-6xl">ESP32-CAM Module</h1>
+        <div class="flex justify-center mb-8">
+        <div class="w-[800px] h-[600px] border-4 border-gray-300 rounded-lg shadow-lg overflow-hidden" style="width:800px; height:600px;">
+            <img id="esp32feed" alt="esp32feed" class="w-full h-full object-contain" style="display:block;">
+            <canvas id="imageCanvasesp32" style="display: none;"></canvas>
+        </div>
+    </div>
+        <div class="mb-6">
+            <label for="ipAddress" class="block text-gray-700 text-sm font-bold mb-2">ESP32-CAM IP Address:</label>
+            <input type="text" id="ipAddress" 
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                   placeholder="Enter IP address (e.g. 192.168.1.100)">
+        </div>
+        <div class="flex space-x-4 mt-6"></div>
+        <button id="captureButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
+            <i class="fas fa-camera mr-2"></i>
+            Capture Photo
+        </button>
+        
+        <button id="liveStreamButton" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
+            <i class="fas fa-video mr-2"></i>
+            Live Stream
+        </button>
+    </div>
+</div>
+<div id="keyboard">
+    <div>
+        <label for="octaveControl">Octave:</label>
+        <input type="number" id="octaveControl" value="4" min="1" max="8" />
+    </div>
+    <svg class="keyboard-virtual" viewBox="0 0 1050 300" width="100%" height="300">
+        <!-- White keys -->
+        <!-- First Octave -->
+        <rect class="white-key" x="0" y="0" width="75" height="300" data-note="C" />
+        <rect class="white-key" x="75" y="0" width="75" height="300" data-note="D" />
+        <rect class="white-key" x="150" y="0" width="75" height="300" data-note="E" />
+        <rect class="white-key" x="225" y="0" width="75" height="300" data-note="F" />
+        <rect class="white-key" x="300" y="0" width="75" height="300" data-note="G" />
+        <rect class="white-key" x="375" y="0" width="75" height="300" data-note="A" />
+        <rect class="white-key" x="450" y="0" width="75" height="300" data-note="B" />
+    
+        <!-- Black keys First Octave -->
+        <rect class="black-key" x="52.5" y="0" width="45" height="180" data-note="C#" />
+        <rect class="black-key" x="127.5" y="0" width="45" height="180" data-note="D#" />
+        <rect class="black-key" x="277.5" y="0" width="45" height="180" data-note="F#" />
+        <rect class="black-key" x="352.5" y="0" width="45" height="180" data-note="G#" />
+        <rect class="black-key" x="427.5" y="0" width="45" height="180" data-note="A#" />
+    
+        <!-- Second Octave -->
+        <rect class="white-key" id="second-octave" x="525" y="0" width="75" height="300" data-note="C" />
+        <rect class="white-key" id="second-octave" x="600" y="0" width="75" height="300" data-note="D" />
+        <rect class="white-key" id="second-octave" x="675" y="0" width="75" height="300" data-note="E" />
+        <rect class="white-key" id="second-octave" x="750" y="0" width="75" height="300" data-note="F" />
+        <rect class="white-key" id="second-octave" x="825" y="0" width="75" height="300" data-note="G" />
+        <rect class="white-key" id="second-octave" x="900" y="0" width="75" height="300" data-note="A" />
+        <rect class="white-key" id="second-octave" x="975" y="0" width="75" height="300" data-note="B" />
+    
+        <!-- Black keys Second Octave -->
+        <rect class="black-key" id="second-octave" x="577.5" y="0" width="45" height="180" data-note="C#" />
+        <rect class="black-key" id="second-octave" x="652.5" y="0" width="45" height="180" data-note="D#" />
+        <rect class="black-key" id="second-octave" x="802.5" y="0" width="45" height="180" data-note="F#" />
+        <rect class="black-key" id="second-octave" x="877.5" y="0" width="45" height="180" data-note="G#" />
+        <rect class="black-key" id="second-octave" x="952.5" y="0" width="45" height="180" data-note="A#" />
+    
+      </svg>
+      <section id="main">
+        <button id="connectMIDI" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center">
+            <i class="fas fa-plug mr-2"></i>
+            Connect MIDI
+        </button>
+    </section>
+
+    </div>
+<div id="section4" class="section" hidden>
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-16"></div>
+            <img src="img/IMGSYNTH1.png" alt="ImgSynth Logo" class="mx-auto mb-8" width="400" height="200">
+            <p class="text-2xl italic text-gray-600 max-w-3xl mx-auto">
+                A revolutionary web-based synthesizer that transforms images into unique soundscapes through advanced analysis of visual elements.
+            </p>
+        </div>
+
+        <!-- Features Section -->
+        <div class="bg-white rounded-lg shadow-xl p-8 mb-12">
+            <h2 class="text-4xl font-serif font-bold mb-8 text-center text-gray-800">Key Features</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="feature-card p-6 border rounded-lg hover:shadow-md transition-shadow">
+                    <h3 class="text-2xl font-bold mb-3 text-blue-600">Sound Engine</h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-center">
+                            <span class="mr-2">🎹</span> 3 Custom Oscillators
+                        </li>
+                        <li class="flex items-center">
+                            <span class="mr-2">📊</span> ADSR Envelope Control
+                        </li>
+                        <li class="flex items-center">
+                            <span class="mr-2">🎛️</span> Advanced Filter System
+                        </li>
+                        <li class="flex items-center">
+                            <span class="mr-2">✨</span> Professional Effects Suite
+                        </li>
+                    </ul>
+                </div>
+                <div class="feature-card p-6 border rounded-lg hover:shadow-md transition-shadow">
+                    <h3 class="text-2xl font-bold mb-3 text-purple-600">Image Analysis</h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-center">
+                            <span class="mr-2">🎨</span> Color-to-Waveform Mapping
+                        </li>
+                        <li class="flex items-center">
+                            <span class="mr-2">💡</span> Brightness Detection
+                        </li>
+                        <li class="flex items-center">
+                            <span class="mr-2">📐</span> Depth Analysis
+                        </li>
+                        <li class="flex items-center">
+                            <span class="mr-2">📑</span> Preset Management
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works Section -->
+        <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-8 mb-12">
+            <h2 class="text-4xl font-serif font-bold mb-6 text-center text-gray-800">How It Works</h2>
+            <div class="max-w-3xl mx-auto text-gray-600">
+                <p class="text-xl mb-6">
+                    Upload any image and watch as ImgSynth analyzes its visual characteristics to create unique sound parameters:
+                </p>
+                <ul class="space-y-4">
+                    <li class="flex items-center bg-white p-3 rounded-lg shadow-sm">
+                        <span class="text-2xl mr-4">🌈</span>
+                        <span>Colors determine oscillator waveforms and harmonics</span>
+                    </li>
+                    <li class="flex items-center bg-white p-3 rounded-lg shadow-sm">
+                        <span class="text-2xl mr-4">✨</span>
+                        <span>Brightness controls filter parameters</span>
+                    </li>
+                    <li class="flex items-center bg-white p-3 rounded-lg shadow-sm">
+                        <span class="text-2xl mr-4">📐</span>
+                        <span>Image depth maps to effect parameters</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <h1 class="text-4xl font-bold mb-6">ESP32-CAM Module Overview</h1>
+        <div class="description">
+            <p class="font-serif text-2xl italic">The ESP32-CAM is a compact development board equipped with a camera, built around ESP32 chip. It integrates WiFi, Bluetooth, and a camera module that allows you to stream video and capture images.</p>
+
+            <h2 class="font-serif text-3xl mt-6">Key Features:</h2>
+            <ul class="font-serif text-xl italic list-disc ml-8">
+            <li>OV2640 camera sensor</li>
+            <li>WiFi and Bluetooth connectivity</li>
+            <li>MicroSD card slot</li>
+            <li>Low power consumption</li>
+            <li>Programmable using Arduino IDE</li>
+            </ul>
+        </div>
+        <div class="downloads mt-8">
+            <h2 class="font-serif text-3xl">Required Software:</h2>
+            <div class="flex flex-col gap-4 mt-4">
+                <a href="https://www.arduino.cc/en/software" target="_blank" 
+                   class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center w-fit">
+                    <i class="fas fa-download mr-2"></i>
+                    Download Arduino IDE
+                </a>
+                
+                <a href="ImgSynthESP32.zip" download 
+                   class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded inline-flex items-center w-fit">
+                    <i class="fas fa-file-archive mr-2"></i>
+                    Download Project Files
+                </a>
+            </div>
+        </div>
+
+        <div id="aforism" class="text-2xl italic text-gray-600 max-w-3xl mx-auto text-center my-8 p-6 bg-white rounded-lg shadow-md">
+            "Don't wait for the perfect moment to add color to your life; make each moment perfect with the colors you choose."
+        </div>
+
+        <!-- Technologies Section -->
+        <div class="text-center">
+            <h2 class="text-3xl font-bold mb-8">Powered By</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-center mb-12">
+                <a href="https://github.com/riccardotocci/ImgSynth" target="_blank" 
+                   class="transform hover:scale-105 transition-transform">
+                    <img src="img/github-logo.png" alt="GitHub" class="h-16 mx-auto mb-2">
+                    <p class="text-sm font-medium">riccardotocci/ImgSynth</p>
+                </a>
+                <a href="https://firebase.google.com/" target="_blank"
+                   class="transform hover:scale-105 transition-transform">
+                    <img src="img/firebase-logo.png" alt="Firebase" class="h-16 mx-auto mb-2">
+                    <p class="text-sm font-medium">Firebase</p>
+                </a>
+                <a href="https://tonejs.github.io/" target="_blank"
+                   class="transform hover:scale-105 transition-transform">
+                    <img src="img/tonejs-logo.png" alt="Tone.js" class="h-16 mx-auto mb-2">
+                    <p class="text-sm font-medium">Tone.js</p>
+                </a>
+                <a href="https://opencv.org/" target="_blank"
+                   class="transform hover:scale-105 transition-transform">
+                    <img src="img/OpenCV_logo_no_text_.webp" alt="OpenCV" class="h-16 mx-auto mb-2">
+                    <p class="text-sm font-medium">OpenCV</p>
+                </a>
+            </div>
+            
+            <div class="text-sm text-gray-500">
+                Additional libraries: NexusUI, jQuery, Chroma.js, Tailwind CSS, Switchery
+            </div>
+        </div>
+        <!-- Bug Report Section -->
+        <!-- Bug Report Contact -->
+        <div class="bg-white rounded-lg shadow-xl p-8 mt-12">
+            <h2 class="text-3xl font-bold mb-6 text-center">Found a Bug?</h2>
+            <div class="max-w-md mx-auto">
+                <form action="mailto:toccir01@gmail.com" method="post" enctype="text/plain" class="space-y-4">
+                    <div>
+                        <label for="bugTitle" class="block text-gray-700 font-medium mb-2">Bug Title</label>
+                        <input type="text" id="bugTitle" name="Bug Title" required 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="bugDescription" class="block text-gray-700 font-medium mb-2">Description</label>
+                        <textarea id="bugDescription" name="Bug Description" required rows="4"
+                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+                    <button type="submit" 
+                        class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+                        <i class="fas fa-bug mr-2"></i>
+                        Report Bug
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div></a></div>
+
 </div>
 
-    <script type="module" src="js/login.js"></script>
+    
     <script src="js/section.js"></script>
     <script src="js/oscillator_tone/waveform.js"></script>
 
@@ -521,6 +780,8 @@
     <script src="js/image_ai/rumore.js"></script>
     <script src="js/image_ai/transformResult.js"></script>
     <script src="js/image_ai/analyzeimage.js"></script>
+    <script src="js/esp32-cam/index.js"></script>
+    <script type="module" src="js/login.js"></script>
 
     <script src="js/oscillator_tone/compute_parameter.js"></script>
     <script src="js/oscillator_tone/definitions.js"></script>
@@ -537,6 +798,6 @@
     <script src="js/oscillator_tone/connection.js"></script>
     <script src="js/oscillator_tone/main.js"></script>
     <script src="js/oscillator_tone/tastiera.js"></script>
-    <script src="sketch.js"></script>
+    <script src="js/sketch.js"></script>
 </body>
 </html>

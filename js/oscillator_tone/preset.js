@@ -101,16 +101,20 @@ function applyPreset(preset) {
                     updateVolume(index, osc, oscillator.volume);
                 }
             }
+            console.log("Oscillatore", index + 1, "volume:", oscillator.volume, "dajeroma");
 
             // Applica i parametri del preset
             if (oscillator.waveform !== undefined) {
                 updateOscillatorParameter(index, "waveform", oscillator.waveform);
+                console.log("Oscillatore", index + 1, "waveform:", oscillator.waveform);
             }
             if (oscillator.detune !== undefined) {
                 updateOscillatorParameter(index, "detune", oscillator.detune);
+                console.log("Oscillatore", index + 1, "detune:", oscillator.detune);
             }
             if (oscillator.octave !== undefined) {
                 updateOscillatorParameter(index, "octave", oscillator.octave);
+                console.log("Oscillatore", index + 1, "octave:", oscillator.octave);
             }
 
             // Aggiorna l'interfaccia utente
@@ -120,12 +124,30 @@ function applyPreset(preset) {
         }
     });
 
-    sharedFilter.type = preset.filterType;
-    sharedFilter.frequency.value = preset.sharedFilterFrequency;
-    sharedFilter.rolloff = preset.sharedFilterQ;
+    // Filter settings
+    if (preset.filterType) {
+        console.log("Setting filter type:", preset.filterType);
+        sharedFilter.type = preset.filterType;
+    }
+    if (preset.sharedFilterFrequency) {
+        console.log("Setting filter frequency:", preset.sharedFilterFrequency, "Hz");
+        sharedFilter.frequency.value = preset.sharedFilterFrequency;
+    }
+    if (preset.sharedFilterQ) {
+        console.log("Setting filter rolloff:", preset.sharedFilterQ);
+        sharedFilter.rolloff = preset.sharedFilterQ;
+    }
     updateFilterUI(preset);
+    console.log("Filter UI updated");
 
+    // Envelope settings
     oscillators.forEach((_, index) => {
+        console.log(`Updating envelope for oscillator ${index + 1}:`, {
+            attack: preset.attack,
+            decay: preset.decay,
+            sustain: preset.sustain,
+            release: preset.release
+        });
         updateEnvelope(index, {
             attack: preset.attack,
             decay: preset.decay,
@@ -134,34 +156,69 @@ function applyPreset(preset) {
         });
     });
     updateEnvelopeUI(preset);
+    console.log("Envelope UI updated");
 
+    // Reverb settings
+    console.log("Updating reverb settings:", {
+        size: preset.reverb.size,
+        decay: preset.reverb.decay,
+        mix: preset.reverb.mix,
+        preDelay: preset.reverb.preDelay
+    });
     reverb.size = preset.reverb.size;
     reverb.decay = preset.reverb.decay;
     reverb.mix = preset.reverb.mix;
     reverb.preDelay = preset.reverb.preDelay;
     updateReverbUI(preset);
+    console.log("Reverb UI updated");
 
+    // Delay settings
+    console.log("Updating delay settings:", {
+        time: preset.delay.time / 1000,
+        feedback: preset.delay.feedback,
+        mix: preset.delay.mix
+    });
     delay.delayTime = preset.delay.time / 1000;
     delay.feedback = preset.delay.feedback;
     delay.wet = preset.delay.mix;
     updateDelayUI(preset);
+    console.log("Delay UI updated");
 
-    distortion.drive =preset.saturation.drive;
+    // Distortion settings
+    console.log("Updating distortion settings:", {
+        drive: preset.saturation.drive,
+        tone: preset.saturation.tone,
+        wet: preset.saturation.wet
+    });
+    distortion.drive = preset.saturation.drive;
     distortion.tone = preset.saturation.tone;
     distortion.wet = preset.saturation.wet;
     updateDistortionUI(preset);
+    console.log("Distortion UI updated");
 
-    chorus.depth =preset.chorus.depth;
+    // Chorus settings
+    console.log("Updating chorus settings:", {
+        depth: preset.chorus.depth,
+        delayTime: preset.chorus.delayTime,
+        feedback: preset.chorus.feedback,
+        frequency: preset.chorus.frequency,
+        spread: preset.chorus.spread,
+        wet: preset.chorus.wet
+    });
+    chorus.depth = preset.chorus.depth;
     chorus.delayTime = preset.chorus.delayTime;
     chorus.feedback = preset.chorus.feedback;
-    chorus.frequency =preset.chorus.frequency;
+    chorus.frequency = preset.chorus.frequency;
     chorus.spread = preset.chorus.spread;
     chorus.wet = preset.chorus.wet;
     updateChorusUI(preset);
+    console.log("Chorus UI updated");
 
     if (preset.noise) {
+        console.log("Setting noise gain to:", preset.noise.level);
         noiseGainNode.gain.value = preset.noise.level;
         setNoiseVolume(noiseGainNode.gain.value);
+        console.log("Noise settings updated");
 
     }
 

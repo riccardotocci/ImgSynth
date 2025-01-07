@@ -62,11 +62,13 @@
         display: none;
         padding: 20px;
         width: 1600px;
+        flex-direction: column; /* Contenuti impilati verticalmente */
         background-color: rgb(242, 242, 242,0.5);
         border: 1px solid #ddd;
         border-radius: 5px;
         margin-top: 20px;
         position: relative;
+        
       }
 
       /* Responsive design */

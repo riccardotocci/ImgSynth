@@ -9,6 +9,44 @@ let bottomImg, topImg;
 let canvas_sketch, ctx_sketch;
 let img_p5;
 
+// Function to process the image
+function processSketch(imageElement) {
+  // Create canvas and context
+  canvas_sketch = document.getElementById('mainCanvas');
+  canvas_sketch.width = imageElement.width;
+  canvas_sketch.height = imageElement.height;
+  ctx_sketch = canvas_sketch.getContext('2d');
+
+  // Draw color version (bottom image)
+  bottomImg = document.createElement('canvas');
+  const bottomCtx = bottomImg.getContext('2d');
+  bottomImg.width = imageElement.width;
+  bottomImg.height = imageElement.height;
+  bottomCtx.drawImage(imageElement, 0, 0);
+
+  // Create black and white version (top image)
+  topImg = document.createElement('canvas');
+  const topCtx = topImg.getContext('2d');
+  topImg.width = imageElement.width;
+  topImg.height = imageElement.height;
+  topCtx.drawImage(imageElement, 0, 0);
+
+  // Convert to grayscale
+  const imageData = topCtx.getImageData(0, 0, imageElement.width, imageElement.height);
+  const pixels = imageData.data;
+  for (let i = 0; i < pixels.length; i += 4) {
+    const gray = (pixels[i] + pixels[i + 1] + pixels[i + 2]) / 3;
+    pixels[i] = gray;     // Red
+    pixels[i + 1] = gray; // Green
+    pixels[i + 2] = gray; // Blue
+  }
+  topCtx.putImageData(imageData, 0, 0);
+
+  // Display the canvas and render the black-and-white image
+  document.getElementById('canvas-container').style.display = 'block';
+  ctx_sketch.drawImage(topImg, 0, 0);
+}
+
 // Event listener for file input
 document.getElementById('imageInput').addEventListener('change', (event) => {
   const file = event.target.files[0];
@@ -17,40 +55,7 @@ document.getElementById('imageInput').addEventListener('change', (event) => {
     reader.onload = (e) => {
       const img_p5 = new Image();
       img_p5.onload = () => {
-        // Create canvas and context
-        canvas_sketch = document.getElementById('mainCanvas');
-        canvas_sketch.width = img_p5.width;
-        canvas_sketch.height = img_p5.height;
-        ctx_sketch = canvas_sketch.getContext('2d');
-
-        // Draw color version (bottom image)
-        bottomImg = document.createElement('canvas');
-        const bottomCtx = bottomImg.getContext('2d');
-        bottomImg.width = img_p5.width;
-        bottomImg.height = img_p5.height;
-        bottomCtx.drawImage(img_p5, 0, 0);
-
-        // Create black and white version (top image)
-        topImg = document.createElement('canvas');
-        const topCtx = topImg.getContext('2d');
-        topImg.width = img_p5.width;
-        topImg.height = img_p5.height;
-        topCtx.drawImage(img_p5, 0, 0);
-
-        // Convert to grayscale
-        const imageData = topCtx.getImageData(0, 0, img_p5.width, img_p5.height);
-        const pixels = imageData.data;
-        for (let i = 0; i < pixels.length; i += 4) {
-          const gray = (pixels[i] + pixels[i + 1] + pixels[i + 2]) / 3;
-          pixels[i] = gray;     // Red
-          pixels[i + 1] = gray; // Green
-          pixels[i + 2] = gray; // Blue
-        }
-        topCtx.putImageData(imageData, 0, 0);
-
-        // Display the canvas and render the black-and-white image
-        document.getElementById('canvas-container').style.display = 'block';
-        ctx_sketch.drawImage(topImg, 0, 0);
+        processSketch(img_p5);
       };
       img_p5.src = e.target.result;
     };
