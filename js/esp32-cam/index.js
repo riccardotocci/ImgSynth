@@ -100,7 +100,7 @@ document.getElementById("liveStreamButton").addEventListener("click", () => {
                 // Gestisci errori di caricamento immagine
                 snapshotImg.onerror = () => {
                     console.error("Errore durante il caricamento dell'immagine.");
-                    alert("Non è stato possibile caricare l'immagine dall'ESP32.");
+                    alert("Failed to load the image from the ESP32.");
                     clearInterval(captureInterval);
                     captureInterval = null;
                     button.textContent = "Start Stream";
@@ -108,7 +108,7 @@ document.getElementById("liveStreamButton").addEventListener("click", () => {
             };
 
             captureAndAnalyze();
-            captureInterval = setInterval(captureAndAnalyze, 5000);
+            captureInterval = setInterval(captureAndAnalyze, 10000);
             button.textContent = "Stop Stream";
         } catch (error) {
             console.error("Stream error:", error);

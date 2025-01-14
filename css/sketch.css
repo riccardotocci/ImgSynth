@@ -1,0 +1,17 @@
+/* Stile generico per il canvas */
+canvas {
+ /* Rimuove spazi indesiderati intorno al canvas */
+    margin: 0 auto; /* Centra il canvas */
+  }
+  
+  /* Contenitore per il canvas */
+  #canvas-container {
+    max-width: 100%; /* Rende il canvas responsivo */
+    background-color: #f9f9f9; /* Colore di sfondo */
+    border-radius: 8px; /* Angoli arrotondati */
+    margin: 10px;
+    position: relative;
+    border: 1px solid #ddd;
+    max-height: 400px;
+    flex-shrink: 0;
+  }

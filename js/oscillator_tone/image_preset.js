@@ -24,12 +24,10 @@ function adjustPresetFromImage(imageAnalysis, dominantColors) {
         return {
             id: `oscillator${index + 1}`, // Identificatore dell'oscillatore
             waveform: waveType || (index % 2 === 0 ? "sine" : "triangle"), // Cambia il tipo di onda per oscillatori diversi
-            detune: mapRange(sat, 0, 100, -100, 100), // Differenziazione del detune
-            // Modifica la frequenza in base all'indice
+            detune: mapRange(sat, 0, 100, -50, 50), // Differenziazione del detune
             octave: Math.ceil(mapRange(light, 0, 100, -2 , 2 )), // Differenziazione dell'ottava
-            volume: Math.ceil(mapRange(light, 0, 50, -20, 0)), // Differenziazione del volume
-            harmonics: 1 + index * 2, // Aggiungi armoniche in base all'indice
-            voices: Math.round(mapRange(imageAnalysis.depthValue, 0, 100, 1, 8)) + index, // Incremento del numero di voci
+            volume: Math.ceil(mapRange(light, 0, 100, -20, 0)), // Differenziazione del volume
+            harmonics: Math.ceil(mapRange(sat, 0,100, 1, 10)), // Aggiungi armoniche in base all'indice
         };
     });
     console.log("Average S:", imageAnalysis.averageS);
@@ -40,11 +38,14 @@ function adjustPresetFromImage(imageAnalysis, dominantColors) {
         oscillators: oscillatorsData,
         filterType: getFilterType(imageAnalysis.averageL || 50), // Default a "lowpass" se non definito
         sharedFilterFrequency: mapRange(imageAnalysis.averageL, 0, 100, 20, 20000),
-        sharedFilterQ: getLFOType(imageAnalysis.sharpness),
+        sharedFilterRolloff: getrolloffType(imageAnalysis.sharpness),
+        sharedFilterQ: parseFloat(mapRange(imageAnalysis.averageL,0,100,0,10)).toFixed(1),
+
         attack: mapRangeLog(imageAnalysis.sharpness, 0, 100, 0.01, 2),
         decay: mapRangeInverse(imageAnalysis.sharpness, 0, 100, 0.01, 2),
         sustain: mapRangeInverse(imageAnalysis.sharpness, 0, 100, 0.1, 1),
         release: mapRangeInverse(imageAnalysis.sharpness, 0, 100, 0.01, 3),
+
         reverb: {
             preDelay: mapRange(imageAnalysis.depthValue, 0, 1, 0, 0.5),
             decay: mapRange(imageAnalysis.depthValue, 0, 1, 0.2, 5),
@@ -59,7 +60,7 @@ function adjustPresetFromImage(imageAnalysis, dominantColors) {
         },
         saturation: {
             tone: getToneString(imageAnalysis.averageS),
-            drive: mapRange(imageAnalysis.averageS, 0, 100, 0, 1),
+            drive: parseFloat(mapRange(imageAnalysis.averageS, 0, 100, 0, 1)).toFixed(1),
             wet: mapRange(imageAnalysis.averageS, 0, 100, 0, 0.8),
         },
         chorus:{
@@ -71,7 +72,7 @@ function adjustPresetFromImage(imageAnalysis, dominantColors) {
             wet:mapRange(imageAnalysis.normalizedContrast, 0, 100, 0, 1),
         },
         noise: {
-            level: Math.ceil(mapRange(imageAnalysis.noiseLevel, 0, 100, -20, 0)),
+            level: Math.ceil(mapRange(imageAnalysis.noiseLevel, 0, 100, -60, -20)),
         },
     };
 

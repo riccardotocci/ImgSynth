@@ -1,3 +1,4 @@
+
 const synthConfig = {
     oscillator: { type: "sine" },
     detune: 0,
@@ -16,13 +17,17 @@ const adsrConfig = {
     release: 0.5, // Valore iniziale di release
 };
 
-var noisesynth = new Tone.Noise("pink");
+var noisesynth = new Tone.Noise("white");
 
 var gain = new Tone.Gain(0.5);
 
 const oscillators = Array.from({ length: 3 }, (_, i) => {
     const synth = new Tone.PolySynth(Tone.Synth, synthConfig);
     console.log(`Oscillatore ${i + 1} creato`, synth);
+    const gain = new Tone.Gain(0.8);
+
+    // Collegare il synth al gain e poi alla destinazione
+    synth.connect(gain);
 
     return {
         id: i + 1, // ID univoco
@@ -33,9 +38,10 @@ const oscillators = Array.from({ length: 3 }, (_, i) => {
             pitch: 0,
             octave: 0,
             harmonics: 1,
-            voices: 1,
+            volume: -12,
         },
         synth: synth,
+        gain: gain,
         envelope: {
             attack: adsrConfig.attack,
             decay: adsrConfig.decay,
@@ -45,33 +51,24 @@ const oscillators = Array.from({ length: 3 }, (_, i) => {
     };
 });
 
-
 oscillators.forEach((osc, index) => {
-    const channel = new Tone.Channel({
-        volume: -6,    // Volume iniziale del canale
-        pan: 0,        // Pan iniziale
-        mute: false,   // Canale non muto di default
-    }).toDestination(); // Collegamento del canale all'output principale
-
-    osc.channel = channel;
-    console.log(`Canale del mixer ${index + 1} creato`);
+    osc.panner = new Tone.Panner(0); // Pan iniziale a 0
+    console.log(`Panner per Oscillatore ${index + 1} inizializzato`);
 });
+
 
 const sharedFilter = new Tone.Filter({
     type: "lowpass", // Tipo di filtro
     frequency: 1000, // Frequenza iniziale
     Q: 1,            // Fattore di qualità
     rolloff: -12,    // Rolloff del filtro
-}).toDestination(); // Collega alla destinazione finale
+}); // Collega alla destinazione finale
 
-const envelopeScaler = new Tone.Multiply(5000);
+sharedFilter.frequency.value = 1000;
+// Crea un LFO
+const lfo = new Tone.LFO("10hz",400,4000);
 
-const filterEnvelope = new Tone.Envelope({
-    attack: 0.5,          // Tempo di Attack
-    decay: 0.2,           // Tempo di Decay
-    sustain: 0.7,         // Livello di Sustain
-    release: 0.5,         // Tempo di Release
-});
+lfo.connect(sharedFilter.frequency);
 
 // Configurazione globale degli effetti (unica per tutti gli oscillatori)
 const effectsConfig = {
@@ -85,13 +82,11 @@ const effectsConfig = {
     chorusSpread: 180,
     reverbSize: 0.5,
     reverbPreDelay: 0.1,
-    limiterOn: true, // P,ofondità del chorus (0-1)
 }
-
-
 
 // Crea istanze degli effetti
 const reverb = new Tone.Reverb({ wet: effectsConfig.reverbWet });
+
 const delay = new Tone.FeedbackDelay({
     delayTime: effectsConfig.delayTime / 1000,
     feedback: 0.3,  // Livello del feedback (ritorni)
@@ -99,10 +94,11 @@ const delay = new Tone.FeedbackDelay({
 });
 
 const distortion = new Tone.Distortion(effectsConfig.distortionAmount);
-const limiter = new Tone.Limiter(effectsConfig.limiterThreshold);
-const chorus = new Tone.Chorus(4, effectsConfig.chorusDepth, 0.5).start(); // Chorus a 4Hz
+const limiter = new Tone.Limiter(-10);
+const chorus = new Tone.Chorus(4, effectsConfig.chorusDepth, 0.5); // Chorus a 4Hz
 
 const analyser = new Tone.Analyser("fft", 256);
+
 window.analyser = analyser;
 
 let presets;
@@ -277,5 +273,4 @@ document.getElementById("presetSelector").addEventListener("change", (e) => {
             },
         },
     };
-    
 });

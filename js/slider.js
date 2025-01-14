@@ -49,6 +49,7 @@ const sliderConfigs = {
   
   function initializeSlider(config) {
     const sliderElement = document.getElementById(config.id);
+    console.log(sliderElement);
   
     if (sliderElement) {
         // Inizializza lo slider con Nexus UI
@@ -59,7 +60,10 @@ const sliderConfigs = {
           step: config.step,
           value: config.value
         });
-  
+        
+        Nexus.sliders = Nexus.sliders || {};
+        Nexus.sliders[`#${config.id}`] = slider;
+
         // Associa evento per aggiornare il valore
         slider.on("change", (value) => {
             config.onChange(value);
@@ -89,6 +93,7 @@ function initializeOscillatorSliders(configs) {
     configs.forEach((config, index) => {
         const sliderElementId = `#${config.id}`;
         const sliderElement = document.getElementById(config.id);
+        console.log(sliderElementId);
 
         if (sliderElement) {
             const slider = new Nexus.Slider(sliderElementId, {
@@ -140,14 +145,18 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function setNoiseVolume(value) {
-    const sliderElement = document.getElementById(sliderConfigs.noiseVolume.id);
-    if (sliderElement) {
-        sliderElement.value = value;
-        sliderConfigs.noiseVolume.onChange(value);
+    const sliderId = `#${sliderConfigs.noiseVolume.id}`; // ID dello slider Nexus
+    const slider = Nexus.sliders[sliderId]; // Recupera l'istanza dello slider Nexus
+
+    if (slider) {
+        slider.value = value; // Aggiorna il valore graficamente e logicamente nello slider Nexus
+        sliderConfigs.noiseVolume.onChange(value); // Richiama il callback associato per aggiornare l'audio
+        console.log(`Noise volume impostato a ${value} dB tramite Nexus UI.`);
     } else {
-        console.warn(`Elemento slider con ID ${sliderConfigs.noiseVolume.id} non trovato.`);
+        console.warn(`Slider Nexus con ID ${sliderId} non trovato.`);
     }
 }
+
 
 function setOscillatorVolume(index, value) {
     if (index >= 0 && index < sliderConfigs.oscillatorVolumes.length) {

@@ -1,7 +1,9 @@
 #secondrow{
     display:flex;
     flex-direction: row;
-    gap: 160px;
+    gap: 130px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .knob-adsr{
@@ -16,6 +18,7 @@
 #envelope{
     display:flex;
     flex-direction: column;
+    align-items: center;
     
 }
 
@@ -23,11 +26,12 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    text-align: center;
     align-items: center;
-    margin: 10px;
     padding: 10px;
     border: 1px solid #ccc;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     background-color: rgba(133, 216, 0, 0.2);
+    white-space: nowrap;
 }

@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
         distortionTypeControl.addEventListener("change", (e) => {
             const type = e.target.value;
             distortion.set({ type });
-            console.log("Distortion type updated:", type);
         });
     }
 
@@ -14,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
         distortionAmountControl.addEventListener("input", (e) => {
             const amount = parseFloat(e.target.value);
             distortion.set({ distortion: amount });
-            console.log("Distortion amount updated:", amount);
+            document.getElementById("distortionAmountValue").innerText = amount;
         });
     }
 
@@ -22,8 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (distortionWetControl) {
         distortionWetControl.addEventListener("input", (e) => {
             const wet = parseFloat(e.target.value);
-            distortion.set({ wet });
-            console.log("Distortion wet updated:", wet);
+            distortion.set({ wet: wet });
+            document.getElementById("distortionWetValue").innerText = wet;
         });
     }
 
@@ -33,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         chorusDepthControl.addEventListener("input", (e) => {
             const depth = parseFloat(e.target.value);
             chorus.set({ depth });
-            console.log("Chorus depth updated:", depth);
+            document.getElementById("chorusDepthValue").innerText = depth;
         });
     }
 
@@ -42,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
         chorusDelayControl.addEventListener("input", (e) => {
             const delayTime = parseFloat(e.target.value) / 1000; // Convert to seconds
             chorus.set({ delayTime });
-            console.log("Chorus delay updated:", delayTime);
+            document.getElementById("chorusDelayValue").innerText = delayTime
         });
     }
 
@@ -51,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
         chorusFeedbackControl.addEventListener("input", (e) => {
             const feedback = parseFloat(e.target.value);
             chorus.set({ feedback });
-            console.log("Chorus feedback updated:", feedback);
+            document.getElementById("chorusFeedbackValue").innerText = feedback;
         });
     }
 
@@ -60,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
         chorusFrequencyControl.addEventListener("input", (e) => {
             const frequency = parseFloat(e.target.value);
             chorus.set({ frequency });
-            console.log("Chorus frequency updated:", frequency);
+            document.getElementById("chorusFrequencyValue").innerText = frequency;
         });
     }
 
@@ -69,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
         chorusSpreadControl.addEventListener("input", (e) => {
             const spread = parseInt(e.target.value, 10);
             chorus.set({ spread });
-            console.log("Chorus spread updated:", spread);
+            document.getElementById("chorusSpreadValue").innerText = spread;
         });
     }
 
@@ -78,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
         chorusWetControl.addEventListener("input", (e) => {
             const wet = parseFloat(e.target.value);
             chorus.set({ wet });
-            console.log("Chorus wet updated:", wet);
+            document.getElementById("chorusWetValue").innerText = wet;
         });
     }
 
@@ -88,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
         delayTimeControl.addEventListener("input", (e) => {
             const delayTime = parseFloat(e.target.value) / 1000; // Convert to seconds
             delay.set({ delayTime });
-            console.log("Delay time updated:", delayTime);
+            document.getElementById("delayTimeValue").innerText = delayTime;
         });
     }
 
@@ -97,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
         delayFeedbackControl.addEventListener("input", (e) => {
             const feedback = parseFloat(e.target.value);
             delay.set({ feedback });
-            console.log("Delay feedback updated:", feedback);
+            document.getElementById("delayFeedbackValue").innerText = feedback; 
         });
     }
 
@@ -106,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
         delayWetControl.addEventListener("input", (e) => {
             const wet = parseFloat(e.target.value);
             delay.set({ wet });
-            console.log("Delay wet updated:", wet);
+            document.getElementById("delayWetValue").innerText = wet;
         });
     }
 
@@ -116,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
         reverbSizeControl.addEventListener("input", (e) => {
             const decay = parseFloat(e.target.value);
             reverb.set({ decay });
-            console.log("Reverb size updated:", decay);
+            document.getElementById("reverbSizeValue").innerText = decay;
         });
     }
 
@@ -125,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
         reverbPreDelayControl.addEventListener("input", (e) => {
             const preDelay = parseFloat(e.target.value);
             reverb.set({ preDelay });
-            console.log("Reverb pre-delay updated:", preDelay);
+            document.getElementById("reverbPreDelayValue").innerText = preDelay;
         });
     }
 
@@ -134,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
         reverbWetControl.addEventListener("input", (e) => {
             const wet = parseFloat(e.target.value);
             reverb.set({ wet });
-            console.log("Reverb wet updated:", wet);
+            document.getElementById("reverbWetValue").innerText = wet;
         });
     }
 
@@ -143,8 +142,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (limiterThresholdControl) {
         limiterThresholdControl.addEventListener("input", (e) => {
             const threshold = parseFloat(e.target.value);
-            limiter.set({ threshold });
-            console.log("Limiter threshold updated:", threshold);
+            limiter.set({ threshold: threshold });
+            document.getElementById("limiterThresholdValue").innerText = threshold;
         });
     }
 });
@@ -212,34 +211,29 @@ switchLimiter.forEach((toggle, index) => {
     switchDistortion.forEach((toggle, index) => {
         toggle.addEventListener("change", () => {
             distortion.set({ bypass: !toggle.checked });
-            console.log(`Distortion ${toggle.checked ? "enabled" : "disabled"}`);
         });
     });
 
     switchChorus.forEach((toggle, index) => {
         toggle.addEventListener("change", () => {
             chorus.set({ bypass: !toggle.checked });
-            console.log(`Chorus ${toggle.checked ? "enabled" : "disabled"}`);
         });
     });
 
     switchDelay.forEach((toggle, index) => {
         toggle.addEventListener("change", () => {
             delay.set({ bypass: !toggle.checked });
-            console.log(`Delay ${toggle.checked ? "enabled" : "disabled"}`);
         });
     });
 
     switchReverb.forEach((toggle, index) => {
         toggle.addEventListener("change", () => {
             reverb.set({ bypass: !toggle.checked });
-            console.log(`Reverb ${toggle.checked ? "enabled" : "disabled"}`);
         });
     });
 
     switchLimiter.forEach((toggle, index) => {
         toggle.addEventListener("change", () => {
             limiter.set({ bypass: !toggle.checked });
-            console.log(`Limiter ${toggle.checked ? "enabled" : "disabled"}`);
         });
     });

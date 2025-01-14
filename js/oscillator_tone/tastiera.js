@@ -40,7 +40,6 @@ function handleKeyPress(keyRect, note) {
         if (osc.isActive) {
             console.log(`Oscillatore ${index + 1}: Nota ${fullNote} inviata`);
             osc.synth.triggerAttack(fullNote);
-            filterEnvelope.triggerAttack();
         }
     });
 
@@ -55,7 +54,6 @@ function handleKeyRelease() {
     oscillators.forEach((osc) => {
         if (osc.isActive) {
             osc.synth.releaseAll();
-            filterEnvelope.triggerRelease();
 
         }
     });

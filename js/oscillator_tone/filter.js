@@ -3,7 +3,6 @@ if (frequencyControl) {
     frequencyControl.addEventListener("input", (e) => {
         const frequency = parseFloat(e.target.value);
         sharedFilter.frequency.value = frequency;
-        console.log(`Frequenza del filtro condiviso aggiornata a ${frequency} Hz`);
     });
     
 }
@@ -23,7 +22,7 @@ if (filterTypeControl) {
     filterTypeControl.addEventListener("change", (e) => {
         const type = e.target.value;
         sharedFilter.type = type;
-        console.log(`Tipo di filtro condiviso aggiornato a ${type}`);
+        console.log(`Tipo di filtro condiviso aggiornato a ${sharedFilter.type}`);
     });
 }
 
@@ -36,8 +35,6 @@ if (rolloffControl) {
         console.log(`Rolloff del filtro condiviso aggiornato a ${rolloff} dB/oct`);
     });
 }
-
-
 
 // Listener per modificare il Q del filtro condiviso
 const qualityControl = document.getElementById("sharedFilterQ");
@@ -52,4 +49,28 @@ if (qualityControl) {
     });
 }
 
+// Crea due nodi di guadagno per il mix
+const wetGain = new Tone.Gain(0.5); // Segnale filtrato
+const dryGain = new Tone.Gain(0.5); // Segnale non filtrato
 
+// Crea un mixer per sommare i due segnali
+const mixNode = new Tone.Gain();
+
+// Aggiorna il mix tra wet e dry
+function updateMix(wetRatio) {
+    const dryRatio = 1 - wetRatio; // Il resto è il segnale dry
+    wetGain.gain.value = wetRatio;
+    dryGain.gain.value = dryRatio;
+
+}
+// Listener per modificare il Q del filtro condiviso
+const mixControl = document.getElementById("mixFilter");
+const mixControlDisplay = document.getElementById("mixFilterValue");
+
+if (mixControl) {
+    mixControl.addEventListener("input", (e) => {
+        const mixValue = parseFloat(e.target.value);
+        updateMix(mixValue); // Aggiorna il Q del filtro condiviso // Aggiorna l'interfaccia utente
+        mixControlDisplay.textContent = `${(mixValue * 100).toFixed(1)}%`; // Aggiorna l'interfaccia utente
+    });
+}

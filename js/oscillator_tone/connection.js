@@ -1,92 +1,97 @@
 oscillators.forEach((osc, index) => {
-    if (osc.synth && osc.channel) {
-        osc.synth.connect(osc.channel);      // Oscillatore → Filtro individuale   // Filtro individuale → Mixer
-        osc.channel.connect(sharedFilter); // Mixer → Filtro condiviso
-        
+    if (osc.gain && osc.panner) {
+        osc.gain.connect(osc.panner); 
+
+        osc.panner.connect(dryGain);
+        osc.panner.connect(sharedFilter);
+
         console.log(`Oscillatore ${index + 1} collegato al filtro condiviso.`);
     } else {
         console.error(`Oscillatore ${index + 1}, Filtro o Mixer non configurati.`);
     }
 });
 
-// Catena iniziale degli effetti
-sharedFilter.connect(Tone.Destination); // Connetti solo il filtro alla destinazione
-// Collega il rumore al filtro condiviso
+dryGain.connect(mixNode);
 
-// Collega l'analizzatore per la visualizzazione dello spettro
+sharedFilter.connect(wetGain);
+wetGain.connect(mixNode);
+
+mixNode.connect(Tone.Destination);
+
 Tone.Destination.connect(analyser);
 
-console.log("Catena audio iniziale configurata");
+// Funzione per aggiornare la catena audio quando si attivano/disattivano effetti
+function updateEffectChain(effects) {
+    // Disconnetti tutto dalla destinazione
+    mixNode.disconnect();
 
-// Funzione per aggiornare la catena audio quando si abilita/disabilita un effetto
-function updateEffectChain(isEnabled, effectInstance) {
-    oscillators.forEach((osc) => {
-        // Disconnetti qualsiasi connessione esistente
-        osc.synth.disconnect();
+    // Ricostruisci la catena audio basandoti sugli effetti attivi
+    let currentNode = mixNode;
 
+    effects.forEach(({ isEnabled, effectInstance }) => {
         if (isEnabled) {
-            // Connetti con l'effetto attivato
-            osc.synth.chain(sharedFilter, effectInstance, Tone.Destination);
-            console.log(`${effectInstance.name || "Effetto"} abilitato`);
-        } else {
-            // Disconnetti esplicitamente l'effetto e collega direttamente
-            if (effectInstance.disconnect) effectInstance.disconnect();
-            osc.synth.chain(sharedFilter, Tone.Destination);
-            console.log(`${effectInstance.name || "Effetto"} disabilitato`);
+            currentNode.connect(effectInstance);
+            currentNode = effectInstance; // Aggiorna il nodo corrente
+        }
+    });
+
+    // Connetti l'ultimo nodo alla destinazione
+    currentNode.connect(Tone.Destination);
+    console.log("Catena audio aggiornata con effetti abilitati");
+}
+
+// Funzione per inizializzare i toggle degli effetti
+function initializeEffectToggles(effectToggles) {
+    effectToggles.forEach(({ toggleId, effectInstance }) => {
+        const toggleControl = document.getElementById(toggleId);
+        if (toggleControl) {
+            toggleControl.addEventListener("change", () => {
+                // Aggiorna lo stato dell'effetto
+                const isEnabled = toggleControl.checked;
+                const effect = effectToggles.find(e => e.effectInstance === effectInstance);
+                if (effect) effect.isEnabled = isEnabled;
+
+                // Ricostruisci la catena audio
+                updateEffectChain(effectToggles);
+
+                console.log(`${effectInstance.name || "Effetto"} toggle: ${isEnabled}`);
+            });
         }
     });
 }
 
-
-// Event Listeners per i toggle degli effetti
+// Esegui al caricamento della pagina
 document.addEventListener("DOMContentLoaded", () => {
-    // Distortion
-    const distortionToggleControl = document.getElementById("distortionToggle");
-    if (distortionToggleControl) {
-        distortionToggleControl.addEventListener("change", (e) => {
-            const isEnabled = e.target.checked;
-            updateEffectChain(isEnabled, distortion);
-            console.log(`Distortion toggle: ${isEnabled}`);
-        });
-    }
+    // Definisci gli effetti e i relativi toggle
+    const effectToggles = [
+        {
+            toggleId: "distortionToggle",
+            effectInstance: distortion,
+            isEnabled: false,
+        },
+        {
+            toggleId: "chorusToggle",
+            effectInstance: chorus,
+            isEnabled: false,
+        },
+        {
+            toggleId: "delayToggle",
+            effectInstance: delay,
+            isEnabled: false,
+        },
+        {
+            toggleId: "reverbToggle",
+            effectInstance: reverb,
+            isEnabled: false,
+        },
+        {
+            toggleId: "limiterToggle",
+            effectInstance: limiter,
+            isEnabled: false,
+        },
+    ];
 
-    // Chorus
-    const chorusToggleControl = document.getElementById("chorusToggle");
-    if (chorusToggleControl) {
-        chorusToggleControl.addEventListener("change", (e) => {
-            const isEnabled = e.target.checked;
-            updateEffectChain(isEnabled, chorus);
-            console.log(`Chorus toggle: ${isEnabled}`);
-        });
-    }
-
-    // Delay
-    const delayToggleControl = document.getElementById("delayToggle");
-    if (delayToggleControl) {
-        delayToggleControl.addEventListener("change", (e) => {
-            const isEnabled = e.target.checked;
-            updateEffectChain(isEnabled, delay);
-            console.log(`Delay toggle: ${isEnabled}`);
-        });
-    }
-
-    // Reverb
-    const reverbToggleControl = document.getElementById("reverbToggle");
-    if (reverbToggleControl) {
-        reverbToggleControl.addEventListener("change", (e) => {
-            const isEnabled = e.target.checked;
-            updateEffectChain(isEnabled, reverb);
-            console.log(`Reverb toggle: ${isEnabled}`);
-        });
-    }
-
-    // Limiter
-    const limiterToggleControl = document.getElementById("limiterToggle");
-    if (limiterToggleControl) {
-        limiterToggleControl.addEventListener("change", (e) => {
-            const isEnabled = e.target.checked;
-            limiter.mute = !isEnabled; // Muta il limiter se disattivato
-            console.log(`Limiter toggle: ${isEnabled}`);
-        });
-    }
+    // Inizializza i toggle
+    initializeEffectToggles(effectToggles);
 });
+

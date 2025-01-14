@@ -1,27 +1,53 @@
-// Funzione per configurare i controlli di un parametro di una sorgente
-function setupModMatrixControl(sourceName, paramName, controlId) {
-    const control = document.getElementById(controlId);
-    if (control) {
-        control.addEventListener("input", (e) => {
-            const value = parseFloat(e.target.value);
-            updateModMatrixParameter(sourceName, paramName, value);
-        });
-        console.log(`Controllo ${controlId} configurato per ${sourceName} ${paramName}`);
+// Update envelope parameters dynamically
+document.getElementById("lfo-frequency").addEventListener("input", (e) => {
+    const newFrequency = parseFloat(e.target.value); // Leggi il valore dell'input
+    lfo.frequency.value = newFrequency; // Imposta il valore sulla proprietà `.value`
+    
+    // Aggiorna il testo del valore visibile nell'interfaccia
+    document.getElementById("lfo-frequency-value").textContent = newFrequency;
+});
+
+document.getElementById("lfo-min").addEventListener("input", (e) => {
+    const newMin = parseFloat(e.target.value);
+    lfo.min = newMin; // Imposta correttamente il valore minimo
+    document.getElementById("lfo-min-value").textContent = newMin;
+});
+
+document.getElementById("lfo-max").addEventListener("input", (e) => {
+    const newMax = parseFloat(e.target.value);
+    lfo.max = newMax; // Imposta correttamente il valore massimo
+    document.getElementById("lfo-max-value").textContent = newMax;
+});
+
+document.getElementById("lfo-amplitude").addEventListener("input", (e) => {
+    const newAmplitude = parseFloat(e.target.value);
+    lfo.amplitude.value = newAmplitude; // Imposta correttamente l'ampiezza
+    document.getElementById("lfo-amplitude-value").textContent = newAmplitude;
+});
+// Variabile per controllare lo stato
+let isActive = false;
+
+// Funzione per gestire lo stato dell'LFO
+function toggleLFO(state) {
+    isActive = state;
+    if (isActive) {
+        lfo.start(); // Avvia l'LFO
     } else {
-        console.warn(`Controllo ${controlId} non trovato per ${sourceName} ${paramName}`);
+        lfo.stop(); // Ferma l'LFO
     }
 }
+// Select the single switch
+const switchlfo = document.getElementById("lfotoggle");
 
-// Configura i controlli per LFO1
-setupModMatrixControl("LFO1", "frequency", "lfo1Frequency");
-setupModMatrixControl("LFO1", "min", "lfo1Min");
-setupModMatrixControl("LFO1", "max", "lfo1Max");
-setupModMatrixControl("LFO1", "amplitude", "lfo1Amplitude");
+// Initialize Switchery for the element
+new Switchery(switchlfo, {
+    color: 'rgba(116, 240, 0, 0.3)',         // ON color
+    secondaryColor: 'rgba(255,255,255,0.3)', // OFF color
+    jackColor: '#FFFFFF',    // Button color
+    size: 'default',         // Size: small, default, large
+});
 
-// Configura i controlli per LFO2
-setupModMatrixControl("LFO2", "frequency", "lfo2Frequency");
-setupModMatrixControl("LFO2", "min", "lfo2Min");
-setupModMatrixControl("LFO2", "max", "lfo2Max");
-setupModMatrixControl("LFO2", "amplitude", "lfo2Amplitude");
-
-
+// Event to handle the state
+switchlfo.addEventListener("change", () => {
+    toggleLFO(switchlfo.checked); // Sync with LFO state
+});

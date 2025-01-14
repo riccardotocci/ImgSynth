@@ -13,6 +13,10 @@ let img_p5;
 function processSketch(imageElement) {
   // Create canvas and context
   canvas_sketch = document.getElementById('mainCanvas');
+  if (!canvas_sketch) {
+    console.error('Canvas element not found');
+    return;
+  }
   canvas_sketch.width = imageElement.width;
   canvas_sketch.height = imageElement.height;
   ctx_sketch = canvas_sketch.getContext('2d');

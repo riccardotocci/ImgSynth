@@ -1,10 +1,4 @@
-
-
 let result_rumore = document.getElementById('result_rumore');
-
-function onOpenCvReady() {
-  console.log('OpenCV.js è pronto!');
-}
 
 function calculateNoise(canvas,ctx){
       // Convert image to OpenCV Mat

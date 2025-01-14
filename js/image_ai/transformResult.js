@@ -1,4 +1,3 @@
-
 function transformParameters(results) {
     const normalizedParameters = {};
 

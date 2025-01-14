@@ -1,7 +1,6 @@
 function updateVolume(index,osc, volume) {
-    if (osc.channel) {
-        osc.channel.volume.value = volume;
-        console.log(`Canale Mixer per Oscillatore ${index + 1}: Volume impostato a ${volume} dB`);
+    if (osc.synth) {
+        osc.synth.volume.value = volume;
     } else {
         console.error(`Canale Mixer non trovato per Oscillatore ${index + 1}.`);
     }

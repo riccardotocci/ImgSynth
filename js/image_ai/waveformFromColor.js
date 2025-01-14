@@ -5,8 +5,6 @@ const startStopButton = document.getElementById('startStop');
 const waveformInfo = document.getElementById('waveformInfo');
 const waveformCanvas = document.getElementById('waveformCanvas');
 
-
-
 // Convert HEX to HSL
 function hexToHSL(hex) {
     let r = 0, g = 0, b = 0;

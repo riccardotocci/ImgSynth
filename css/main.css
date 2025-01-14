@@ -1,15 +1,28 @@
         /* Body style for background color */
-    body {
-        background-color: #1e2a44;
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding-left: 20px;
-        padding-right: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
+        body {
+            background-color: #1e2a44;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            align-content: center;
+            min-height: 1080px;
+            margin: 0;
+            width: 100%;
+            padding: 20px;
+            position: relative;
+        }
+
+        html {
+            min-width: 1700px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            overflow-x:visible;
+        }
 
       /* Navbar container */
       .navbar {
@@ -63,34 +76,12 @@
         padding: 20px;
         width: 1600px;
         flex-direction: column; /* Contenuti impilati verticalmente */
-        background-color: rgb(242, 242, 242,0.5);
+        background-color: rgba(242, 242, 242, 0.416);
         border: 1px solid #ddd;
         border-radius: 5px;
         margin-top: 20px;
         position: relative;
-        
-      }
-
-      /* Responsive design */
-      @media (max-width: 1600px) {
-          .navbar {
-          flex-direction: row;
-          width: calc(100% - 40px);
-          }
-
-          .navbar a {
-          margin: 5px 0;
-          text-align: center;
-          }
-
-          .container {
-          width: 100%;
-          padding: 10px;
-          }
-
-          .section {
-          width: 100%;
-          }
+        outline: 3px solid rgba(255, 255, 255, 0.7);
       }
 
       .section.active {

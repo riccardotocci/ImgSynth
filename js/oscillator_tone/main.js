@@ -4,14 +4,12 @@ const toggleOscillator = (index) => {
     osc.isActive = !osc.isActive;
     const button = document.getElementById(`oscillatorToggle${osc.id}`);
     button.textContent = osc.isActive ? "ON" : "OFF";
-    console.log(`Oscillatore ${osc.id} ${osc.isActive ? "attivato" : "disattivato"}`);
 };
 
 const toggleNoise = (noise) => {
     noise.isActive = !noise.isActive;
     const button = document.getElementById(`NoiseToggle`);
     button.textContent = noise.isActive ? "ON" : "OFF";
-    console.log(`Noise ${noise.isActive ? "attivato" : "disattivato"}`);
 };
 
 
@@ -29,10 +27,8 @@ document.getElementById("connectMIDI").addEventListener("click", async () => {
                 oscillators.forEach((osc) => {
                     if (osc.isActive) {
                         if (status === 144 && velocity > 0) { // Nota premuta
-                            startVisualizationFromMIDI(note);
                             osc.synth.triggerAttack(frequency);
                         } else if (status === 128 || (status === 144 && velocity === 0)) {
-                            stopVisualization(); // Nota rilasciata
                             osc.synth.triggerRelease(frequency);
                         }
                     }
@@ -49,7 +45,7 @@ document.getElementById("connectMIDI").addEventListener("click", async () => {
             };
         });
     } else {
-        alert("MIDI non supportato dal browser.");
+        alert("MIDI not supported by the browser.");
     }
 });
 

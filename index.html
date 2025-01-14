@@ -21,10 +21,9 @@
         <link rel="stylesheet" href="css/oscillator_tone/backsettings.css">
         <link rel="stylesheet" href="css/image_ai/image_ai.css">
         <link rel="stylesheet" href="css/popup.css">
-        <link rel="stylesheet" href="css/slider.css">
         <link rel="stylesheet" href="css/imagecontainer.css">
-        <link rel="stylesheet" href="css/select.css">
-        <link rel="stylesheet" href="css/p5.css">
+        <link rel="stylesheet" href="css/esp32-cam.css">
+        <link rel="stylesheet" href="css/sketch.css">
         <link rel="stylesheet" href="css/oscillator_tone/modmatrix.css">
         
         <link rel="stylesheet" href="css/oscillator_tone/preset.css">
@@ -32,7 +31,7 @@
 
         <!-- Librerie JS -->
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.36/Tone.min.js"></script>
+        <script src="http://unpkg.com/tone"></script>
         <script src="oscillator_tone/input-knobs-master/input-knobs.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
         <script src="https://docs.opencv.org/4.10.0/opencv.js"></script>
@@ -59,9 +58,9 @@
     <img src="img/IMGSYNTH2.png" alt="ImgSynth Logo" width="400" height="200" />
     <!-- Login con Email/Password -->
     <form id="email-login-form" style="display: block;">
-    <input type="email" id="email" placeholder="Email" required />
-    <input type="password" id="password" placeholder="Password" required />
-    <button class="bg-white text-black font-bold py-2 px-4 rounded" type="submit">Login</button>
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button class="bg-white text-black font-bold py-2 px-4 rounded" id="login-button" type="submit">Login</button>
     </form>
     
     <!-- Registrazione con Email/Password -->
@@ -83,20 +82,14 @@
           </button>
           
       </div>
-      
-      <!-- Messaggio di successo -->
-      <div id="success-message" style="display: none;">
-        <h2>Login completed successfully!</h2>
-        <button id="logout-button" style="display: none;">Logout</button>
-      </div>
 </div>
 
 
 
     <!-- Horizontal floating navbar -->
-    <div class="navbar bg-gray-800 p-4 rounded-lg shadow-lg">
+    <div class="navbar p-4 rounded-lg shadow-lg">
         <div class="flex space-x-6"></div>
-            <a href="#" onclick="showSection('section1', this)" class="text-white hover:text-blue-400 font-semibold px-3 py-2 rounded-md transition duration-300 flex items-center">
+            <a href="#" onclick="showSection('section1', this)" class=" font-semibold px-3 py-2 rounded-md transition duration-300 flex items-center">
                 <i class="fas fa-play mr-2"></i>Play
             </a>
             <a href="#" onclick="showSection('section2', this)" class="text-white hover:text-blue-400 font-semibold px-3 py-2 rounded-md transition duration-300 flex items-center">
@@ -156,7 +149,7 @@
     <div id="control-group">
         <div id="oscillator" class="oscillator1">
             <div class="oscillator-container">
-                <div class="label text-lg font-semibold text-gray-700">Oscillatore 1: <span id="waveformLabel0" >sine</span></div>
+                <div class="label text-lg font-semibold text-gray-900">Osc 1: <span id="waveformLabel0" >sine</span></div>
                 <canvas id="waveformCanvas0" width="100" height="50"></canvas>
                 <div class="controls">
                     <button onclick="changeWaveform(0, -1)">◀</button>
@@ -165,7 +158,7 @@
             </div>
             <div class="knob-container">
                 <label for="detuneKnob1">Detune</label>
-                <input id="detuneKnob1" class="input-knob" type="range" min="-1200" max="1200" step="10" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
+                <input id="detuneKnob1" class="input-knob" type="range" min="-100" max="100" step="1" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
                 <span id="detuneKnob1Value">0</span>
             </div>
             <div class="knob-container">
@@ -195,7 +188,7 @@
     
         <div id="oscillator" class="oscillator2">
             <div class="oscillator-container">
-                <div class="label text-lg font-semibold text-gray-700">Oscillatore 2: <span id="waveformLabel1">sine</span></div>
+                <div class="label text-lg font-semibold text-gray-900">Osc 2: <span id="waveformLabel1">sine</span></div>
                 <canvas id="waveformCanvas1" width="100" height="50"></canvas>
                 <div class="controls">
                     <button onclick="changeWaveform(1, -1)">◀</button>
@@ -204,7 +197,7 @@
             </div>
             <div class="knob-container">
                 <label for="detuneKnob2">Detune</label>
-                <input id="detuneKnob2" class="input-knob" type="range" min="-1200" max="1200" step="10" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
+                <input id="detuneKnob2" class="input-knob" type="range" min="-100" max="100" step="1" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
                 <span id="detuneKnob2Value">0</span>
             </div>
             <div class="knob-container">
@@ -232,7 +225,7 @@
     
         <div id="oscillator" class="oscillator3">
             <div class="oscillator-container">
-                <div class="label text-lg font-semibold text-gray-700">Oscillatore 3 <span id="waveformLabel2">sine</span></div>
+                <div class="label text-lg font-semibold text-gray-900">Osc 3 <span id="waveformLabel2">sine</span></div>
                 <canvas id="waveformCanvas2" width="100" height="50"></canvas>
                 <div class="controls">
                     <button onclick="changeWaveform(2, -1)">◀</button>
@@ -241,7 +234,7 @@
             </div>
             <div class="knob-container">
                 <label for="detuneKnob3">Detune</label>
-                <input id="detuneKnob3" class="input-knob" type="range" min="-1200" max="1200" step="10" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
+                <input id="detuneKnob3" class="input-knob" type="range" min="-100" max="100" step="1" data-bgcolor='rgba(95, 113, 204, 0.622)' data-fgcolor='rgba(0, 0, 255, 0.5)'>
                 
                 <span id="detuneKnob3Value">0</span>
             </div>
@@ -270,7 +263,7 @@
     </div>
 
     <!-- Canali del mixer -->
-    <div id="mixer" class="text-lg font-medium text-gray-600">
+    <div id="mixer" class="text-lg font-medium text-gray-900">
             <div>
                 <label for="volume1" >Volume Osc 1</label>
                 <div id="volume1"></div>
@@ -290,7 +283,7 @@
 
     <div class="noise">
         <div class="noisevolumeslider">
-            <label for="noiseVolume" class="text-lg font-medium text-gray-600">Volume Noise</label>
+            <label for="noiseVolume" class="text-lg font-medium text-gray-900">Volume Noise</label>
             <div id="noiseVolume"></div>
             <span id="noiseVolumeValue">-48 dB</span>
         </div>
@@ -307,13 +300,21 @@
     </div>
     
     <div id="filter">
-        <label class="text-lg font-bold text-gray-700">FILTER</label>
+        <label class="text-lg font-bold text-gray-900">FILTER</label>
+        <div id="filterknobs">
     <div id="secfilter">
         <label for="sharedFilterFrequency">Cutoff</label>
 
         <input id="sharedFilterFrequency" type="range" class="input-knob" min="20" max="20000" step="1" value="1000" data-bgcolor=' rgba(100, 230, 70, 0.2)' data-fgcolor=' rgba(0, 250, 0, 0.8)'>
         <span id="sharedFilterFrequencyValue">1000</span>
     </div>
+
+    <div id="secfilter" id="filterQualityControl">
+        <label for="sharedFilterQ">Q</label>
+        <input id="sharedFilterQ" min="0.1" max="10" step="0.1" value="1" type="range" class="input-knob" data-bgcolor=' rgba(100, 230, 70, 0.2)' data-fgcolor=' rgba(0, 250, 0, 0.8)'>
+        <span id="sharedFilterQValue">1</span>
+    </div>
+</div>
     <div id="secfilter">
         <label for="sharedFilterType">Type</label>
         <select id="sharedFilterType" class="block w-30 p-2 mb-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -321,17 +322,7 @@
             <option value="highpass">Highpass</option>
             <option value="bandpass">Bandpass</option>
             <option value="notch">Notch</option>
-            <option value="allpass">Allpass</option>
-            <option value="peaking">Peaking</option>
-            <option value="lowshelf">Lowshelf</option>
-            <option value="highshelf">Highshelf</option>
         </select>
-    </div>
-
-    <div id="secfilter" id="filterQualityControl">
-        <label for="sharedFilterQ">Q</label>
-        <input id="sharedFilterQ" min="0.1" max="10" step="0.1" value="1" type="range" class="input-knob" data-bgcolor=' rgba(100, 230, 70, 0.2)' data-fgcolor=' rgba(0, 250, 0, 0.8)'>
-        <span id="sharedFilterQValue">1</span>
     </div>
     <div id="secfilter">
         <label for="sharedFilterRolloff">Rolloff</label>
@@ -342,12 +333,17 @@
             <option value="-96">-96 dB/oct</option>
         </select>
     </div>
+    <div id="secfilter">
+    <label for="mixFilter">MIX</label>
+    <input id="mixFilter" type="range" class="input-knob" min="0" max="1" step="0.01" value="0.5" data-bgcolor=' rgba(100, 230, 70, 0.2)' data-fgcolor=' rgba(0, 250, 0, 0.8)'>
+        <span id="mixFilterValue">50.0%</span>
+    </div>
     </div>
 </div>
 <div id="secondrow">
     <!--adsr-->
         <div class="adsr-section">
-            <label class="text-lg font-bold text-gray-700">AMPLITUDE-ENVELOPE</label>
+            <label class="text-lg font-bold text-gray-900">ENVELOPE</label>
             <div class="knob-adsr">
             <div id="envelope">
                 <label for="attack">Attack</label>
@@ -374,28 +370,29 @@
     <!--adsr-->
     
     <div class="adsr-section">
-        <label class="text-lg font-bold text-gray-700">FILTER-ENVELOPE</label>
+        <label class="text-lg font-bold text-gray-900">LFO</label>
         <div class="knob-adsr">
             <div id="envelope">
-                <label for="filter-attack">Attack</label>
-                <input type="range" class="input-knob"  id="filter-attack" min="0" max="2" step="0.01" value="0.5" data-bgcolor='rgba(170, 240, 0, 0.2)' data-fgcolor='rgba(30, 120, 0, 0.8)'>
-                <span id="filter-attack-value">0.50</span>
+                <label for="lfo-frequency">Frequency</label>
+                <input type="range" class="input-knob"  id="lfo-frequency" min="0" max="10" step="0.1" value="10" data-bgcolor='rgba(170, 240, 0, 0.2)' data-fgcolor='rgba(30, 120, 0, 0.8)'>
+                <span id="lfo-frequency-value">10.0</span>
             </div>
             <div id="envelope">
-                <label for="filter-decay">Decay</label>
-                <input type="range" class="input-knob"  id="filter-decay" min="0" max="2" step="0.01" value="0.2" data-bgcolor='rgba(170, 240, 0, 0.2)' data-fgcolor='rgba(30, 120, 0, 0.8)'>
-                <span id="filter-decay-value">0.20</span>
+                <label for="lfo-min">Min</label>
+                <input type="range" class="input-knob" id="lfo-min" min="0" max="10000" step="1" value="400" data-bgcolor='rgba(170, 240, 0, 0.2)' data-fgcolor='rgba(30, 120, 0, 0.8)'>
+                <span id="lfo-min-value">400</span>
             </div>
             <div id="envelope">
-                <label for="filter-sustain">Sustain</label>
-                <input type="range" class="input-knob" id="filter-sustain" min="0" max="1" step="0.01" value="0.7" data-bgcolor='rgba(170, 240, 0, 0.2)' data-fgcolor='rgba(30, 120, 0, 0.8)'>
-                <span id="filter-sustain-value">0.70</span>
+                <label for="lfo-max">Max</label>
+                <input type="range" class="input-knob" id="lfo-max" min="0" max="10000" step="1" value="4000" data-bgcolor='rgba(170, 240, 0, 0.2)' data-fgcolor='rgba(30, 120, 0, 0.8)'>
+                <span id="lfo-max-value">4000</span>
             </div>
             <div id="envelope">
-                <label for="filter-release">Release</label>
-                <input type="range" class="input-knob"  id="filter-release" min="0" max="2" step="0.01" value="0.5" data-bgcolor='rgba(170, 240, 0, 0.2)' data-fgcolor='rgba(30, 120, 0, 0.8)'>
-                <span id="filter-release-value">0.50</span>
+                <label for="lfo-amplitude">Amplitude</label>
+                <input type="range" class="input-knob"  id="lfo-amplitude" min="0" max="1" step="0.01" value="0.5" data-bgcolor='rgba(170, 240, 0, 0.2)' data-fgcolor='rgba(30, 120, 0, 0.8)'>
+                <span id="lfo-amplitude-value">0.50</span>
             </div>
+            <input id="lfotoggle" type="checkbox" class="js-switch">
         </div>
     </div>
 </div>
@@ -403,7 +400,7 @@
         <!-- Configurazione Effetti -->
         <section id="effects">
             <div id="Distortion">
-                <h3 class="text-lg font-bold text-gray-700">Distortion</h3>
+                <h3 class="text-lg font-bold text-gray-900">Distortion</h3>
                 <input id="distortionToggle" type="checkbox" class="js-switch">
                 <label for="distortionType">Type</label>
                 <select id="distortionType">
@@ -412,80 +409,77 @@
                     <option value="square">Square</option>
                 </select>
                 <label for="distortionAmount">AMT</label>
-                <input type="range" class="input-knob" id="distortionAmount" min="0" max="1" step="0.01" data-bgcolor=' rgba(160,40,40,0.7)' data-fgcolor=' rgba(255,40,40,0.8)'>
-                <div id="distortionAmountValue">0.5</div>
+                <input type="range" class="input-knob" id="distortionAmount" min="0" max="1" step="0.01" value="0.5" data-bgcolor=' rgba(160,40,40,0.7)' data-fgcolor=' rgba(255,40,40,0.8)'>
+                <div id="distortionAmountValue">0.50</div>
                 <label for="distortionWet">Wet:</label>
-                <input type="range" class="input-knob" id="distortionWet" min="0" max="1" step="0.01" data-bgcolor=' rgba(160,40,40,0.7)' data-fgcolor=' rgba(255,40,40,0.8)'>
-                <div id="distortionWetValue">0.5</div>
+                <input type="range" class="input-knob" id="distortionWet" min="0" max="1" step="0.01" value="0.50" data-bgcolor=' rgba(160,40,40,0.7)' data-fgcolor=' rgba(255,40,40,0.8)'>
+                <div id="distortionWetValue">0.50</div>
             </div>
             
             <div id="Chorus">
-                <h3 class="text-lg font-bold text-gray-700">Chorus</h3>
+                <h3 class="text-lg font-bold text-gray-900">Chorus</h3>
                 <input id="chorusToggle" type="checkbox" class="js-switch">
                 <div id="chorusToggleValue"></div>
                 <div id="choruspanel">
                     <div id="chorus1">
                         <label for="chorusDelay">Delay</label>
-                        <input type="range" class="input-knob" id="chorusDelay" min="0" max="10" step="0.1" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
-                        <div id="chorusDelayValue"></div>
+                        <input type="range" class="input-knob" id="chorusDelay" min="0" max="10" step="0.1" value="5.0" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
+                        <div id="chorusDelayValue">5.0</div>
                         <label for="chorusDepth">Depth</label>
-                        <input type="range" class="input-knob" id="chorusDepth" min="0" max="1" step="0.01" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
-                        <div id="chorusDepthValue"></div>
+                        <input type="range" class="input-knob" id="chorusDepth" min="0" max="1" step="0.01" value="0.5" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
+                        <div id="chorusDepthValue">0.50</div>
                         <label for="chorusFeedback">Feedback</label>
-                        <input type="range" class="input-knob" id="chorusFeedback" min="0" max="1" step="0.01" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
-                        <div id="chorusFeedbackValue"></div>
+                        <input type="range" class="input-knob" id="chorusFeedback" min="0" max="1" step="0.01" value="0.5" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
+                        <div id="chorusFeedbackValue">0.50</div>
                     </div>
                     <div id="chorus2">
                         <label for="chorusFrequency">Frequency</label>
-                        <input type="range" class="input-knob" id="chorusFrequency" min="0.1" max="10" step="0.1" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
-                        <div id="chorusFrequencyValue"></div>
+                        <input type="range" class="input-knob" id="chorusFrequency" min="0.1" max="10" step="0.1" value="5" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
+                        <div id="chorusFrequencyValue">5.0</div>
                         <label for="chorusSpread">Spread</label>
-                        <input type="range" class="input-knob" id="chorusSpread" min="0" max="360" step="1" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
-                        <div id="chorusSpreadValue"></div>
+                        <input type="range" class="input-knob" id="chorusSpread" min="0" max="360" step="1" value="180" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
+                        <div id="chorusSpreadValue">180</div>
                         <label for="chorusWet">Wet</label>
-                        <input type="range" class="input-knob" id="chorusWet" min="0" max="1" step="0.01" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
-                        <div id="chorusWetValue"></div>
+                        <input type="range" class="input-knob" id="chorusWet" min="0" max="1" step="0.01" value="0.5" data-bgcolor=' rgba(180,20,70,0.7)' data-fgcolor=' rgba(255,20,100,0.8)'>
+                        <div id="chorusWetValue">0.50</div>
                     </div>
                 </div>
             </div>
             
             <div id="Delay">
-                <h3 class="text-lg font-bold text-gray-700">Delay</h3>
+                <h3 class="text-lg font-bold text-gray-900">Delay</h3>
                 <input id="delayToggle" type="checkbox" class="js-switch">
-                <div id="delayToggleValue"></div>
                 <label for="delayTime">Delay Time</label>
                 <input type="range" class="input-knob" id="delayTime" min="0" max="1000" step="10" value="500" data-bgcolor=' rgba(170,20,100,0.7)' data-fgcolor=' rgba(255,0,120,0.8)'>
-                <div id="delayTimeValue"></div>
+                <div id="delayTimeValue">500</div>
                 <label for="delayFeedback">Feedback</label>
-                <input type="range" class="input-knob" id="delayFeedback" min="0" max="1" step="0.01" data-bgcolor=' rgba(170,20,100,0.7)' data-fgcolor=' rgba(255,0,120,0.8)'>
-                <div id="delayFeedbackValue"></div>
+                <input type="range" class="input-knob" id="delayFeedback" min="0" max="1" step="0.01" value="0.5" data-bgcolor=' rgba(170,20,100,0.7)' data-fgcolor=' rgba(255,0,120,0.8)'>
+                <div id="delayFeedbackValue">0.50</div>
                 <label for="delayWet">Wet</label>
-                <input type="range" class="input-knob" id="delayWet" min="0" max="1" step="0.01" data-bgcolor=' rgba(170,20,100,0.7)' data-fgcolor=' rgba(255,0,120,0.8)'>
-                <div id="delayWetValue"></div>
+                <input type="range" class="input-knob" id="delayWet" min="0" max="1" step="0.01" value="0.5" data-bgcolor=' rgba(170,20,100,0.7)' data-fgcolor=' rgba(255,0,120,0.8)'>
+                <div id="delayWetValue">0.50</div>
             </div>
             
             <div id="Reverb">
-                <h3 class="text-lg font-bold text-gray-700">Reverb</h3>
+                <h3 class="text-lg font-bold text-gray-900">Reverb</h3>
                 <input id="reverbToggle" type="checkbox" class="js-switch">
-                <div id="reverbToggleValue"></div>
                 <label for="reverbSize">Size</label>
                 <input type="range" class="input-knob" id="reverbSize" min="0" max="1" step="0.01" value="0.5" data-bgcolor=' rgba(140,0,120,0.7)' data-fgcolor=' rgba(250,0,150,0.8)'>
-                <div id="reverbSizeValue"></div>
+                <div id="reverbSizeValue">0.50</div>
                 <label for="reverbPreDelay">Pre-delay</label>
                 <input type="range" class="input-knob" id="reverbPreDelay" min="0" max="1" step="0.01" value="0.5" data-bgcolor=' rgba(140,0,120,0.7)' data-fgcolor=' rgba(250,0,150,0.8)'>
-                <div id="reverbPreDelayValue"></div>
+                <div id="reverbPreDelayValue">0.50</div>
                 <label for="reverbWet">Wet</label>
                 <input type="range" class="input-knob" id="reverbWet" min="0" max="1" step="0.01" value="0.5" data-bgcolor=' rgba(140,0,120,0.7)' data-fgcolor=' rgba(250,0,150,0.8)'>
-                <div id="reverbWetValue"></div>
+                <div id="reverbWetValue">0.50</div>
             </div>
             
             <div id="Limiter">
-                <h3 class="text-lg font-bold text-gray-700">Limiter</h3>
+                <h3 class="text-lg font-bold text-gray-900">Limiter</h3>
                 <input id="limiterToggle" type="checkbox" class="js-switch">
-                <div id="limiterToggleValue">0</div>
                 <label for="limiterThreshold">Threshold</label>
-                <input type="range" class="input-knob" id="limiterThreshold" min="-60" max="0" step="1" data-bgcolor=' rgba(80,0,80,0.7)' data-fgcolor=' rgba(200,0,200,0.8)'>
-                <div id="limiterThresholdValue">0</div>
+                <input type="range" class="input-knob" id="limiterThreshold" min="-60" max="0" step="1" value="-30" data-bgcolor=' rgba(80,0,80,0.7)' data-fgcolor=' rgba(200,0,200,0.8)'>
+                <div id="limiterThresholdValue">-30</div>
             </div>
         </section>
 
@@ -517,6 +511,18 @@
                 <i class="fas fa-folder-open mr-2"></i>
                 Load Preset
             </button>
+      <!-- Messaggio di successo -->
+      <div id="success-message" style="display: none;">
+        <h2>Login completed successfully!</h2>
+        <button id="logout-button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+            <i class="fas fa-sign-out-alt mr-2"></i>
+          Logout
+        </button>
+      </div>
+      <button id="reopen-popup" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" >
+        Reopen Popup
+    </button>
+
             <select id="presetSelector" >
                 <option value="default">Default</option>
                 <option value="ambient">Ambient</option>
@@ -529,9 +535,9 @@
     <div class="esp32-section">
         <h1 class="mb-4 text-3xl font-extrabold font-serif text-gray-900 dark:text-white md:text-5xl lg:text-6xl">ESP32-CAM Module</h1>
         <div class="flex justify-center mb-8">
-        <div class="w-[800px] h-[600px] border-4 border-gray-300 rounded-lg shadow-lg overflow-hidden" style="width:800px; height:600px;">
-            <img id="esp32feed" alt="esp32feed" class="w-full h-full object-contain" style="display:block;">
-            <canvas id="imageCanvasesp32" style="display: none;"></canvas>
+        <div class="w-[800px] h-[600px] border-4 border-gray-300 rounded-lg shadow-lg overflow-hidden" style="width:800px; height:600px;" id="esp32blank">
+            <img id="esp32feed" alt="esp32feed" class="w-full h-full object-contain" style="display:block; z-index:0;">
+            <canvas id="imageCanvasesp32" style="display: none; background-color:white; z-index:1;"></canvas>
         </div>
     </div>
         <div class="mb-6">
@@ -550,6 +556,13 @@
             <i class="fas fa-video mr-2"></i>
             Live Stream
         </button>
+        <div class="flex flex-col space-y-4"></div>
+            <a href="#esp32-section" onclick="showSection('section4', this)"
+            class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
+            <i class="fas fa-info-circle mr-2"></i>
+            Visit About Page for More Information
+            </a>
+        </div>
     </div>
 </div>
 <div id="keyboard">
@@ -597,13 +610,13 @@
             <i class="fas fa-plug mr-2"></i>
             Connect MIDI
         </button>
-    </section>
+        </section>
 
     </div>
 <div id="section4" class="section" hidden>
     <div class="max-w-6xl mx-auto px-4 py-8">
         <!-- Hero Section -->
-        <div class="text-center mb-16"></div>
+        <div class="text-center"></div>
             <img src="img/IMGSYNTH1.png" alt="ImgSynth Logo" class="mx-auto mb-8" width="400" height="200">
             <p class="text-2xl italic text-gray-600 max-w-3xl mx-auto">
                 A revolutionary web-based synthesizer that transforms images into unique soundscapes through advanced analysis of visual elements.
@@ -674,12 +687,12 @@
                 </ul>
             </div>
         </div>
-        <h1 class="text-4xl font-bold mb-6">ESP32-CAM Module Overview</h1>
+        <h1 class="text-4xl font-serif font-bold mb-6" id="esp32-section">ESP32-CAM Module Overview</h1>
         <div class="description">
-            <p class="font-serif text-2xl italic">The ESP32-CAM is a compact development board equipped with a camera, built around ESP32 chip. It integrates WiFi, Bluetooth, and a camera module that allows you to stream video and capture images.</p>
+            <p class=" text-2xl mb-6">The ESP32-CAM is a compact development board equipped with a camera, built around ESP32 chip. It integrates WiFi, Bluetooth, and a camera module that allows you to stream video and capture images.</p>
 
-            <h2 class="font-serif text-3xl mt-6">Key Features:</h2>
-            <ul class="font-serif text-xl italic list-disc ml-8">
+            <h2 class="text-serif text-3xl mt-6">Key Features:</h2>
+            <ul class="text-serif text-xl list-disc ml-8">
             <li>OV2640 camera sensor</li>
             <li>WiFi and Bluetooth connectivity</li>
             <li>MicroSD card slot</li>
@@ -767,9 +780,7 @@
 
 </div>
 
-    
     <script src="js/section.js"></script>
-    <script src="js/oscillator_tone/waveform.js"></script>
 
     <!-- Script Personalizzati -->
     <script src="js/image_ai/waveformFromColor.js"></script>
@@ -789,8 +800,10 @@
     <script src="js/oscillator_tone/filter.js"></script>
     <script src="js/oscillator_tone/mixer.js"></script>
     <script src="js/oscillator_tone/envelope.js"></script>
+    <script src="js/oscillator_tone/lfo.js"></script>
     <script src="js/oscillator_tone/effects.js"></script>
     <script src="js/oscillator_tone/preset.js"></script>
+    <script src="js/oscillator_tone/waveform.js"></script>
     <script src="js/oscillator_tone/image_preset.js"></script>
     <script src="js/oscillator_tone/analizzatore.js"></script>
     <script src="js/oscillator_tone/noise.js"></script>

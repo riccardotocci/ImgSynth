@@ -21,7 +21,6 @@ const updateEnvelope = (oscillatorIndex, config = adsrConfig) => {
     osc.envelope.sustain = config.sustain;
     osc.envelope.release = config.release;
 
-    console.log(`Envelope aggiornato per l'oscillatore ${oscillatorIndex + 1}:`, config);
 };
 
 // Event listener per aggiornare i controlli ADSR
@@ -48,30 +47,3 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
-
-
-// Update envelope parameters dynamically
-document.getElementById("filter-attack").addEventListener("input", (e) => {
-    filterEnvelope.attack = parseFloat(e.target.value);
-    document.getElementById("filter-attack-value").textContent = e.target.value;
-    console.log(`Filter attack updated to: ${e.target.value}`);
-});
-
-document.getElementById("filter-decay").addEventListener("input", (e) => {
-    filterEnvelope.decay = parseFloat(e.target.value);
-    document.getElementById("filter-decay-value").textContent = e.target.value;
-    console.log(`Filter decay updated to: ${e.target.value}`);
-});
-
-document.getElementById("filter-sustain").addEventListener("input", (e) => {
-    filterEnvelope.sustain = parseFloat(e.target.value);
-    document.getElementById("filter-sustain-value").textContent = e.target.value;
-    console.log(`Filter sustain updated to: ${e.target.value}`);
-});
-
-document.getElementById("filter-release").addEventListener("input", (e) => {
-    filterEnvelope.release = parseFloat(e.target.value);
-    document.getElementById("filter-release-value").textContent = e.target.value;
-    console.log(`Filter release updated to: ${e.target.value}`);
-});
-

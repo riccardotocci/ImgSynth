@@ -2,19 +2,13 @@ let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
 let result = document.getElementById('result');
 
-console.log('cv:', cv); // Verifica che OpenCV.js sia caricato
-console.log('Canvas:', canvas); // Verifica il canvas
-console.log('Immagine caricata:', cv.imread(canvas)); // Testa cv.imread
-
-
 function onOpenCvReady() {
   if (typeof cv === 'undefined') {
-    console.error('OpenCV.js non è stato caricato correttamente.');
+    console.error('OpenCV.js was not loaded correctly.');
     return;
   }
   console.log('OpenCV.js è pronto.');
 }
-
 
 function calculateSharpness(canvas, ctx){
     try {
@@ -41,7 +35,6 @@ function calculateSharpness(canvas, ctx){
       // Scala la nitidezza in 0-100
       const SCALE_FACTOR = 20000; // Regola in base alle necessità
       let normalizedSharpness = Math.min(100, relativeSharpness * SCALE_FACTOR);
-      console.log('Normalized Sharpness:', normalizedSharpness);
 
       // Cleanup delle risorse OpenCV
       src.delete();
@@ -52,7 +45,7 @@ function calculateSharpness(canvas, ctx){
 
       return normalizedSharpness;
     } catch (error) {
-      console.error('Errore durante l’elaborazione:', error);
-      alert('Si è verificato un errore durante l’elaborazione dell’immagine.');
+      console.error('Error during processing:', error);
+      alert('An error occurred while processing the image.');
     }
 };

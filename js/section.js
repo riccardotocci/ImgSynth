@@ -1,18 +1,4 @@
-// Funzione per chiudere il popup
-function closePopup() {
-    const popup = document.getElementById("popup");
-    if (popup) {
-      popup.style.display = "none";
-    }
-  }
-  
 
-
-  // Aggiungi l'evento per il pulsante Skip
-document.getElementById("skip-button").addEventListener("click", () => {
-    console.log("Login skipped by the user.");
-    closePopup();
-  });
 
         function showSection(sectionId, element, useHidden = false) {
             // Remove 'active' class from all navbar links

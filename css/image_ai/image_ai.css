@@ -35,7 +35,12 @@
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.05s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  transition: background-color 0.05s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#recalculateButton:hover {
+  transform: scale(0.9);
+  filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.7));
 }
 
 #recalculateButton:active {
@@ -43,7 +48,7 @@
 }
 
 .ImgSynthLogo{
-  filter: drop-shadow(2px 2px 2px rgba(255, 255, 255, 0.2));
+  filter: drop-shadow(2px 2px 2px rgba(255, 255, 255, 0.263));
   display: inline-block; /* Per evitare spazi indesiderati */
 }
 

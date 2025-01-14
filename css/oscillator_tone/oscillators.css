@@ -3,18 +3,23 @@
   flex-direction: row;
   align-content: center;
   align-items: center;
-
 }
 
-.control-group {
+#control-group {
   display: flex;
   flex-direction: column; /* Mantiene gli oscillatori uno sotto l'altro */
-  gap: 20px; /* Spaziatura verticale tra oscillatori */
-  margin-top: 20px;
-  left: 0%;
-  width: 100%;
+  gap: 5px; /* Spaziatura verticale tra oscillatori */
+  margin-top: 0px;
 }
 
+.oscillator-container{
+  width: 150px;
+  text-align: left;
+  padding-left: 30px;
+}
+.controls{
+  text-align: center;
+}
 #oscillator {
   display: flex;
   flex-direction: row; /* Dispone i controlli dell'oscillatore in riga */
@@ -25,9 +30,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   padding: 10px;
-  width: 700px; /* Imposta una larghezza per tutti gli oscillatori */
-  margin: 0; /* Centra gli oscillatori nella pagina */
-  outline: px solid blue;
+  width: 760px; /* Imposta una larghezza per tutti gli oscillatori */
   background-color: rgba(0, 0, 255, 0.1);
   position: relative;
   overflow: hidden;
@@ -46,7 +49,6 @@
 .input-knob {
   margin: 5px 0;
   width:2%;
-  
 }
 
 label {
@@ -60,15 +62,9 @@ span {
   margin-top: 5px;
 }
 
-.switchery {
-  border: 1px solid rgba(0, 0, 0, 0.1);
+#limiterToggle{
+  margin:5px;
 }
-
-.switchery-small {
-  height: 20px;
-  width: 40px;
-}
-
 
 .waveform-select {
   margin: 10px;

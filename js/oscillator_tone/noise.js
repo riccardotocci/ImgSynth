@@ -13,7 +13,7 @@ function setupNoise() {
             noiseGainNode.connect(sharedFilter);
         } else {
             noiseGainNode.toDestination();
-            console.warn("Filtro condiviso non compatibile, collegamento diretto alla destinazione.");
+            console.warn("Shared filter not compatible, directly connecting to the destination.");
         }
 
         console.log("Nodo di guadagno del rumore configurato e collegato.");
@@ -26,7 +26,7 @@ function setupNoise() {
             document.getElementById("noiseVolumeValue").innerText = value.toFixed(1);
         };
     } else {
-        console.warn("Slider.js non trovato. Configurazione dello slider del rumore saltata.");
+        console.warn("Slider.js not found. Noise slider configuration skipped.");
     }
 }
 
@@ -36,7 +36,7 @@ function updateNoiseSource(type) {
         try {
             noiseSource.stop();
         } catch (error) {
-            console.warn("Errore nel fermare il rumore precedente:", error);
+            console.warn("Error stopping the previous noise:", error);
         }
         noiseSource.disconnect();
     }
@@ -51,9 +51,8 @@ function playNoise() {
     }
     try {
         noiseSource.start();
-        console.log("Noise started.");
     } catch (error) {
-        console.warn("Errore nell'avviare il rumore:", error);
+        console.warn("Error starting the noise:", error);
     }
 }
 
@@ -61,9 +60,8 @@ function stopNoise() {
     if (noiseSource) {
         try {
             noiseSource.stop();
-            console.log("Noise stopped.");
         } catch (error) {
-            console.warn("Errore nel fermare il rumore:", error);
+            console.warn("Error stopping the noise:", error);
         }
     }
 }
@@ -86,7 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (typeof updateNoiseSource === "function") {
             try {
                 updateNoiseSource(noiseType); // Aggiorna il tipo di rumore
-                console.log(`Tipo di rumore aggiornato a: ${noiseType}`);
             } catch (error) {
                 console.error("Errore durante l'aggiornamento del rumore:", error);
             }
@@ -123,9 +120,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (noiseGainNode) {
         noiseGainNode.gain.value = Math.pow(10, -60 / 20);
         document.getElementById("noiseVolumeValue").innerText = (-60).toFixed(1);
-        console.log("Volume del rumore inizializzato a -60 dB.");
     } else {
-        console.warn("Nodo di guadagno del rumore non trovato.");
+        console.warn("Noise gain node not found.");
     }
 });
 

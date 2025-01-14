@@ -1,27 +1,59 @@
 const updateOscillatorParameter = (index, param, value) => {
     const osc = oscillators[index];
 
-    if (param === "detune") {
-        osc.config.detune = value;
-        osc.synth.set({
-            detune: value + osc.config.pitch * 100 + osc.config.octave * 1200,
-        });
-    } else if (param === "pan") {
-        osc.config.pan = value;
-        osc.synth.set({ pan: value });
-        console.log(`Oscillatore ${index + 1} pan impostato su ${value}`);
-        } else if (param in osc.config) {
-        osc.config[param] = value;
+    switch (param) {
+        case "detune":
+            osc.config.detune = value;
+            osc.synth.set({
+                detune: value + osc.config.pitch * 100 + osc.config.octave * 1200,
+            });
+            console.log(`Oscillatore ${index + 1} detune impostato su ${value}`);
+            break;
 
-        if (param === "waveform") {
-            osc.synth.set({ oscillator: { waveform: value } });
+            case "pan":
+                // Usa Tone.Panner per il controllo del pan
+                if (!osc.panner) {
+                    osc.panner = new Tone.Panner(0).toDestination();
+                    osc.synth.connect(osc.panner); // Connetti il synth al panner
+                }
+            
+                osc.panner.pan.value = value; // Imposta il valore del pan
+                console.log(`Oscillatore ${index + 1} pan impostato su ${value}`);
+                break;
+            
+
+        case "octave":
+            osc.config.octave = value;
+            osc.synth.set({
+                detune: osc.config.detune + osc.config.pitch * 100 + value * 1200,
+            });
+            console.log(`Oscillatore ${index + 1} ottava impostata su ${value}`);
+            break;
+
+        case "pitch":
+            osc.config.pitch = value;
+            osc.synth.set({
+                detune: osc.config.detune + value * 100 + osc.config.octave * 1200,
+            });
+            console.log(`Oscillatore ${index + 1} pitch impostato su ${value}`);
+            break;
+
+        case "harmonics":
+            osc.config.harmonics = value;
+            // Aggiungi logica per armoniche se necessario
+            console.log(`Oscillatore ${index + 1} armoniche impostate su ${value}`);
+            break;
+
+        case "waveform":
+            osc.config.waveform = value;
+            osc.synth.set({ oscillator: { type: value } });
             console.log(`Oscillatore ${index + 1} forma d'onda impostata su ${value}`);
-        }
-        } else {
-        console.warn(`Parametro ${param} non valido per Oscillatore ${index + 1}`);
+            break;
+
+        default:
+            console.warn(`Parametro ${param} non valido per Oscillatore ${index + 1}`);
     }
 };
-
 
 // Event listener per gestire controlli dinamici
 document.addEventListener("DOMContentLoaded", () => {
@@ -40,22 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
-
-    // Gestisci forma d'onda
-    document.querySelectorAll(".waveform-select").forEach((select) => {
-        select.addEventListener("change", (e) => {
-            const id = e.target.id; // Esempio: waveform1
-            const value = e.target.value;
-            const index = parseInt(id.replace("waveform", ""), 10) - 1;
-
-            if (!isNaN(index) && index >= 0 && index < oscillators.length) {
-                updateOscillatorParameter(index, "waveform", value);
-            }
-        });
-    });
-
-// Seleziona il primo elemento figlio di <body> (se esiste)
-const firstElement = document.body.firstChild;
 
     // Seleziona tutti gli switch
     const switches = document.getElementById("firstrow").querySelectorAll(".js-switch");
@@ -77,7 +93,5 @@ const firstElement = document.body.firstChild;
             console.log(`Oscillatore ${index + 1} ${osc.isActive ? "attivato" : "disattivato"}`);
         });
     });
-
-
-
 });
+

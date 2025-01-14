@@ -19,7 +19,7 @@
 
     function calculateAverageSL(hslValues) {
       if (!hslValues || hslValues.length === 0) {
-        console.error("Nessun valore HSL disponibile per calcolare la media.");
+        console.error("No HSL values available to calculate the average.");
         return { averageS: 0, averageL: 0 };
       }
     

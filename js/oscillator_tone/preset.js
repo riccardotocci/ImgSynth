@@ -21,6 +21,14 @@ function updateOscillatorUI(index, oscillator) {
     } else {
         console.warn(`Elemento DOM octaveKnob${index + 1} o octaveKnob${index + 1}Value non trovato.`);
     }
+    const harmonicsElement = document.getElementById(`harmonics${index + 1}`);
+    const harmonicsValueElement = document.getElementById(`harmonics${index + 1}Value`);
+    if (harmonicsElement && harmonicsValueElement) {
+        harmonicsElement.value = oscillator.harmonics;
+        harmonicsValueElement.innerText = oscillator.harmonics;
+    } else {
+        console.warn(`Elemento DOM octaveKnob${index + 1} o octaveKnob${index + 1}Value non trovato.`);
+    }
     document.getElementById(`volume${index + 1}`).value = oscillator.volume;
     document.getElementById(`volume${index + 1}Value`).innerText = `${oscillator.volume} dB`;
 }
@@ -28,9 +36,10 @@ function updateOscillatorUI(index, oscillator) {
 function updateFilterUI(preset) {
     document.getElementById("sharedFilterType").value = preset.filterType;
     document.getElementById("sharedFilterFrequency").value = preset.sharedFilterFrequency;
-    document.getElementById("sharedFilterRolloff").value = preset.sharedFilterQ;
+    document.getElementById("sharedFilterRolloff").value = preset.sharedFilterRolloff;
+    document.getElementById("sharedFilterQ").value = preset.sharedFilterQ;
+    document.getElementById("sharedFilterQValue").textContent = preset.sharedFilterQ;
     document.getElementById("sharedFilterFrequencyValue").textContent = `${Math.round(preset.sharedFilterFrequency)} Hz`;
-
 }
 
 function updateEnvelopeUI(preset) {
@@ -93,7 +102,7 @@ function applyPreset(preset) {
             const osc = oscillators[index];
 
             // Assicurati che il canale sia configurato correttamente
-            if (!osc.channel) {
+            if (!osc.synth) {
                 console.warn(`Canale non trovato per Oscillatore ${index + 1}. Ignorando il volume.`);
             } else {
                 if (oscillator.volume !== undefined) {
@@ -116,6 +125,10 @@ function applyPreset(preset) {
                 updateOscillatorParameter(index, "octave", oscillator.octave);
                 console.log("Oscillatore", index + 1, "octave:", oscillator.octave);
             }
+            if (oscillator.harmonics !== undefined) {
+                updateOscillatorParameter(index, "harmonics", oscillator.harmonics);
+                console.log("Oscillatore", index + 1, "harmonics:", oscillator.harmonics);
+            }
 
             // Aggiorna l'interfaccia utente
             updateOscillatorUI(index, oscillator);
@@ -133,9 +146,15 @@ function applyPreset(preset) {
         console.log("Setting filter frequency:", preset.sharedFilterFrequency, "Hz");
         sharedFilter.frequency.value = preset.sharedFilterFrequency;
     }
+    if (preset.sharedFilterRolloff && [-12, -24, -48, -96].includes(preset.sharedFilterRolloff)) {
+        console.log("Setting filter rolloff:", preset.sharedFilterRolloff);
+        sharedFilter.rolloff = preset.sharedFilterRolloff;
+    } else {
+        console.error("Invalid rolloff value:", preset.sharedFilterRolloff);
+    }
     if (preset.sharedFilterQ) {
-        console.log("Setting filter rolloff:", preset.sharedFilterQ);
-        sharedFilter.rolloff = preset.sharedFilterQ;
+        sharedFilter.Q.value = preset.sharedFilterQ;
+        console.log("Setting filter Q:", sharedFilter.Q.value);
     }
     updateFilterUI(preset);
     console.log("Filter UI updated");
@@ -228,6 +247,7 @@ function applyPreset(preset) {
 
     console.log("Preset applicato:", preset);
 };
+
 document.getElementById("presetSelector").addEventListener("change", (e) => {
     const selectedPreset = e.target.value;
 
@@ -238,5 +258,86 @@ document.getElementById("presetSelector").addEventListener("change", (e) => {
     }
 });
 
+  function collectPresetData() {
+    const preset = {
+        oscillators: [
+            {
+                detune: parseFloat(document.getElementById("detuneKnob1").value),
+                pitch: parseFloat(document.getElementById("pitchKnob1").value),
+                octave: parseInt(document.getElementById("octaveKnob1").value, 10),
+                harmonics: parseFloat(document.getElementById("harmonics1").value),
+                volume: parseFloat(document.getElementById("volume1Value").textContent),
+                pan: parseFloat(document.getElementById("pan3").value),
+                waveform: document.getElementById("waveformLabel0").textContent.trim()
+            },
+            {
+                detune: parseFloat(document.getElementById("detuneKnob2").value),
+                pitch: parseFloat(document.getElementById("pitchKnob2").value),
+                octave: parseInt(document.getElementById("octaveKnob2").value, 10),
+                harmonics: parseFloat(document.getElementById("harmonics2").value),
+                pan: parseFloat(document.getElementById("pan3").value),
+                volume: parseFloat(document.getElementById("volume2Value").textContent),
+                waveform: document.getElementById("waveformLabel1").textContent.trim()
+            },
+            {
+                detune: parseFloat(document.getElementById("detuneKnob3").value),
+                pitch: parseFloat(document.getElementById("pitchKnob3").value),
+                octave: parseInt(document.getElementById("octaveKnob3").value, 10),
+                harmonics: parseFloat(document.getElementById("harmonics3").value),
+                pan: parseFloat(document.getElementById("pan3").value),
+                volume: parseFloat(document.getElementById("volume3Value").textContent),
+                waveform: document.getElementById("waveformLabel2").textContent.trim()
+            }
+        ],
+        attack: parseFloat(document.getElementById("attack").value),
+        decay: parseFloat(document.getElementById("decay").value),
+        sustain: parseFloat(document.getElementById("sustain").value),
+        release: parseFloat(document.getElementById("release").value),
+        filter: {
+            frequency: parseFloat(document.getElementById("sharedFilterFrequency").value),
+            type: document.getElementById("sharedFilterType").value.trim(),
+            rolloff: parseInt(document.getElementById("sharedFilterRolloff").value, 10),
+            Q: parseInt(document.getElementById("sharedFilterQ").value)
+        },
+        noise: {
+            type: document.getElementById("noiseTypeSelect").value.trim(),
+            level: parseFloat(document.getElementById("noiseVolumeValue").textContent)
+        },
+        
+            saturation: {
+                enabled: document.getElementById("distortionToggle").checked,
+                tone: document.getElementById("distortionType").value.trim(),
+                drive: parseFloat(document.getElementById("distortionAmount").value),
+                wet: parseFloat(document.getElementById("distortionWet").value)
+            },
+            chorus: {
+                enabled: document.getElementById("chorusToggle").checked,
+                delayTime: parseFloat(document.getElementById("chorusDelay").value),
+                depth: parseFloat(document.getElementById("chorusDepth").value),
+                feedback: parseFloat(document.getElementById("chorusFeedback").value),
+                frequency: parseFloat(document.getElementById("chorusFrequency").value),
+                spread: parseFloat(document.getElementById("chorusSpread").value),
+                wet: parseFloat(document.getElementById("chorusWet").value)
+            },
+            delay: {
+                enabled: document.getElementById("delayToggle").checked,
+                time: parseFloat(document.getElementById("delayTime").value),
+                feedback: parseFloat(document.getElementById("delayFeedback").value),
+                mix: parseFloat(document.getElementById("delayWet").value)
+            },
+            reverb: {
+                enabled: document.getElementById("reverbToggle").checked,
+                size: parseFloat(document.getElementById("reverbSize").value),
+                decay: parseFloat(document.getElementById("reverbPreDelay").value),
+                mix: parseFloat(document.getElementById("reverbWet").value)
+            },
+            limiter: {
+                enabled: document.getElementById("limiterToggle").checked,
+                threshold: parseFloat(document.getElementById("limiterThreshold").value)
+            }
+        
+    };
 
+    return preset;
+}
 

@@ -13,7 +13,7 @@ function drawWaveformoscillator(index, type) {
     // Disegna la forma d'onda
     ctx.beginPath();
     ctx.lineWidth = 2;
-    ctx.strokeStyle = 'rgba(0, 0, 255, 0.2)';
+    ctx.strokeStyle = 'rgba(0, 0, 255, 0.69)';
 
     switch (type) {
         case 'sine':
@@ -31,17 +31,16 @@ function drawWaveformoscillator(index, type) {
             break;
 
         case 'triangle':
-            ctx.moveTo(0, midY);
+            ctx.moveTo(0, midY + height / 4);
             ctx.lineTo(width / 2, midY - height / 4);
             ctx.lineTo(width, midY + height / 4);
             break;
 
         case 'sawtooth':
             ctx.moveTo(0, midY + height / 4);
-            for (let x = 0; x <= width; x++) {
-                const y = midY + height / 4 - ((x / width) * height) / 2;
-                ctx.lineTo(x, y);
-            }
+            ctx.lineTo(width/2, midY - height / 4);
+            ctx.lineTo((width/2)+0.001, midY + height / 4);
+            ctx.lineTo(width, midY - height / 4);
             break;
     }
     ctx.stroke();

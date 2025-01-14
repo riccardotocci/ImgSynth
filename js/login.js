@@ -25,10 +25,56 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 const db = getFirestore(app);
 const storage = getStorage(app);
-let user = null;
 let img = null;
 
+
+// AUTHENTICATION
+// AUTHENTICATION
+document.addEventListener("DOMContentLoaded", async () => {
+  console.log("Controllo utente autenticato...");
   
+  // Controllo se esiste un utente autenticato
+  if (auth.currentUser) {
+    try {
+      await signOut(auth);
+      console.log("Utente precedente disconnesso.");
+    } catch (error) {
+      console.error("Errore durante la disconnessione dell'utente precedente:", error);
+    }
+  }
+
+  // Controllo e pulizia della cache
+  console.log("Pulizia della cache locale...");
+  try {
+    localStorage.clear(); // Cancella tutti i dati da Local Storage
+    sessionStorage.clear(); // Cancella tutti i dati da Session Storage
+    console.log("Cache locale pulita con successo.");
+  } catch (error) {
+    console.error("Errore durante la pulizia della cache locale:", error);
+  }
+
+  console.log("Pronto per l'autenticazione.");
+});
+
+
+document.getElementById("skip-button").addEventListener("click", async () => {
+  console.log("Login skipped by the user.");
+
+  // Disconnetti l'utente se autenticato
+  if (auth.currentUser) {
+    try {
+      await signOut(auth);
+      console.log("Utente disconnesso.");
+    } catch (error) {
+      console.error("Errore durante la disconnessione:", error);
+    }
+  }
+
+  // Nascondi il popup
+  document.getElementById("popup").style.display = "none";
+  document.getElementById("reopen-popup").style.display = "block";
+});
+
   document.getElementById("email-register-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     const email = document.getElementById("reg-email").value;
@@ -39,129 +85,118 @@ let img = null;
       console.log("Utente registrato con successo:", result.user);
   
       // Nascondi il modulo e mostra il messaggio di successo
-      document.getElementById("auth-container").style.display = "none";
+      document.getElementById("popup").style.display = "none";
       document.getElementById("success-message").style.display = "block";
       document.getElementById("logout-button").style.display = "inline-block";
+      document.getElementById("reopen-popup").style.display = "none"; // Mostra il pulsante
 
-      // Chiudi il popup
-      closePopup();
     } catch (error) {
       console.error("Errore durante la registrazione:", error);
-      alert("Errore: " + error.message);
+      alert("Error: " + error.message);
     }
   });
 
   document.getElementById("logout-button").addEventListener("click", async () => {
+    console.log("Disconnessione utente...");
     try {
       await signOut(auth);
       console.log("Utente disconnesso.");
   
-      // Mostra nuovamente il modulo e nascondi il pulsante di logout
-      document.getElementById("auth-container").style.display = "block";
       document.getElementById("success-message").style.display = "none";
       document.getElementById("logout-button").style.display = "none";
+      document.getElementById("reopen-popup").style.display = "block";
+      
+
     } catch (error) {
       console.error("Errore durante il logout:", error);
-      alert("Errore: " + error.message);
+      alert("Error: " + error.message);
+    }
+  });
+
+  document.getElementById("reopen-popup").addEventListener("click", () => {
+    // Mostra il popup di autenticazione
+    document.getElementById("popup").style.display = "block";
+    
+    // Nascondi il pulsante di riapertura
+    document.getElementById("reopen-popup").style.display = "none";
+    
+    console.log("Popup di autenticazione riaperto.");
+});
+
+  // Login con Google
+  document.getElementById("google-login").addEventListener("click", async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+  
+      console.log("Utente autenticato con Google:", user);
+  
+      // Nascondi il modulo e mostra il pulsante di logout
+      document.getElementById("popup").style.display = "none";
+      document.getElementById("success-message").style.display = "block";
+      document.getElementById("logout-button").style.display = "inline-block";
+      document.getElementById("reopen-popup").style.display = "none"; // Mostra il pulsante
+      console.log("popup", document.getElementById("popup").style.display);
+  
+    } catch (error) {
+      console.error("Errore durante il login con Google:", error);
+      alert("Error: " + error.message);
     }
   });
   
+  // Login con email/password
+  document.getElementById("email-login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
   
-  function collectPresetData() {
-    const preset = {
-        oscillators: [
-            {
-                detune: parseFloat(document.getElementById("detuneKnob1").value),
-                pitch: parseFloat(document.getElementById("pitchKnob1").value),
-                octave: parseInt(document.getElementById("octaveKnob1").value, 10),
-                harmonics: parseFloat(document.getElementById("harmonics1").value),
-                volume: parseFloat(document.getElementById("volume1Value").textContent),
-                pan: parseFloat(document.getElementById("pan3").value),
-                waveform: document.getElementById("waveformLabel0").textContent.trim()
-            },
-            {
-                detune: parseFloat(document.getElementById("detuneKnob2").value),
-                pitch: parseFloat(document.getElementById("pitchKnob2").value),
-                octave: parseInt(document.getElementById("octaveKnob2").value, 10),
-                harmonics: parseFloat(document.getElementById("harmonics2").value),
-                pan: parseFloat(document.getElementById("pan3").value),
-                volume: parseFloat(document.getElementById("volume2Value").textContent),
-                waveform: document.getElementById("waveformLabel1").textContent.trim()
-            },
-            {
-                detune: parseFloat(document.getElementById("detuneKnob3").value),
-                pitch: parseFloat(document.getElementById("pitchKnob3").value),
-                octave: parseInt(document.getElementById("octaveKnob3").value, 10),
-                harmonics: parseFloat(document.getElementById("harmonics3").value),
-                pan: parseFloat(document.getElementById("pan3").value),
-                volume: parseFloat(document.getElementById("volume3Value").textContent),
-                waveform: document.getElementById("waveformLabel2").textContent.trim()
-            }
-        ],
-        attack: parseFloat(document.getElementById("attack").value),
-        decay: parseFloat(document.getElementById("decay").value),
-        sustain: parseFloat(document.getElementById("sustain").value),
-        release: parseFloat(document.getElementById("release").value),
-        filter: {
-            frequency: parseFloat(document.getElementById("sharedFilterFrequency").value),
-            type: document.getElementById("sharedFilterType").value.trim(),
-            rolloff: parseInt(document.getElementById("sharedFilterRolloff").value, 10)
-        },
-        noise: {
-            type: document.getElementById("noiseTypeSelect").value.trim(),
-            level: parseFloat(document.getElementById("noiseVolumeValue").textContent)
-        },
-        
-            saturation: {
-                enabled: document.getElementById("distortionToggle").checked,
-                tone: document.getElementById("distortionType").value.trim(),
-                drive: parseFloat(document.getElementById("distortionAmount").value),
-                wet: parseFloat(document.getElementById("distortionWet").value)
-            },
-            chorus: {
-                enabled: document.getElementById("chorusToggle").checked,
-                delayTime: parseFloat(document.getElementById("chorusDelay").value),
-                depth: parseFloat(document.getElementById("chorusDepth").value),
-                feedback: parseFloat(document.getElementById("chorusFeedback").value),
-                frequency: parseFloat(document.getElementById("chorusFrequency").value),
-                spread: parseFloat(document.getElementById("chorusSpread").value),
-                wet: parseFloat(document.getElementById("chorusWet").value)
-            },
-            delay: {
-                enabled: document.getElementById("delayToggle").checked,
-                time: parseFloat(document.getElementById("delayTime").value),
-                feedback: parseFloat(document.getElementById("delayFeedback").value),
-                mix: parseFloat(document.getElementById("delayWet").value)
-            },
-            reverb: {
-                enabled: document.getElementById("reverbToggle").checked,
-                size: parseFloat(document.getElementById("reverbSize").value),
-                decay: parseFloat(document.getElementById("reverbPreDelay").value),
-                mix: parseFloat(document.getElementById("reverbWet").value)
-            },
-            limiter: {
-                enabled: document.getElementById("limiterToggle").checked,
-                threshold: parseFloat(document.getElementById("limiterThreshold").value)
-            }
-        
-    };
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      console.log("Utente autenticato con Email/Password:", result.user);
+  
+      // Nascondi il modulo e mostra il pulsante di logout
+      document.getElementById("popup").style.display = "none";
+      document.getElementById("success-message").style.display = "block";
+      document.getElementById("logout-button").style.display = "inline-block";
+      document.getElementById("reopen-popup").style.display = "none";
+  
+    } catch (error) {
+      console.error("Errore durante il login con Email/Password:", error);
+      alert("Error: " + error.message);
+    }
+  });
 
-    return preset;
-}
+  const registerButton = document.getElementById('register-button');
+  const loginForm = document.getElementById('email-login-form');
+  const registerForm = document.getElementById('email-register-form');
 
+  registerButton.addEventListener('click', () => {
+    if (loginForm.style.display === 'block') {
+      loginForm.style.display = 'none';
+      registerForm.style.display = 'block';
+      registerButton.textContent = 'Login';
+    } else {
+      loginForm.style.display = 'block';
+      registerForm.style.display = 'none';
+      registerButton.textContent = 'Register';
+    }
+  });
+
+
+ // PRESETS
 
 async function savePreset() {
   const user = auth.currentUser;
   
   if (!user) {
-    alert("Devi essere loggato per salvare un preset.");
+    alert("You must be logged in to save a preset.");
     return;
   }
 
   // Get preset name from input
   const presetName = document.getElementById("presetName").value;
   if (!presetName) {
-    alert("Inserisci un nome per il preset.");
+    alert("Please enter a name for the preset.");
     return;
   }
 
@@ -190,20 +225,145 @@ async function savePreset() {
 
   try {
     await setDoc(doc(db, "presets", `${user.uid}-${presetId}`), presetData);
-    alert("Preset e immagine salvati con successo!");
+    alert("Preset and image saved successfully!");
     document.getElementById("presetName").value = ""; // Clear input after saving
   } catch (error) {
     console.error("Errore durante il salvataggio del preset:", error);
-    alert("Errore durante il salvataggio del preset.");
+    alert("Error saving the preset.");
   }
 }
   
   
   document.getElementById("savePresetButton").addEventListener("click", savePreset);
 
-  const storageRef = ref(storage, 'images/');
+  window.applyPresetFromDoc = applyPresetFromDoc;
+  async function applyPresetFromDoc(presetId) {
+    const user = auth.currentUser;
+  
+    if (!user) {
+      alert("You must be logged in to apply a preset.");
 
+        return;
+    }
+  
+    try {
+        const docRef = doc(db, "presets", presetId);
+        const docSnap = await getDoc(docRef);
+  
+        if (docSnap.exists()) {
+            const preset = docSnap.data();
+            
+              // Display the image associated with the preset
+              if (preset.imageUrl) {
+                const displayedImage = document.getElementById("displayedImage");
+                // Since the imageUrl is already in base64 format, we can use it directly
+                displayedImage.src = preset.imageUrl;
+                displayedImage.style.display = "block";
+                
+                // Create image object and process it
+                img = new Image();
+                img.src = preset.imageUrl; // Base64 URL can be used directly
+                
+                img.onload = () => {
+                console.log("Preset image loaded, processing...");
+                processImagelogin(img);
+                processSketch(img);
+                };
+  
+                img.onerror = () => {
+                console.error("Error loading preset image");
+                alert("Could not load the preset image");
+                };
+              }
+              
+            applyPreset(preset);
+        } else {
+            console.error("Preset non trovato.");
+            alert("Preset not found.");
 
+        }
+    } catch (error) {
+        console.error("Errore durante l'applicazione del preset:", error);
+        alert("Error applying the preset.");
+
+    }
+  }
+  async function loadPresets() {
+    // Check if preset list is already visible
+    const existingList = document.getElementById('preset-list');
+    if (existingList) {
+      document.body.removeChild(existingList);
+      return;
+    }
+    const user = auth.currentUser;
+  
+    if (!user) {
+      alert("You must be logged in to load presets.");
+
+        return;
+    }
+  
+    try {
+        const presetList = document.createElement("ul");
+        presetList.style.position = 'fixed';
+        presetList.style.top = '50%';
+        presetList.style.left = '50%';
+        presetList.style.transform = 'translate(-50%, -50%)';
+        presetList.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+        presetList.style.padding = '20px';
+        presetList.style.borderRadius = '5px';
+        presetList.style.boxShadow = '0 0 10px rgba(0,0,0,0.3)';
+        presetList.style.zIndex = '1000';
+        presetList.style.maxHeight = '80vh';
+        presetList.style.overflowY = 'auto';
+        presetList.style.listStyle = 'none';
+        presetList.id = 'preset-list';
+  
+        const querySnapshot = await getDocs(collection(db, "presets"));
+        let hasPresets = false;
+  
+        querySnapshot.forEach((doc) => {
+            if (doc.id.startsWith(user.uid)) {
+                hasPresets = true;
+                const preset = doc.data();
+                const listItem = document.createElement("li");
+                listItem.style.cursor = 'pointer';
+                listItem.style.padding = '5px';
+                listItem.style.margin = '5px 0';
+                listItem.textContent = preset.name || 'Preset senza nome';
+                
+                listItem.addEventListener('click', () => {
+                    applyPresetFromDoc(doc.id);
+                    document.body.removeChild(presetList);
+                });
+                
+                presetList.appendChild(listItem);
+            }
+        });
+  
+        if (!hasPresets) {
+            const noPresets = document.createElement("li");
+            noPresets.textContent = "Nessun preset trovato.";
+            presetList.appendChild(noPresets);
+        }
+  
+        // Remove existing list if present
+        
+        if (existingList) {
+            document.body.removeChild(existingList);
+        }
+  
+        document.body.appendChild(presetList);
+  
+    } catch (error) {
+        console.error("Errore durante il caricamento dei preset:", error);
+        alert("Error loading presets.");
+    }
+  }
+
+  document.getElementById("loadPresetsButton").addEventListener("click", loadPresets);
+
+// IMAGE
 
 
   document.getElementById("imageInput").addEventListener("change", async (event) => {
@@ -249,7 +409,7 @@ document.getElementById("selectImageButton").addEventListener("click", async () 
   
   if (!user) {
       console.log("No user logged in");
-      alert("Devi essere loggato per vedere le tue immagini.");
+      alert("You must be logged in to view your images.");
       return;
   }
 
@@ -266,7 +426,7 @@ document.getElementById("selectImageButton").addEventListener("click", async () 
       
       if (listResult.items.length === 0) {
           console.log("No images found");
-          alert("Non ci sono immagini salvate.");
+          alert("No images saved.");
           return;
       }
 
@@ -323,7 +483,7 @@ document.getElementById("selectImageButton").addEventListener("click", async () 
       imageListContainer.style.display = "block";
   } catch (error) {
       console.error("Error fetching images:", error);
-      alert("Errore durante il recupero delle immagini. Riprova.");
+      alert("Error retrieving images. Please try again.");
   }
 });
 
@@ -385,71 +545,13 @@ function processImagelogin(img) {
   console.log('Dominant Colors:', dominantColors);    
 }
 
-  // Login con Google
-  document.getElementById("google-login").addEventListener("click", async () => {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-  
-      console.log("Utente autenticato con Google:", user);
-  
-      // Nascondi il modulo e mostra il pulsante di logout
-      document.getElementById("auth-container").style.display = "none";
-      document.getElementById("success-message").style.display = "block";
-      document.getElementById("logout-button").style.display = "inline-block";
-  
-      // Chiudi il popup
-      closePopup();
-    } catch (error) {
-      console.error("Errore durante il login con Google:", error);
-      alert("Errore: " + error.message);
-    }
-  });
-  
-  // Login con email/password
-  document.getElementById("email-login-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-  
-    try {
-      const result = await signInWithEmailAndPassword(auth, email, password);
-      console.log("Utente autenticato con Email/Password:", result.user);
-  
-      // Nascondi il modulo e mostra il pulsante di logout
-      document.getElementById("auth-container").style.display = "none";
-      document.getElementById("success-message").style.display = "block";
-      document.getElementById("logout-button").style.display = "inline-block";
-  
-      // Chiudi il popup
-      closePopup();
-    } catch (error) {
-      console.error("Errore durante il login con Email/Password:", error);
-      alert("Errore: " + error.message);
-    }
-  });
-
-  const registerButton = document.getElementById('register-button');
-  const loginForm = document.getElementById('email-login-form');
-  const registerForm = document.getElementById('email-register-form');
-
-  registerButton.addEventListener('click', () => {
-    if (loginForm.style.display === 'block') {
-      loginForm.style.display = 'none';
-      registerForm.style.display = 'block';
-      registerButton.textContent = 'Login';
-    } else {
-      loginForm.style.display = 'block';
-      registerForm.style.display = 'none';
-      registerButton.textContent = 'Register';
-    }
-  });
 
 
 document.getElementById("captureButton").addEventListener("click", async () => {
   console.log("Button clicked!");
   const esp32Url = `http://${ipInput.value}`;
   console.log("ESP32 URL:", esp32Url);
+  const user = auth.currentUser;
 
   try {
     console.log("Fetching image...");
@@ -465,8 +567,11 @@ document.getElementById("captureButton").addEventListener("click", async () => {
         const blob = await response.blob();
         
         // Create unique filename
-        const filename = `capture_${Date.now()}.jpg`;
-        const fileRef = ref(storage, 'captures/' + filename);
+        const now = new Date();
+        const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        const formattedTime = `${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
+        const filename = `capture_${formattedDate}_${formattedTime}.jpg`;
+        const fileRef = ref(storage, `users/${user.uid}/images/` + filename);
         
         // Upload to Firebase Storage
         await uploadBytes(fileRef, blob);
@@ -479,6 +584,8 @@ document.getElementById("captureButton").addEventListener("click", async () => {
         
         // Process the image
         processImageesp32();
+        processSketch(snapshotImg);
+
         
         console.log("Image captured and saved to Firebase");
       } catch (error) {
@@ -496,129 +603,3 @@ document.getElementById("captureButton").addEventListener("click", async () => {
     console.error("Stream error:", error);
   }
 });
-
-
-window.applyPresetFromDoc = applyPresetFromDoc;
-async function applyPresetFromDoc(presetId) {
-  const user = auth.currentUser;
-
-  if (!user) {
-      alert("Devi essere loggato per applicare un preset.");
-      return;
-  }
-
-  try {
-      const docRef = doc(db, "presets", presetId);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-          const preset = docSnap.data();
-          
-            // Display the image associated with the preset
-            if (preset.imageUrl) {
-              const displayedImage = document.getElementById("displayedImage");
-              // Since the imageUrl is already in base64 format, we can use it directly
-              displayedImage.src = preset.imageUrl;
-              displayedImage.style.display = "block";
-              
-              // Create image object and process it
-              img = new Image();
-              img.src = preset.imageUrl; // Base64 URL can be used directly
-              
-              img.onload = () => {
-              console.log("Preset image loaded, processing...");
-              processImagelogin(img);
-              processSketch(img);
-              };
-
-              img.onerror = () => {
-              console.error("Error loading preset image");
-              alert("Could not load the preset image");
-              };
-            }
-            
-          applyPreset(preset);
-      } else {
-          console.error("Preset non trovato.");
-          alert("Preset non trovato.");
-      }
-  } catch (error) {
-      console.error("Errore durante l'applicazione del preset:", error);
-      alert("Errore durante l'applicazione del preset.");
-  }
-}
-async function loadPresets() {
-  // Check if preset list is already visible
-  const existingList = document.getElementById('preset-list');
-  if (existingList) {
-    document.body.removeChild(existingList);
-    return;
-  }
-  const user = auth.currentUser;
-
-  if (!user) {
-      alert("Devi essere loggato per caricare i preset.");
-      return;
-  }
-
-  try {
-      const presetList = document.createElement("ul");
-      presetList.style.position = 'fixed';
-      presetList.style.top = '50%';
-      presetList.style.left = '50%';
-      presetList.style.transform = 'translate(-50%, -50%)';
-      presetList.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
-      presetList.style.padding = '20px';
-      presetList.style.borderRadius = '5px';
-      presetList.style.boxShadow = '0 0 10px rgba(0,0,0,0.3)';
-      presetList.style.zIndex = '1000';
-      presetList.style.maxHeight = '80vh';
-      presetList.style.overflowY = 'auto';
-      presetList.style.listStyle = 'none';
-      presetList.id = 'preset-list';
-
-      const querySnapshot = await getDocs(collection(db, "presets"));
-      let hasPresets = false;
-
-      querySnapshot.forEach((doc) => {
-          if (doc.id.startsWith(user.uid)) {
-              hasPresets = true;
-              const preset = doc.data();
-              const listItem = document.createElement("li");
-              listItem.style.cursor = 'pointer';
-              listItem.style.padding = '5px';
-              listItem.style.margin = '5px 0';
-              listItem.textContent = preset.name || 'Preset senza nome';
-              
-              listItem.addEventListener('click', () => {
-                  applyPresetFromDoc(doc.id);
-                  document.body.removeChild(presetList);
-              });
-              
-              presetList.appendChild(listItem);
-          }
-      });
-
-      if (!hasPresets) {
-          const noPresets = document.createElement("li");
-          noPresets.textContent = "Nessun preset trovato.";
-          presetList.appendChild(noPresets);
-      }
-
-      // Remove existing list if present
-      
-      if (existingList) {
-          document.body.removeChild(existingList);
-      }
-
-      document.body.appendChild(presetList);
-
-  } catch (error) {
-      console.error("Errore durante il caricamento dei preset:", error);
-      alert("Errore durante il caricamento dei preset.");
-  }
-}
-
-
-
-document.getElementById("loadPresetsButton").addEventListener("click", loadPresets);

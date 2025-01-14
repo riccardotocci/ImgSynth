@@ -26,6 +26,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     background-color: rgba(255, 37, 37, 0.2);
+    align-items: center;
 }
 #Chorus{
     display: flex;
@@ -36,6 +37,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     background-color: rgba(216, 0, 65, 0.2);
+    align-items: center;
 }
 #choruspanel{
     display: flex;
@@ -51,6 +53,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     background-color: rgba(216, 0, 155, 0.2);
+    align-items: center;
 }
 #Reverb{
     display: flex;
@@ -61,6 +64,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     background-color: rgba(192, 65, 255, 0.2);
+    align-items: center;
 }
 #Limiter{
     display: flex;
@@ -71,4 +75,5 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     background-color: rgba(104, 0, 216, 0.2);
+    align-items: center;
 }

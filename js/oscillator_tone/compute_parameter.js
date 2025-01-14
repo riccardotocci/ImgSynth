@@ -23,6 +23,7 @@ function mapRangeInverse(value, outMin, outMax, inMin, inMax) {
     }
     return (value - outMin) * (inMax - inMin) / (outMax - outMin) + inMin;
 }
+
 // Funzione di mappatura dei valori in forma logaritmica
 function mapRangeLog(value, inputMin, inputMax, outputMin, outputMax) {
     if (value === null || value === undefined) {
@@ -47,11 +48,12 @@ function getFilterType(luminosità) {
 }
 
 // Funzione per determinare il tipo di filtro in base al contrasto
-function getLFOType(nitidezza) {
-    if (nitidezza > 75) return "-96";
-    if (nitidezza > 50) return "-48";
-    if (nitidezza > 25) return "-24";
-    return "-12";
+function getrolloffType(nitidezza) {
+    console.log("Rolloff", nitidezza);
+    if (nitidezza > 75) return -96;
+    if (nitidezza > 50) return -48;
+    if (nitidezza > 25) return -24;
+    return -12 ;
 }
 
 // Funzione per determinare il tipo di filtro in base al contrasto
