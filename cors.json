@@ -1,6 +1,6 @@
 [
   {
-    "origin": ["http://127.0.0.1:5501", "http://localhost:5501", "http://127.0.0.1:5500", "http://localhost:5500","http://127.0.0.1:5500/#"],
+    "origin": ["http://127.0.0.1:5501", "http://localhost:5501", "http://127.0.0.1:5500", "http://localhost:5500","http://127.0.0.1:5500/#","https://dreamy-kitsune-135ba9.netlify.app/"],
     "method": ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"],
     "maxAgeSeconds": 3600,
     "responseHeader": [
