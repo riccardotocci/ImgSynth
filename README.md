@@ -1,7 +1,7 @@
 # ImgSynth: A Modular Audio-Visual Synthesizer
 
 ## Overview
-ImgSynth is an advanced modular synthesizer that merges audio synthesis with visual interaction. This project allows users to create dynamic soundscapes and explore audio processing through intuitive controls and visual representations.
+ImgSynth is an advanced modular synthesizer that merges audio synthesis with visual interaction. Its primary goal is to extract the sound of images and enable users to create entirely new ideas of sound, transcending any known genre. This project empowers users to design dynamic soundscapes and explore audio processing through intuitive controls and visual representations.
 
 ### Key Features
 - **Multi-oscillator synthesis**: Three configurable oscillators with customizable waveforms, detuning, and harmonic control.
