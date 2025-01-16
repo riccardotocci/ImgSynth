@@ -5,7 +5,6 @@ ImgSynth is an advanced modular synthesizer that merges audio synthesis with vis
 
 ### Key Features
 - **Multi-oscillator synthesis**: Three configurable oscillators with customizable waveforms, detuning, and harmonic control.
-- **Modulation matrix**: Dynamically modulate synthesis parameters using LFOs and other sources.
 - **Audio effects**: Integrated distortion, delay, reverb, chorus, and more.
 - **Noise generator**: Configurable noise with selectable types and levels.
 - **Visual spectrum analyzer**: Real-time frequency visualization of the audio output.
@@ -27,7 +26,6 @@ ImgSynth is an advanced modular synthesizer that merges audio synthesis with vis
 
 ### Audio Synthesis
 - **Oscillators**: Configurable waveforms (sine, square, triangle, sawtooth) with detune, pitch, pan, and harmonic controls.
-- **Modulation Matrix**: Link sources (e.g., LFOs) to destination parameters for complex sound design.
 - **Envelope Control**: ADSR (Attack, Decay, Sustain, Release) controls for precise sound shaping.
 
 ### Effects
