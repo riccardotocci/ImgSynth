@@ -16,4 +16,3 @@ jobs:
           API_KEY: ${{ secrets.API_CONFIG_FIREBASE }}
         run: |
           npm install
-          npm run build
