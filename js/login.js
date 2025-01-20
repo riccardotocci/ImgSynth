@@ -10,7 +10,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL, listAll } from "https://w
 
 // Configurazione Firebase
 const firebaseConfig = {
-    apiKey: "AIzaSyAuceluZ-joBXnYFi3edk0aQrHpGP6MTRc",
+    apiKey: ${{secrets.API_CONFIG_FIREBASE}},
     authDomain: "imgsynth-6ff32.firebaseapp.com",
     projectId: "imgsynth-6ff32",
     storageBucket: "imgsynth-6ff32.firebasestorage.app",
