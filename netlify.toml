@@ -1,0 +1,3 @@
+[build]
+  command = "echo 'export const API_KEY = \"${API_CONFIG_FIREBASE}\";' > public/config.js && npm run build"
+  publish = "public"
