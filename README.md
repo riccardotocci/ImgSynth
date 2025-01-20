@@ -19,7 +19,6 @@ ImgSynth is an advanced modular synthesizer that merges audio synthesis with vis
 - **ESP32-CAM**: For capturing images, programmed using the Arduino IDE.
 - **Libraries**:
   - **Chroma.js** for color manipulation.
-  - **TensorFlow.js** for image analysis.
   - **Switchery** for toggle controls.
 
 ## Features
