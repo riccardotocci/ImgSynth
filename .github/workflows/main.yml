@@ -3,7 +3,7 @@ name: Deploy to Netlify
 on:
   push:
     branches:
-      - main  # Sostituisci con il branch corretto se usi un altro branch
+      - main 
 
 jobs:
   deploy:
@@ -21,14 +21,15 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+
       - name: Generate config.js with API key
         run: echo "var API_KEY = '${{ secrets.API_CONFIG_FIREBASE }}';" > config.js
 
       - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v2
-        with:
-          publish-dir: .
-          production-branch: main
-          deploy-message: "GitHub Actions Deploy"
-          netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
+        run: netlify deploy --prod --dir=.
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
