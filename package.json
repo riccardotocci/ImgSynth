@@ -1,0 +1,12 @@
+{
+  "name": "imgsynth",
+  "version": "1.0.0",
+  "description": "ImgSynth is an advanced modular synthesizer that merges audio synthesis with visual interaction. Its primary goal is to extract the sound of images and enable users to create entirely new ideas of sound, transcending any known genre. This project empowers users to design dynamic soundscapes and explore audio processing through intuitive controls and visual representations.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
