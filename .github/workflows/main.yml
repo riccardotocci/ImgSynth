@@ -25,7 +25,7 @@ jobs:
         run: npm install -g netlify-cli
 
       - name: Generate config.js with API key
-        run: echo "var API_KEY = '${{ secrets.API_CONFIG_FIREBASE }}';" > config.js
+        run: echo "var API_KEY = '${{ secrets.API_CONFIGURE_FIREBASE }}';" > config.js
 
       - name: Deploy to Netlify
         run: netlify deploy --prod --dir=.
