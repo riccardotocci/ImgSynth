@@ -12,7 +12,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Debug Environment Variables
-        run: echo "API_CONFIGURE_FIREBASE: ${{ secrets.API_CONFIGURE_FIREBASE }}"
+        env:
+          API_CONFIGURE_FIREBASE: ${{ secrets.API_CONFIGURE_FIREBASE }}
+        run: echo "API_CONFIGURE_FIREBASE: $API_CONFIGURE_FIREBASE"
 
       - name: Build
         env:
