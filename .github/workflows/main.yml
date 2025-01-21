@@ -3,24 +3,33 @@ name: Deploy to Netlify
 on:
   push:
     branches:
-      - main 
+      - main  # Cambia se usi un altro branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Debug Environment Variables
-        env:
-          API_CONFIGURE_FIREBASE: ${{ secrets.API_CONFIGURE_FIREBASE }}
-        run: |
-          echo "Debugging Secret..."
-          echo "API_CONFIGURE_FIREBASE is set"
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-      - name: Build
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+
+      - name: Generate config.js with API key
+        run: echo "var API_KEY = \"${{ secrets.API_CONFIGURE_FIREBASE }}\";" > config.js
+
+      - name: Deploy to Netlify
+        run: netlify deploy --prod --dir=.
         env:
-          API_KEY: ${{ secrets.API_CONFIGURE_FIREBASE }}
-        run: |
-          npm install
-          npm run build
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
