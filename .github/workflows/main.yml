@@ -14,7 +14,9 @@ jobs:
       - name: Debug Environment Variables
         env:
           API_CONFIGURE_FIREBASE: ${{ secrets.API_CONFIGURE_FIREBASE }}
-        run: echo "API_CONFIGURE_FIREBASE: $API_CONFIGURE_FIREBASE"
+        run: |
+          echo "Debugging Secret..."
+          echo "API_CONFIGURE_FIREBASE is set"
 
       - name: Build
         env:
@@ -22,4 +24,3 @@ jobs:
         run: |
           npm install
           npm run build
-
