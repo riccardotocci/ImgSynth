@@ -4,10 +4,21 @@
   "description": "ImgSynth is an advanced modular synthesizer that merges audio synthesis with visual interaction. Its primary goal is to extract the sound of images and enable users to create entirely new ideas of sound, transcending any known genre. This project empowers users to design dynamic soundscapes and explore audio processing through intuitive controls and visual representations.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "echo 'Skipping build step for static site'"
+    "start": "npx http-server -p 8080",
+    "build": "echo 'Skipping build step for static site'",
+    "deploy": "netlify deploy --prod",
+    "generate-config": "echo \"var API_KEY = \\\"${API_CONFIG_FIREBASE}\\\";\" > config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "dependencies": {
+    "netlify-cli": "^15.0.0",
+    "http-server": "^14.1.1"
+  },
+  "devDependencies": {},
+  "keywords": ["synthesizer", "audio", "visual", "modular", "music"],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }
