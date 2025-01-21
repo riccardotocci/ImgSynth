@@ -1,3 +1,0 @@
-[build]
-  command = "echo 'var API_KEY = \"${API_CONFIGURE_FIREBASE}\";' > config.js && echo 'Skipping build step for static site'"
-  publish = "."
